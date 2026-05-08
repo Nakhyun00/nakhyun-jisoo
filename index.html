@@ -3,38 +3,28 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>청첩장</title>
+<title>청첩장 - 김낙현 & 김지수</title>
 <link href="https://fonts.googleapis.com/css2?family=Noto+Serif+KR:wght@300;400;500&family=Noto+Sans+KR:wght@300;400&display=swap" rel="stylesheet">
 <style>
   *{margin:0;padding:0;box-sizing:border-box}
   html{scroll-behavior:smooth}
   body{font-family:'Noto Sans KR',sans-serif;background:#fafaf8;color:#2c2c2a;font-size:14px;line-height:1.8}
   .serif{font-family:'Noto Serif KR',serif}
-
-  /* Hero */
   .hero{min-height:100vh;display:flex;flex-direction:column;align-items:center;justify-content:center;position:relative;overflow:hidden;background:#f5f3ef}
-  .hero-img{width:100%;height:100vh;object-fit:cover;position:absolute;top:0;left:0;opacity:.35}
   .hero-placeholder{width:100%;height:100vh;position:absolute;top:0;left:0;background:linear-gradient(160deg,#e8e2d9 0%,#d4c9b8 100%);display:flex;align-items:center;justify-content:center}
   .hero-placeholder svg{opacity:.15}
   .hero-content{position:relative;z-index:1;text-align:center;padding:2rem}
-  .hero-date{font-size:11px;letter-spacing:4px;color:#888780;margin-bottom:2rem;font-family:'Noto Sans KR',sans-serif;font-weight:300}
   .hero-names{font-family:'Noto Serif KR',serif;font-size:32px;font-weight:400;color:#2c2c2a;letter-spacing:2px;line-height:1.4;margin-bottom:1rem}
   .hero-ampersand{color:#b4aca0;font-size:24px;display:block;margin:.25rem 0}
   .hero-sub{font-size:11px;letter-spacing:3px;color:#888780;font-weight:300}
   .hero-divider{width:40px;height:1px;background:#c8c0b4;margin:1.5rem auto}
-
-  /* Sections */
   section{padding:4rem 1.5rem}
   section:nth-child(even){background:#fff}
   section:nth-child(odd){background:#fafaf8}
   .section-label{font-size:10px;letter-spacing:4px;color:#b4b2a9;font-weight:400;text-align:center;margin-bottom:.75rem}
   .section-title{font-family:'Noto Serif KR',serif;font-size:20px;font-weight:400;text-align:center;margin-bottom:2rem;color:#2c2c2a}
   .divider-line{width:32px;height:1px;background:#d3d1c7;margin:0 auto 2.5rem}
-
-  /* Greeting */
   .greeting-text{max-width:320px;margin:0 auto;text-align:center;font-size:14px;color:#5f5e5a;line-height:2;font-family:'Noto Serif KR',serif;font-weight:300}
-
-  /* Contact */
   .contact-group{margin-bottom:2rem}
   .contact-role{font-size:10px;letter-spacing:3px;color:#b4b2a9;margin-bottom:.75rem;text-align:center}
   .contact-person{display:flex;align-items:center;justify-content:space-between;padding:.75rem 1rem;border:0.5px solid #e8e6e2;border-radius:10px;margin-bottom:.5rem;background:#fff}
@@ -43,31 +33,22 @@
   .contact-actions{display:flex;gap:8px}
   .contact-btn{display:flex;align-items:center;justify-content:center;width:36px;height:36px;border-radius:50%;border:0.5px solid #d3d1c7;background:#fafaf8;color:#5f5e5a;text-decoration:none;font-size:16px;transition:background .2s}
   .contact-btn:hover{background:#f0ede8}
-
-  /* Gallery */
   .gallery-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:4px}
   .gallery-item{aspect-ratio:1;overflow:hidden;cursor:pointer;background:#e8e2d9;border-radius:4px}
   .gallery-item img{width:100%;height:100%;object-fit:cover;transition:transform .3s}
   .gallery-item:hover img{transform:scale(1.05)}
-  .gallery-placeholder{width:100%;height:100%;display:flex;align-items:center;justify-content:center;color:#b4b2a9;font-size:22px}
-
-  /* Lightbox */
   .lightbox{display:none;position:fixed;inset:0;background:rgba(30,28,26,.92);z-index:1000;align-items:center;justify-content:center;flex-direction:column}
   .lightbox.active{display:flex}
   .lightbox img{max-width:92%;max-height:80vh;object-fit:contain;border-radius:6px}
   .lightbox-close{position:absolute;top:1.25rem;right:1.25rem;color:#fff;font-size:24px;cursor:pointer;opacity:.8;background:none;border:none;font-family:sans-serif;line-height:1}
   .lb-nav{display:flex;gap:2rem;margin-top:1.25rem}
   .lb-btn{color:#fff;background:none;border:0.5px solid rgba(255,255,255,.3);width:40px;height:40px;border-radius:50%;cursor:pointer;font-size:18px;display:flex;align-items:center;justify-content:center}
-
-  /* Map */
   .map-box{border-radius:12px;overflow:hidden;border:0.5px solid #e8e6e2;margin-bottom:1.5rem}
   .map-placeholder{height:220px;background:#e8e2d9;display:flex;align-items:center;justify-content:center;flex-direction:column;gap:.5rem;color:#888780;font-size:13px}
   .map-info{background:#fff;border:0.5px solid #e8e6e2;border-radius:10px;padding:1rem 1.25rem}
   .map-info p{font-size:13px;color:#5f5e5a;line-height:1.9}
   .map-info .venue{font-family:'Noto Serif KR',serif;font-size:15px;color:#2c2c2a;margin-bottom:.4rem}
   .map-link{display:inline-block;margin-top:.75rem;font-size:12px;color:#888780;text-decoration:none;border-bottom:0.5px solid #d3d1c7;padding-bottom:1px}
-
-  /* Account */
   .account-card{background:#fff;border:0.5px solid #e8e6e2;border-radius:10px;padding:1rem 1.25rem;margin-bottom:.75rem}
   .account-who{font-size:11px;color:#b4b2a9;letter-spacing:1px;margin-bottom:.3rem}
   .account-name{font-family:'Noto Serif KR',serif;font-size:15px;color:#2c2c2a;margin-bottom:.25rem}
@@ -75,9 +56,33 @@
   .copy-btn{float:right;margin-top:-1.5rem;font-size:11px;color:#888780;background:#fafaf8;border:0.5px solid #d3d1c7;border-radius:6px;padding:4px 10px;cursor:pointer}
   .copy-btn:active{background:#f0ede8}
 
-  /* Footer */
+  /* Calendar */
+  .cal-wrap{display:flex;flex-direction:column;align-items:center}
+  .cal-flower-svg{width:220px;height:auto;margin-bottom:-8px}
+  .cal-box{background:#fff;border:0.5px solid #e8e6e2;border-radius:12px;padding:1.25rem 1.5rem;width:100%;max-width:300px}
+  .cal-month-row{text-align:center;margin-bottom:1rem}
+  .cal-month-num{font-family:'Noto Serif KR',serif;font-size:36px;font-weight:400;color:#2c2c2a;line-height:1}
+  .cal-month-eng{font-size:10px;letter-spacing:3px;color:#b4b2a9;margin-top:2px}
+  .cal-names-row{font-family:'Noto Serif KR',serif;font-size:13px;color:#5f5e5a;text-align:center;margin-bottom:1rem}
+  .cal-grid{display:grid;grid-template-columns:repeat(7,1fr);gap:2px;text-align:center}
+  .cal-grid .day-header{font-size:10px;color:#b4b2a9;padding-bottom:6px;font-weight:400}
+  .cal-grid .day-header:first-child{color:#e8998a}
+  .cal-grid .day-header:last-child{color:#8aabe8}
+  .cal-grid .day{font-size:13px;color:#5f5e5a;padding:4px 0;line-height:1.6}
+  .cal-grid .day.sun{color:#e8998a}
+  .cal-grid .day.sat{color:#8aabe8}
+  .cal-grid .day.empty{color:transparent}
+  .cal-grid .day.highlight{position:relative}
+  .cal-grid .day.highlight span{
+    display:inline-flex;align-items:center;justify-content:center;
+    width:26px;height:26px;border-radius:50%;
+    border:1.5px solid #c9a0a0;color:#2c2c2a;font-weight:500
+  }
+  .cal-add-btn{margin-top:1.25rem;font-size:12px;color:#888780;background:#fafaf8;border:0.5px solid #d3d1c7;border-radius:20px;padding:7px 18px;cursor:pointer;letter-spacing:.5px;transition:background .2s}
+  .cal-add-btn:hover{background:#f0ede8}
+
   footer{text-align:center;padding:3rem 1.5rem;background:#f5f3ef}
-  .footer-date{font-family:'Noto Serif KR',serif;font-size:22px;font-weight:400;color:#2c2c2a;margin-bottom:.5rem}
+  .footer-date{font-family:'Noto Serif KR',serif;font-size:20px;font-weight:400;color:#2c2c2a;margin-bottom:.5rem}
   .footer-place{font-size:12px;color:#888780;letter-spacing:1px}
 </style>
 </head>
@@ -91,12 +96,12 @@
     </svg>
   </div>
   <div class="hero-content">
-    <p class="hero-date serif" style="font-size:11px;letter-spacing:4px;color:#6e6660">2025 · 06 · 14</p>
+    <p class="serif" style="font-size:11px;letter-spacing:4px;color:#6e6660">2026 · 09 · 05</p>
     <div class="hero-divider" style="margin:1rem auto"></div>
     <div class="hero-names serif">
-      김민준
+      김낙현
       <span class="hero-ampersand">&#38;</span>
-      이서연
+      김지수
     </div>
     <div class="hero-divider"></div>
     <p class="hero-sub">WEDDING INVITATION</p>
@@ -122,8 +127,7 @@
   <p class="section-label">GALLERY</p>
   <h2 class="section-title serif">갤러리</h2>
   <div class="divider-line"></div>
-  <div class="gallery-grid" id="gallery">
-  </div>
+  <div class="gallery-grid" id="gallery"></div>
 </section>
 
 <!-- ④ 연락처 -->
@@ -136,32 +140,32 @@
     <p class="contact-role">신랑측</p>
     <div class="contact-person">
       <div>
-        <div class="contact-name serif">김민준</div>
+        <div class="contact-name serif">김낙현</div>
         <div class="contact-relation">신랑</div>
       </div>
       <div class="contact-actions">
-        <a href="tel:010-1234-5678" class="contact-btn" title="전화">📞</a>
-        <a href="sms:010-1234-5678" class="contact-btn" title="문자">💬</a>
+        <a href="tel:010-0000-0000" class="contact-btn" title="전화">📞</a>
+        <a href="sms:010-0000-0000" class="contact-btn" title="문자">💬</a>
       </div>
     </div>
     <div class="contact-person">
       <div>
-        <div class="contact-name serif">김철수</div>
+        <div class="contact-name serif">김정</div>
         <div class="contact-relation">아버지</div>
       </div>
       <div class="contact-actions">
-        <a href="tel:010-1111-2222" class="contact-btn" title="전화">📞</a>
-        <a href="sms:010-1111-2222" class="contact-btn" title="문자">💬</a>
+        <a href="tel:010-0000-0001" class="contact-btn" title="전화">📞</a>
+        <a href="sms:010-0000-0001" class="contact-btn" title="문자">💬</a>
       </div>
     </div>
     <div class="contact-person">
       <div>
-        <div class="contact-name serif">박영희</div>
+        <div class="contact-name serif">박미정</div>
         <div class="contact-relation">어머니</div>
       </div>
       <div class="contact-actions">
-        <a href="tel:010-3333-4444" class="contact-btn" title="전화">📞</a>
-        <a href="sms:010-3333-4444" class="contact-btn" title="문자">💬</a>
+        <a href="tel:010-0000-0002" class="contact-btn" title="전화">📞</a>
+        <a href="sms:010-0000-0002" class="contact-btn" title="문자">💬</a>
       </div>
     </div>
   </div>
@@ -170,32 +174,32 @@
     <p class="contact-role">신부측</p>
     <div class="contact-person">
       <div>
-        <div class="contact-name serif">이서연</div>
+        <div class="contact-name serif">김지수</div>
         <div class="contact-relation">신부</div>
       </div>
       <div class="contact-actions">
-        <a href="tel:010-5678-1234" class="contact-btn" title="전화">📞</a>
-        <a href="sms:010-5678-1234" class="contact-btn" title="문자">💬</a>
+        <a href="tel:010-0000-0003" class="contact-btn" title="전화">📞</a>
+        <a href="sms:010-0000-0003" class="contact-btn" title="문자">💬</a>
       </div>
     </div>
     <div class="contact-person">
       <div>
-        <div class="contact-name serif">이대한</div>
+        <div class="contact-name serif">김환상</div>
         <div class="contact-relation">아버지</div>
       </div>
       <div class="contact-actions">
-        <a href="tel:010-5555-6666" class="contact-btn" title="전화">📞</a>
-        <a href="sms:010-5555-6666" class="contact-btn" title="문자">💬</a>
+        <a href="tel:010-0000-0004" class="contact-btn" title="전화">📞</a>
+        <a href="sms:010-0000-0004" class="contact-btn" title="문자">💬</a>
       </div>
     </div>
     <div class="contact-person">
       <div>
-        <div class="contact-name serif">최민경</div>
+        <div class="contact-name serif">박미연</div>
         <div class="contact-relation">어머니</div>
       </div>
       <div class="contact-actions">
-        <a href="tel:010-7777-8888" class="contact-btn" title="전화">📞</a>
-        <a href="sms:010-7777-8888" class="contact-btn" title="문자">💬</a>
+        <a href="tel:010-0000-0005" class="contact-btn" title="전화">📞</a>
+        <a href="sms:010-0000-0005" class="contact-btn" title="문자">💬</a>
       </div>
     </div>
   </div>
@@ -213,18 +217,18 @@
         <circle cx="12" cy="9" r="2.5"/>
       </svg>
       <span>지도 영역</span>
-      <span style="font-size:11px;color:#c8c4be">실제 배포 시 Google Maps 또는 Kakao Map 삽입</span>
+      <span style="font-size:11px;color:#c8c4be">Google Maps 또는 Kakao Map 삽입</span>
     </div>
   </div>
   <div class="map-info">
-    <p class="venue serif">그랜드 웨딩홀 5층 로즈홀</p>
-    <p>서울특별시 강남구 테헤란로 123<br>그랜드 타워 5층</p>
+    <p class="venue serif">고려대학교 교우회관</p>
+    <p>서울특별시 성북구 종암로 13<br>고려대학교 교우회관</p>
     <p style="margin-top:.75rem;font-size:12px;color:#888780">
-      🚇 지하철 2호선 강남역 3번 출구 도보 5분<br>
-      🚌 버스 140, 341, 3412 강남역 하차<br>
-      🚗 주차 가능 (2시간 무료)
+      🚇 지하철 6호선 고려대역 1번 출구 도보 10분<br>
+      🚌 버스 정류장 고려대학교 하차<br>
+      🚗 교내 주차 가능
     </p>
-    <a href="https://map.kakao.com" class="map-link" target="_blank">카카오맵에서 보기 →</a>
+    <a href="https://map.kakao.com/link/search/고려대학교 교우회관" class="map-link" target="_blank">카카오맵에서 보기 →</a>
   </div>
 </section>
 
@@ -233,42 +237,139 @@
   <p class="section-label">ACCOUNT</p>
   <h2 class="section-title serif">마음 전하기</h2>
   <div class="divider-line"></div>
-
   <div class="account-card">
-    <p class="account-who">신랑 김민준</p>
-    <p class="account-name serif">국민은행</p>
-    <p class="account-num">123-456-789012</p>
-    <button class="copy-btn" onclick="copyText('123-456-789012',this)">복사</button>
+    <p class="account-who">신랑 김낙현</p>
+    <p class="account-name serif">은행명</p>
+    <p class="account-num">000-000-000000</p>
+    <button class="copy-btn" onclick="copyText('000-000-000000',this)">복사</button>
   </div>
   <div class="account-card">
-    <p class="account-who">신랑 아버지 김철수</p>
-    <p class="account-name serif">신한은행</p>
-    <p class="account-num">110-222-333456</p>
-    <button class="copy-btn" onclick="copyText('110-222-333456',this)">복사</button>
+    <p class="account-who">신랑 아버지 김정</p>
+    <p class="account-name serif">은행명</p>
+    <p class="account-num">000-000-000000</p>
+    <button class="copy-btn" onclick="copyText('000-000-000000',this)">복사</button>
   </div>
   <div class="account-card">
-    <p class="account-who">신부 이서연</p>
-    <p class="account-name serif">우리은행</p>
-    <p class="account-num">1002-567-890123</p>
-    <button class="copy-btn" onclick="copyText('1002-567-890123',this)">복사</button>
+    <p class="account-who">신부 김지수</p>
+    <p class="account-name serif">은행명</p>
+    <p class="account-num">000-000-000000</p>
+    <button class="copy-btn" onclick="copyText('000-000-000000',this)">복사</button>
   </div>
   <div class="account-card">
-    <p class="account-who">신부 아버지 이대한</p>
-    <p class="account-name serif">하나은행</p>
-    <p class="account-num">111-222-333444</p>
-    <button class="copy-btn" onclick="copyText('111-222-333444',this)">복사</button>
+    <p class="account-who">신부 아버지 김환상</p>
+    <p class="account-name serif">은행명</p>
+    <p class="account-num">000-000-000000</p>
+    <button class="copy-btn" onclick="copyText('000-000-000000',this)">복사</button>
   </div>
 </section>
 
-<!-- Footer -->
+<!-- ⑦ 달력 -->
+<section>
+  <p class="section-label">DATE</p>
+  <h2 class="section-title serif">날짜</h2>
+  <div class="divider-line"></div>
+  <div class="cal-wrap">
+    <!-- 꽃 화환 SVG -->
+    <svg class="cal-flower-svg" viewBox="0 0 220 110" fill="none" xmlns="http://www.w3.org/2000/svg">
+      <!-- 줄기 아치 -->
+      <path d="M30 100 Q110 10 190 100" stroke="#a8b89a" stroke-width="1.2" fill="none" stroke-dasharray="3 2"/>
+      <!-- 왼쪽 잎들 -->
+      <ellipse cx="38" cy="78" rx="9" ry="5" fill="#b8c9a8" transform="rotate(-40 38 78)"/>
+      <ellipse cx="52" cy="54" rx="8" ry="4" fill="#c8d8b8" transform="rotate(-55 52 54)"/>
+      <ellipse cx="72" cy="34" rx="7" ry="3.5" fill="#b8c9a8" transform="rotate(-65 72 34)"/>
+      <!-- 오른쪽 잎들 -->
+      <ellipse cx="182" cy="78" rx="9" ry="5" fill="#b8c9a8" transform="rotate(40 182 78)"/>
+      <ellipse cx="168" cy="54" rx="8" ry="4" fill="#c8d8b8" transform="rotate(55 168 54)"/>
+      <ellipse cx="148" cy="34" rx="7" ry="3.5" fill="#b8c9a8" transform="rotate(65 148 34)"/>
+      <!-- 꽃들 - 왼쪽 -->
+      <circle cx="30" cy="97" r="7" fill="#f0c8c0"/>
+      <circle cx="30" cy="97" r="3.5" fill="#e8a090"/>
+      <circle cx="47" cy="68" r="6" fill="#e8d0c0"/>
+      <circle cx="47" cy="68" r="3" fill="#d4a888"/>
+      <circle cx="68" cy="44" r="5" fill="#d8c8e8"/>
+      <circle cx="68" cy="44" r="2.5" fill="#b898cc"/>
+      <circle cx="90" cy="26" r="5.5" fill="#f0d8c0"/>
+      <circle cx="90" cy="26" r="2.5" fill="#d4a878"/>
+      <!-- 꽃들 - 오른쪽 -->
+      <circle cx="190" cy="97" r="7" fill="#f0c8c0"/>
+      <circle cx="190" cy="97" r="3.5" fill="#e8a090"/>
+      <circle cx="173" cy="68" r="6" fill="#e8d0c0"/>
+      <circle cx="173" cy="68" r="3" fill="#d4a888"/>
+      <circle cx="152" cy="44" r="5" fill="#d8c8e8"/>
+      <circle cx="152" cy="44" r="2.5" fill="#b898cc"/>
+      <circle cx="130" cy="26" r="5.5" fill="#f0d8c0"/>
+      <circle cx="130" cy="26" r="2.5" fill="#d4a878"/>
+      <!-- 중앙 큰 꽃 -->
+      <circle cx="110" cy="18" r="9" fill="#f4d0c8"/>
+      <circle cx="110" cy="18" r="5" fill="#e8a8a0"/>
+      <!-- 작은 포인트 꽃들 -->
+      <circle cx="59" cy="32" r="3.5" fill="#f0e0c0"/>
+      <circle cx="161" cy="32" r="3.5" fill="#f0e0c0"/>
+      <circle cx="80" cy="20" r="3" fill="#e8c8d8"/>
+      <circle cx="140" cy="20" r="3" fill="#e8c8d8"/>
+    </svg>
+
+    <div class="cal-box">
+      <div class="cal-month-row">
+        <div class="cal-month-num">9</div>
+        <div class="cal-month-eng">Sept.</div>
+      </div>
+      <div class="cal-names-row">김낙현 &amp; 김지수</div>
+      <div class="cal-grid">
+        <div class="day-header">Sun.</div>
+        <div class="day-header">Mon.</div>
+        <div class="day-header">Tue.</div>
+        <div class="day-header">Wed.</div>
+        <div class="day-header">Thu.</div>
+        <div class="day-header">Fri.</div>
+        <div class="day-header">Sat.</div>
+        <!-- 2026년 9월: 1일이 화요일(idx=2) -->
+        <div class="day empty">·</div>
+        <div class="day empty">·</div>
+        <div class="day">1</div>
+        <div class="day">2</div>
+        <div class="day">3</div>
+        <div class="day">4</div>
+        <div class="day sat">5</div>
+        <!-- 실제로 9월 5일은 토요일(2026년) -->
+        <div class="day sun">6</div>
+        <div class="day">7</div>
+        <div class="day">8</div>
+        <div class="day">9</div>
+        <div class="day">10</div>
+        <div class="day">11</div>
+        <div class="day sat">12</div>
+        <div class="day sun">13</div>
+        <div class="day">14</div>
+        <div class="day">15</div>
+        <div class="day">16</div>
+        <div class="day">17</div>
+        <div class="day">18</div>
+        <div class="day sat">19</div>
+        <div class="day sun">20</div>
+        <div class="day">21</div>
+        <div class="day">22</div>
+        <div class="day">23</div>
+        <div class="day">24</div>
+        <div class="day">25</div>
+        <div class="day sat">26</div>
+        <div class="day sun">27</div>
+        <div class="day">28</div>
+        <div class="day">29</div>
+        <div class="day">30</div>
+      </div>
+    </div>
+    <button class="cal-add-btn" onclick="addToCalendar()">＋ 일정에 추가하기</button>
+  </div>
+</section>
+
 <footer>
-  <p class="footer-date serif">2025년 6월 14일 토요일 오후 2시</p>
-  <p class="footer-place" style="margin-top:.5rem">그랜드 웨딩홀 로즈홀</p>
+  <p class="footer-date serif">2026년 9월 5일 토요일 오후 1시</p>
+  <p class="footer-place" style="margin-top:.5rem">고려대학교 교우회관</p>
   <div style="width:32px;height:1px;background:#d3d1c7;margin:1.5rem auto"></div>
-  <p style="font-size:11px;color:#b4b2a9;letter-spacing:2px">김민준 &#38; 이서연</p>
+  <p style="font-size:11px;color:#b4b2a9;letter-spacing:2px">김낙현 &#38; 김지수</p>
 </footer>
 
-<!-- Lightbox -->
 <div class="lightbox" id="lightbox" onclick="closeLB(event)">
   <button class="lightbox-close" onclick="closeLightbox()">✕</button>
   <img id="lb-img" src="" alt="">
@@ -279,7 +380,6 @@
 </div>
 
 <script>
-// Gallery placeholder images (Picsum)
 const imgs = [
   'images/MO_00018.jpg',
   'images/MO_00051.jpg',
@@ -299,6 +399,17 @@ imgs.forEach((src,i) => {
   grid.appendChild(div);
 });
 
+// 달력에서 5일 강조 표시
+document.addEventListener('DOMContentLoaded', () => {
+  const days = document.querySelectorAll('.cal-grid .day');
+  days.forEach(d => {
+    if(d.textContent.trim() === '5') {
+      d.classList.add('highlight');
+      d.innerHTML = '<span>5</span>';
+    }
+  });
+});
+
 function openLightbox(i) {
   curIdx = i;
   document.getElementById('lb-img').src = imgs[i];
@@ -316,13 +427,31 @@ function lbNav(dir) {
   curIdx = (curIdx + dir + imgs.length) % imgs.length;
   document.getElementById('lb-img').src = imgs[curIdx];
 }
-
 function copyText(text, btn) {
   navigator.clipboard.writeText(text).then(() => {
     const orig = btn.textContent;
     btn.textContent = '✓ 완료';
     setTimeout(() => btn.textContent = orig, 1800);
   });
+}
+function addToCalendar() {
+  const url = [
+    'BEGIN:VCALENDAR',
+    'VERSION:2.0',
+    'BEGIN:VEVENT',
+    'DTSTART:20260905T130000',
+    'DTEND:20260905T150000',
+    'SUMMARY:김낙현 & 김지수 결혼식',
+    'LOCATION:서울특별시 성북구 종암로 13 고려대학교 교우회관',
+    'DESCRIPTION:김낙현 & 김지수 결혼식에 초대합니다.',
+    'END:VEVENT',
+    'END:VCALENDAR'
+  ].join('\r\n');
+  const blob = new Blob([url], {type:'text/calendar'});
+  const a = document.createElement('a');
+  a.href = URL.createObjectURL(blob);
+  a.download = 'wedding_invitation.ics';
+  a.click();
 }
 </script>
 </body>
