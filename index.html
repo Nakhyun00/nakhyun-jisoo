@@ -1,0 +1,333 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>청첩장</title>
+<link href="https://fonts.googleapis.com/css2?family=Noto+Serif+KR:wght@300;400;500&family=Noto+Sans+KR:wght@300;400&display=swap" rel="stylesheet">
+<style>
+  *{margin:0;padding:0;box-sizing:border-box}
+  html{scroll-behavior:smooth}
+  body{font-family:'Noto Sans KR',sans-serif;background:#fafaf8;color:#2c2c2a;font-size:14px;line-height:1.8}
+  .serif{font-family:'Noto Serif KR',serif}
+
+  /* Hero */
+  .hero{min-height:100vh;display:flex;flex-direction:column;align-items:center;justify-content:center;position:relative;overflow:hidden;background:#f5f3ef}
+  .hero-img{width:100%;height:100vh;object-fit:cover;position:absolute;top:0;left:0;opacity:.35}
+  .hero-placeholder{width:100%;height:100vh;position:absolute;top:0;left:0;background:linear-gradient(160deg,#e8e2d9 0%,#d4c9b8 100%);display:flex;align-items:center;justify-content:center}
+  .hero-placeholder svg{opacity:.15}
+  .hero-content{position:relative;z-index:1;text-align:center;padding:2rem}
+  .hero-date{font-size:11px;letter-spacing:4px;color:#888780;margin-bottom:2rem;font-family:'Noto Sans KR',sans-serif;font-weight:300}
+  .hero-names{font-family:'Noto Serif KR',serif;font-size:32px;font-weight:400;color:#2c2c2a;letter-spacing:2px;line-height:1.4;margin-bottom:1rem}
+  .hero-ampersand{color:#b4aca0;font-size:24px;display:block;margin:.25rem 0}
+  .hero-sub{font-size:11px;letter-spacing:3px;color:#888780;font-weight:300}
+  .hero-divider{width:40px;height:1px;background:#c8c0b4;margin:1.5rem auto}
+
+  /* Sections */
+  section{padding:4rem 1.5rem}
+  section:nth-child(even){background:#fff}
+  section:nth-child(odd){background:#fafaf8}
+  .section-label{font-size:10px;letter-spacing:4px;color:#b4b2a9;font-weight:400;text-align:center;margin-bottom:.75rem}
+  .section-title{font-family:'Noto Serif KR',serif;font-size:20px;font-weight:400;text-align:center;margin-bottom:2rem;color:#2c2c2a}
+  .divider-line{width:32px;height:1px;background:#d3d1c7;margin:0 auto 2.5rem}
+
+  /* Greeting */
+  .greeting-text{max-width:320px;margin:0 auto;text-align:center;font-size:14px;color:#5f5e5a;line-height:2;font-family:'Noto Serif KR',serif;font-weight:300}
+
+  /* Contact */
+  .contact-group{margin-bottom:2rem}
+  .contact-role{font-size:10px;letter-spacing:3px;color:#b4b2a9;margin-bottom:.75rem;text-align:center}
+  .contact-person{display:flex;align-items:center;justify-content:space-between;padding:.75rem 1rem;border:0.5px solid #e8e6e2;border-radius:10px;margin-bottom:.5rem;background:#fff}
+  .contact-name{font-family:'Noto Serif KR',serif;font-size:15px;color:#2c2c2a}
+  .contact-relation{font-size:11px;color:#b4b2a9;margin-top:2px}
+  .contact-actions{display:flex;gap:8px}
+  .contact-btn{display:flex;align-items:center;justify-content:center;width:36px;height:36px;border-radius:50%;border:0.5px solid #d3d1c7;background:#fafaf8;color:#5f5e5a;text-decoration:none;font-size:16px;transition:background .2s}
+  .contact-btn:hover{background:#f0ede8}
+
+  /* Gallery */
+  .gallery-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:4px}
+  .gallery-item{aspect-ratio:1;overflow:hidden;cursor:pointer;background:#e8e2d9;border-radius:4px}
+  .gallery-item img{width:100%;height:100%;object-fit:cover;transition:transform .3s}
+  .gallery-item:hover img{transform:scale(1.05)}
+  .gallery-placeholder{width:100%;height:100%;display:flex;align-items:center;justify-content:center;color:#b4b2a9;font-size:22px}
+
+  /* Lightbox */
+  .lightbox{display:none;position:fixed;inset:0;background:rgba(30,28,26,.92);z-index:1000;align-items:center;justify-content:center;flex-direction:column}
+  .lightbox.active{display:flex}
+  .lightbox img{max-width:92%;max-height:80vh;object-fit:contain;border-radius:6px}
+  .lightbox-close{position:absolute;top:1.25rem;right:1.25rem;color:#fff;font-size:24px;cursor:pointer;opacity:.8;background:none;border:none;font-family:sans-serif;line-height:1}
+  .lb-nav{display:flex;gap:2rem;margin-top:1.25rem}
+  .lb-btn{color:#fff;background:none;border:0.5px solid rgba(255,255,255,.3);width:40px;height:40px;border-radius:50%;cursor:pointer;font-size:18px;display:flex;align-items:center;justify-content:center}
+
+  /* Map */
+  .map-box{border-radius:12px;overflow:hidden;border:0.5px solid #e8e6e2;margin-bottom:1.5rem}
+  .map-placeholder{height:220px;background:#e8e2d9;display:flex;align-items:center;justify-content:center;flex-direction:column;gap:.5rem;color:#888780;font-size:13px}
+  .map-info{background:#fff;border:0.5px solid #e8e6e2;border-radius:10px;padding:1rem 1.25rem}
+  .map-info p{font-size:13px;color:#5f5e5a;line-height:1.9}
+  .map-info .venue{font-family:'Noto Serif KR',serif;font-size:15px;color:#2c2c2a;margin-bottom:.4rem}
+  .map-link{display:inline-block;margin-top:.75rem;font-size:12px;color:#888780;text-decoration:none;border-bottom:0.5px solid #d3d1c7;padding-bottom:1px}
+
+  /* Account */
+  .account-card{background:#fff;border:0.5px solid #e8e6e2;border-radius:10px;padding:1rem 1.25rem;margin-bottom:.75rem}
+  .account-who{font-size:11px;color:#b4b2a9;letter-spacing:1px;margin-bottom:.3rem}
+  .account-name{font-family:'Noto Serif KR',serif;font-size:15px;color:#2c2c2a;margin-bottom:.25rem}
+  .account-num{font-size:14px;color:#5f5e5a;letter-spacing:.5px}
+  .copy-btn{float:right;margin-top:-1.5rem;font-size:11px;color:#888780;background:#fafaf8;border:0.5px solid #d3d1c7;border-radius:6px;padding:4px 10px;cursor:pointer}
+  .copy-btn:active{background:#f0ede8}
+
+  /* Footer */
+  footer{text-align:center;padding:3rem 1.5rem;background:#f5f3ef}
+  .footer-date{font-family:'Noto Serif KR',serif;font-size:22px;font-weight:400;color:#2c2c2a;margin-bottom:.5rem}
+  .footer-place{font-size:12px;color:#888780;letter-spacing:1px}
+</style>
+</head>
+<body>
+
+<!-- ① Hero -->
+<section class="hero" style="padding:0">
+  <div class="hero-placeholder">
+    <svg width="120" height="120" viewBox="0 0 120 120" fill="none">
+      <path d="M60 20 C60 20 20 45 20 72 C20 90 38 100 60 85 C82 100 100 90 100 72 C100 45 60 20 60 20Z" fill="#8a7f72"/>
+    </svg>
+  </div>
+  <div class="hero-content">
+    <p class="hero-date serif" style="font-size:11px;letter-spacing:4px;color:#6e6660">2025 · 06 · 14</p>
+    <div class="hero-divider" style="margin:1rem auto"></div>
+    <div class="hero-names serif">
+      김민준
+      <span class="hero-ampersand">&#38;</span>
+      이서연
+    </div>
+    <div class="hero-divider"></div>
+    <p class="hero-sub">WEDDING INVITATION</p>
+  </div>
+</section>
+
+<!-- ② 인사말 -->
+<section>
+  <p class="section-label">GREETING</p>
+  <h2 class="section-title serif">인사말</h2>
+  <div class="divider-line"></div>
+  <p class="greeting-text">
+    서로가 서로에게 하나뿐인 사람이 되어<br>
+    평생을 함께 걷고자 합니다.<br><br>
+    오랫동안 기다려온 소중한 날,<br>
+    귀한 걸음 하시어 저희의 시작을<br>
+    함께 축복해 주시면 감사하겠습니다.
+  </p>
+</section>
+
+<!-- ③ 갤러리 -->
+<section>
+  <p class="section-label">GALLERY</p>
+  <h2 class="section-title serif">갤러리</h2>
+  <div class="divider-line"></div>
+  <div class="gallery-grid" id="gallery">
+  </div>
+</section>
+
+<!-- ④ 연락처 -->
+<section>
+  <p class="section-label">CONTACT</p>
+  <h2 class="section-title serif">연락처</h2>
+  <div class="divider-line"></div>
+
+  <div class="contact-group">
+    <p class="contact-role">신랑측</p>
+    <div class="contact-person">
+      <div>
+        <div class="contact-name serif">김민준</div>
+        <div class="contact-relation">신랑</div>
+      </div>
+      <div class="contact-actions">
+        <a href="tel:010-1234-5678" class="contact-btn" title="전화">📞</a>
+        <a href="sms:010-1234-5678" class="contact-btn" title="문자">💬</a>
+      </div>
+    </div>
+    <div class="contact-person">
+      <div>
+        <div class="contact-name serif">김철수</div>
+        <div class="contact-relation">아버지</div>
+      </div>
+      <div class="contact-actions">
+        <a href="tel:010-1111-2222" class="contact-btn" title="전화">📞</a>
+        <a href="sms:010-1111-2222" class="contact-btn" title="문자">💬</a>
+      </div>
+    </div>
+    <div class="contact-person">
+      <div>
+        <div class="contact-name serif">박영희</div>
+        <div class="contact-relation">어머니</div>
+      </div>
+      <div class="contact-actions">
+        <a href="tel:010-3333-4444" class="contact-btn" title="전화">📞</a>
+        <a href="sms:010-3333-4444" class="contact-btn" title="문자">💬</a>
+      </div>
+    </div>
+  </div>
+
+  <div class="contact-group">
+    <p class="contact-role">신부측</p>
+    <div class="contact-person">
+      <div>
+        <div class="contact-name serif">이서연</div>
+        <div class="contact-relation">신부</div>
+      </div>
+      <div class="contact-actions">
+        <a href="tel:010-5678-1234" class="contact-btn" title="전화">📞</a>
+        <a href="sms:010-5678-1234" class="contact-btn" title="문자">💬</a>
+      </div>
+    </div>
+    <div class="contact-person">
+      <div>
+        <div class="contact-name serif">이대한</div>
+        <div class="contact-relation">아버지</div>
+      </div>
+      <div class="contact-actions">
+        <a href="tel:010-5555-6666" class="contact-btn" title="전화">📞</a>
+        <a href="sms:010-5555-6666" class="contact-btn" title="문자">💬</a>
+      </div>
+    </div>
+    <div class="contact-person">
+      <div>
+        <div class="contact-name serif">최민경</div>
+        <div class="contact-relation">어머니</div>
+      </div>
+      <div class="contact-actions">
+        <a href="tel:010-7777-8888" class="contact-btn" title="전화">📞</a>
+        <a href="sms:010-7777-8888" class="contact-btn" title="문자">💬</a>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ⑤ 오시는 길 -->
+<section>
+  <p class="section-label">LOCATION</p>
+  <h2 class="section-title serif">오시는 길</h2>
+  <div class="divider-line"></div>
+  <div class="map-box">
+    <div class="map-placeholder">
+      <svg width="36" height="36" viewBox="0 0 24 24" fill="none" stroke="#b4b2a9" stroke-width="1.5">
+        <path d="M12 2C8.13 2 5 5.13 5 9c0 5.25 7 13 7 13s7-7.75 7-13c0-3.87-3.13-7-7-7z"/>
+        <circle cx="12" cy="9" r="2.5"/>
+      </svg>
+      <span>지도 영역</span>
+      <span style="font-size:11px;color:#c8c4be">실제 배포 시 Google Maps 또는 Kakao Map 삽입</span>
+    </div>
+  </div>
+  <div class="map-info">
+    <p class="venue serif">그랜드 웨딩홀 5층 로즈홀</p>
+    <p>서울특별시 강남구 테헤란로 123<br>그랜드 타워 5층</p>
+    <p style="margin-top:.75rem;font-size:12px;color:#888780">
+      🚇 지하철 2호선 강남역 3번 출구 도보 5분<br>
+      🚌 버스 140, 341, 3412 강남역 하차<br>
+      🚗 주차 가능 (2시간 무료)
+    </p>
+    <a href="https://map.kakao.com" class="map-link" target="_blank">카카오맵에서 보기 →</a>
+  </div>
+</section>
+
+<!-- ⑥ 축의금 -->
+<section>
+  <p class="section-label">ACCOUNT</p>
+  <h2 class="section-title serif">마음 전하기</h2>
+  <div class="divider-line"></div>
+
+  <div class="account-card">
+    <p class="account-who">신랑 김민준</p>
+    <p class="account-name serif">국민은행</p>
+    <p class="account-num">123-456-789012</p>
+    <button class="copy-btn" onclick="copyText('123-456-789012',this)">복사</button>
+  </div>
+  <div class="account-card">
+    <p class="account-who">신랑 아버지 김철수</p>
+    <p class="account-name serif">신한은행</p>
+    <p class="account-num">110-222-333456</p>
+    <button class="copy-btn" onclick="copyText('110-222-333456',this)">복사</button>
+  </div>
+  <div class="account-card">
+    <p class="account-who">신부 이서연</p>
+    <p class="account-name serif">우리은행</p>
+    <p class="account-num">1002-567-890123</p>
+    <button class="copy-btn" onclick="copyText('1002-567-890123',this)">복사</button>
+  </div>
+  <div class="account-card">
+    <p class="account-who">신부 아버지 이대한</p>
+    <p class="account-name serif">하나은행</p>
+    <p class="account-num">111-222-333444</p>
+    <button class="copy-btn" onclick="copyText('111-222-333444',this)">복사</button>
+  </div>
+</section>
+
+<!-- Footer -->
+<footer>
+  <p class="footer-date serif">2025년 6월 14일 토요일 오후 2시</p>
+  <p class="footer-place" style="margin-top:.5rem">그랜드 웨딩홀 로즈홀</p>
+  <div style="width:32px;height:1px;background:#d3d1c7;margin:1.5rem auto"></div>
+  <p style="font-size:11px;color:#b4b2a9;letter-spacing:2px">김민준 &#38; 이서연</p>
+</footer>
+
+<!-- Lightbox -->
+<div class="lightbox" id="lightbox" onclick="closeLB(event)">
+  <button class="lightbox-close" onclick="closeLightbox()">✕</button>
+  <img id="lb-img" src="" alt="">
+  <div class="lb-nav">
+    <button class="lb-btn" onclick="lbNav(-1)">&#8592;</button>
+    <button class="lb-btn" onclick="lbNav(1)">&#8594;</button>
+  </div>
+</div>
+
+<script>
+// Gallery placeholder images (Picsum)
+const imgs = [
+  'https://picsum.photos/seed/wed1/400/400',
+  'https://picsum.photos/seed/wed2/400/400',
+  'https://picsum.photos/seed/wed3/400/400',
+  'https://picsum.photos/seed/wed4/400/400',
+  'https://picsum.photos/seed/wed5/400/400',
+  'https://picsum.photos/seed/wed6/400/400',
+  'https://picsum.photos/seed/wed7/400/400',
+  'https://picsum.photos/seed/wed8/400/400',
+  'https://picsum.photos/seed/wed9/400/400',
+];
+
+const grid = document.getElementById('gallery');
+let curIdx = 0;
+
+imgs.forEach((src,i) => {
+  const div = document.createElement('div');
+  div.className = 'gallery-item';
+  div.innerHTML = `<img src="${src}" alt="웨딩 사진 ${i+1}" loading="lazy">`;
+  div.onclick = () => openLightbox(i);
+  grid.appendChild(div);
+});
+
+function openLightbox(i) {
+  curIdx = i;
+  document.getElementById('lb-img').src = imgs[i];
+  document.getElementById('lightbox').classList.add('active');
+  document.body.style.overflow = 'hidden';
+}
+function closeLightbox() {
+  document.getElementById('lightbox').classList.remove('active');
+  document.body.style.overflow = '';
+}
+function closeLB(e) {
+  if(e.target === document.getElementById('lightbox')) closeLightbox();
+}
+function lbNav(dir) {
+  curIdx = (curIdx + dir + imgs.length) % imgs.length;
+  document.getElementById('lb-img').src = imgs[curIdx];
+}
+
+function copyText(text, btn) {
+  navigator.clipboard.writeText(text).then(() => {
+    const orig = btn.textContent;
+    btn.textContent = '✓ 완료';
+    setTimeout(() => btn.textContent = orig, 1800);
+  });
+}
+</script>
+</body>
+</html>
