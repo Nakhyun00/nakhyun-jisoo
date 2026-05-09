@@ -357,7 +357,6 @@
         <div class="day">30</div>
       </div>
     </div>
-    <button class="cal-add-btn" onclick="addToCalendar()">＋ 일정에 추가하기</button>
   </div>
 </section>
 
@@ -431,25 +430,6 @@ function copyText(text, btn) {
     btn.textContent = '✓ 완료';
     setTimeout(() => btn.textContent = orig, 1800);
   });
-}
-function addToCalendar() {
-  const url = [
-    'BEGIN:VCALENDAR',
-    'VERSION:2.0',
-    'BEGIN:VEVENT',
-    'DTSTART:20260905T130000',
-    'DTEND:20260905T150000',
-    'SUMMARY:김낙현 & 김지수 결혼식',
-    'LOCATION:서울특별시 성북구 종암로 13 고려대학교 교우회관',
-    'DESCRIPTION:김낙현 & 김지수 결혼식에 초대합니다.',
-    'END:VEVENT',
-    'END:VCALENDAR'
-  ].join('\r\n');
-  const blob = new Blob([url], {type:'text/calendar'});
-  const a = document.createElement('a');
-  a.href = URL.createObjectURL(blob);
-  a.download = 'wedding_invitation.ics';
-  a.click();
 }
 </script>
 </body>
