@@ -86,6 +86,9 @@
 </head>
 <body>
 
+ <!-- 카카오맵 API -->
+<script type="text/javascript" src="//dapi.kakao.com/v2/maps/sdk.js?appkey=b9101a3f62bf69d410ed17160d17a39e"></script>
+
 <!-- ① Hero -->
 <section class="hero" style="padding:0">
   <div class="hero-placeholder">
@@ -204,29 +207,20 @@
 </section>
 
 <!-- ⑤ 오시는 길 -->
+<!-- ⑤ 오시는 길 -->
 <section>
   <p class="section-label">LOCATION</p>
   <h2 class="section-title serif">오시는 길</h2>
   <div class="divider-line"></div>
+  
+  <!-- 지도 영역 -->
   <div class="map-box">
-    <div class="map-placeholder">
-      <svg width="36" height="36" viewBox="0 0 24 24" fill="none" stroke="#b4b2a9" stroke-width="1.5">
-        <path d="M12 2C8.13 2 5 5.13 5 9c0 5.25 7 13 7 13s7-7.75 7-13c0-3.87-3.13-7-7-7z"/>
-        <circle cx="12" cy="9" r="2.5"/>
-      </svg>
-      <span>지도 영역</span>
-      <span style="font-size:11px;color:#c8c4be">Google Maps 또는 Kakao Map 삽입</span>
-    </div>
+    <div id="map" style="width:100%; height:250px;"></div>
   </div>
+
   <div class="map-info">
     <p class="venue serif">고려대학교 교우회관</p>
     <p>서울특별시 성북구 종암로 13<br>고려대학교 교우회관</p>
-    <p style="margin-top:.75rem;font-size:12px;color:#888780">
-      🚇 지하철 6호선 고려대역 1번 출구 도보 10분<br>
-      🚌 버스 정류장 고려대학교 하차<br>
-      🚗 교내 주차 가능
-    </p>
-    <a href="https://map.kakao.com/link/search/고려대학교 교우회관" class="map-link" target="_blank">카카오맵에서 보기 →</a>
   </div>
 </section>
 
@@ -431,6 +425,34 @@ function copyText(text, btn) {
     setTimeout(() => btn.textContent = orig, 1800);
   });
 }
+ // 카카오맵 초기화 함수
+function initMap() {
+  const container = document.getElementById('map'); // 지도를 담을 영역
+  const position = new kakao.maps.LatLng(37.5921, 127.0351); // 고려대학교 교우회관 좌표
+  
+  const options = {
+    center: position, // 지도의 중심좌표
+    level: 3 // 지도의 확대 레벨
+  };
+
+  const map = new kakao.maps.Map(container, options); // 지도 생성
+
+  // 마커 생성
+  const marker = new kakao.maps.Marker({
+    position: position
+  });
+
+  // 마커를 지도 위에 표시
+  marker.setMap(map);
+  
+  // (선택) 지도가 로드된 후 중심을 다시 잡기 위함 (반응형 대응)
+  window.addEventListener('resize', function() {
+    map.setCenter(position);
+  });
+}
+
+// 스크립트 로드 후 바로 실행
+document.addEventListener('DOMContentLoaded', initMap);
 </script>
 </body>
 </html>
