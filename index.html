@@ -78,17 +78,20 @@
     width:26px;height:26px;border-radius:50%;
     border:1.5px solid #c9a0a0;color:#2c2c2a;font-weight:500
   }
+  .cal-add-btn{margin-top:1.25rem;font-size:12px;color:#888780;background:#fafaf8;border:0.5px solid #d3d1c7;border-radius:20px;padding:7px 18px;cursor:pointer;letter-spacing:.5px;transition:background .2s}
+  .cal-add-btn:hover{background:#f0ede8}
 
   footer{text-align:center;padding:3rem 1.5rem;background:#f5f3ef}
   .footer-date{font-family:'Noto Serif KR',serif;font-size:20px;font-weight:400;color:#2c2c2a;margin-bottom:.5rem}
   .footer-place{font-size:12px;color:#888780;letter-spacing:1px}
 </style>
+
+<!-- 카카오맵 API -->
+<script type="text/javascript" src="//dapi.kakao.com/v2/maps/sdk.js?appkey=53bdf8eade17fadc3b3cdc4b7c1dd8c1"></script>
 </head>
 <body>
 
- <!-- 카카오맵 API -->
-<script type="text/javascript" src="//dapi.kakao.com/v2/maps/sdk.js?appkey=b9101a3f62bf69d410ed17160d17a39e"></script>
-
+  
 <!-- ① Hero -->
 <section class="hero" style="padding:0">
   <div class="hero-placeholder">
@@ -207,20 +210,23 @@
 </section>
 
 <!-- ⑤ 오시는 길 -->
-<!-- ⑤ 오시는 길 -->
 <section>
   <p class="section-label">LOCATION</p>
   <h2 class="section-title serif">오시는 길</h2>
   <div class="divider-line"></div>
-  
-  <!-- 지도 영역 -->
   <div class="map-box">
+    <div class="map-box">
     <div id="map" style="width:100%; height:250px;"></div>
   </div>
-
   <div class="map-info">
     <p class="venue serif">고려대학교 교우회관</p>
     <p>서울특별시 성북구 종암로 13<br>고려대학교 교우회관</p>
+    <p style="margin-top:.75rem;font-size:12px;color:#888780">
+      🚇 지하철 6호선 고려대역 1번 출구 도보 10분<br>
+      🚌 버스 정류장 고려대학교 하차<br>
+      🚗 교내 주차 가능
+    </p>
+    <a href="https://map.kakao.com/link/search/고려대학교 교우회관" class="map-link" target="_blank">카카오맵에서 보기 →</a>
   </div>
 </section>
 
@@ -236,19 +242,7 @@
     <button class="copy-btn" onclick="copyText('000-000-000000',this)">복사</button>
   </div>
   <div class="account-card">
-    <p class="account-who">신랑 아버지 김정</p>
-    <p class="account-name serif">은행명</p>
-    <p class="account-num">000-000-000000</p>
-    <button class="copy-btn" onclick="copyText('000-000-000000',this)">복사</button>
-  </div>
-  <div class="account-card">
     <p class="account-who">신부 김지수</p>
-    <p class="account-name serif">은행명</p>
-    <p class="account-num">000-000-000000</p>
-    <button class="copy-btn" onclick="copyText('000-000-000000',this)">복사</button>
-  </div>
-  <div class="account-card">
-    <p class="account-who">신부 아버지 김환상</p>
     <p class="account-name serif">은행명</p>
     <p class="account-num">000-000-000000</p>
     <button class="copy-btn" onclick="copyText('000-000-000000',this)">복사</button>
@@ -351,7 +345,6 @@
         <div class="day">30</div>
       </div>
     </div>
-  </div>
 </section>
 
 <footer>
@@ -377,6 +370,24 @@ const imgs = [
   'images/MO_00107.jpg',
   'images/MO_00201.jpg',
   'images/MO_00219.jpg',
+  'images/MO_00233.jpg',
+  'images/MO_00265.jpg',
+  'images/MO_00324.jpg',
+  'images/MO_00354.jpg',
+  'images/MO_00399.jpg',
+  'images/MO_00646.jpg',
+  'images/MO_00658.jpg',
+  'images/MO_00663.jpg',
+  'images/MO_00684.jpg',
+  'images/MO_00723.jpg',
+  'images/MO_00751.jpg',
+  'images/MO_00789.jpg',
+  'images/MO_00815.jpg',
+  'images/MO_00835.jpg',
+  'images/MO_00860.jpg',
+  'images/MO_00898.jpg',
+  'images/MO_00916.jpg',
+  'images/MO_00942.jpg',
 ];
 
 const grid = document.getElementById('gallery');
@@ -425,7 +436,7 @@ function copyText(text, btn) {
     setTimeout(() => btn.textContent = orig, 1800);
   });
 }
- // 카카오맵 초기화 함수
+
 function initMap() {
   const container = document.getElementById('map'); // 지도를 담을 영역
   const position = new kakao.maps.LatLng(37.5921, 127.0351); // 고려대학교 교우회관 좌표
