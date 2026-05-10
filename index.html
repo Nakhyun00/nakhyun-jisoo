@@ -3,466 +3,480 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>청첩장 - 김낙현 & 김지수</title>
+<title>청첩장 · 김낙현 & 김지수</title>
 <link href="https://fonts.googleapis.com/css2?family=Noto+Serif+KR:wght@300;400;500&family=Noto+Sans+KR:wght@300;400&display=swap" rel="stylesheet">
-<style>
-  *{margin:0;padding:0;box-sizing:border-box}
-  html{scroll-behavior:smooth}
-  body{font-family:'Noto Sans KR',sans-serif;background:#fafaf8;color:#2c2c2a;font-size:14px;line-height:1.8}
-  .serif{font-family:'Noto Serif KR',serif}
-  .hero{min-height:100vh;display:flex;flex-direction:column;align-items:center;justify-content:center;position:relative;overflow:hidden;background:#f5f3ef}
-  .hero-placeholder{width:100%;height:100vh;position:absolute;top:0;left:0;background:linear-gradient(160deg,#e8e2d9 0%,#d4c9b8 100%);display:flex;align-items:center;justify-content:center}
-  .hero-placeholder svg{opacity:.15}
-  .hero-content{position:relative;z-index:1;text-align:center;padding:2rem}
-  .hero-names{font-family:'Noto Serif KR',serif;font-size:32px;font-weight:400;color:#2c2c2a;letter-spacing:2px;line-height:1.4;margin-bottom:1rem}
-  .hero-ampersand{color:#b4aca0;font-size:24px;display:block;margin:.25rem 0}
-  .hero-sub{font-size:11px;letter-spacing:3px;color:#888780;font-weight:300}
-  .hero-divider{width:40px;height:1px;background:#c8c0b4;margin:1.5rem auto}
-  section{padding:4rem 1.5rem}
-  section:nth-child(even){background:#fff}
-  section:nth-child(odd){background:#fafaf8}
-  .section-label{font-size:10px;letter-spacing:4px;color:#b4b2a9;font-weight:400;text-align:center;margin-bottom:.75rem}
-  .section-title{font-family:'Noto Serif KR',serif;font-size:20px;font-weight:400;text-align:center;margin-bottom:2rem;color:#2c2c2a}
-  .divider-line{width:32px;height:1px;background:#d3d1c7;margin:0 auto 2.5rem}
-  .greeting-text{max-width:320px;margin:0 auto;text-align:center;font-size:14px;color:#5f5e5a;line-height:2;font-family:'Noto Serif KR',serif;font-weight:300}
-  .contact-group{margin-bottom:2rem}
-  .contact-role{font-size:10px;letter-spacing:3px;color:#b4b2a9;margin-bottom:.75rem;text-align:center}
-  .contact-person{display:flex;align-items:center;justify-content:space-between;padding:.75rem 1rem;border:0.5px solid #e8e6e2;border-radius:10px;margin-bottom:.5rem;background:#fff}
-  .contact-name{font-family:'Noto Serif KR',serif;font-size:15px;color:#2c2c2a}
-  .contact-relation{font-size:11px;color:#b4b2a9;margin-top:2px}
-  .contact-actions{display:flex;gap:8px}
-  .contact-btn{display:flex;align-items:center;justify-content:center;width:36px;height:36px;border-radius:50%;border:0.5px solid #d3d1c7;background:#fafaf8;color:#5f5e5a;text-decoration:none;font-size:16px;transition:background .2s}
-  .contact-btn:hover{background:#f0ede8}
-  .gallery-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:4px}
-  .gallery-item{aspect-ratio:1;overflow:hidden;cursor:pointer;background:#e8e2d9;border-radius:4px}
-  .gallery-item img{width:100%;height:100%;object-fit:cover;transition:transform .3s}
-  .gallery-item:hover img{transform:scale(1.05)}
-  .lightbox{display:none;position:fixed;inset:0;background:rgba(30,28,26,.92);z-index:1000;align-items:center;justify-content:center;flex-direction:column}
-  .lightbox.active{display:flex}
-  .lightbox img{max-width:92%;max-height:80vh;object-fit:contain;border-radius:6px}
-  .lightbox-close{position:absolute;top:1.25rem;right:1.25rem;color:#fff;font-size:24px;cursor:pointer;opacity:.8;background:none;border:none;font-family:sans-serif;line-height:1}
-  .lb-nav{display:flex;gap:2rem;margin-top:1.25rem}
-  .lb-btn{color:#fff;background:none;border:0.5px solid rgba(255,255,255,.3);width:40px;height:40px;border-radius:50%;cursor:pointer;font-size:18px;display:flex;align-items:center;justify-content:center}
-  .map-box{border-radius:12px;overflow:hidden;border:0.5px solid #e8e6e2;margin-bottom:1.5rem}
-  .map-placeholder{height:220px;background:#e8e2d9;display:flex;align-items:center;justify-content:center;flex-direction:column;gap:.5rem;color:#888780;font-size:13px}
-  .map-info{background:#fff;border:0.5px solid #e8e6e2;border-radius:10px;padding:1rem 1.25rem}
-  .map-info p{font-size:13px;color:#5f5e5a;line-height:1.9}
-  .map-info .venue{font-family:'Noto Serif KR',serif;font-size:15px;color:#2c2c2a;margin-bottom:.4rem}
-  .map-link{display:inline-block;margin-top:.75rem;font-size:12px;color:#888780;text-decoration:none;border-bottom:0.5px solid #d3d1c7;padding-bottom:1px}
-  .account-card{background:#fff;border:0.5px solid #e8e6e2;border-radius:10px;padding:1rem 1.25rem;margin-bottom:.75rem}
-  .account-who{font-size:11px;color:#b4b2a9;letter-spacing:1px;margin-bottom:.3rem}
-  .account-name{font-family:'Noto Serif KR',serif;font-size:15px;color:#2c2c2a;margin-bottom:.25rem}
-  .account-num{font-size:14px;color:#5f5e5a;letter-spacing:.5px}
-  .copy-btn{float:right;margin-top:-1.5rem;font-size:11px;color:#888780;background:#fafaf8;border:0.5px solid #d3d1c7;border-radius:6px;padding:4px 10px;cursor:pointer}
-  .copy-btn:active{background:#f0ede8}
-
-  /* Calendar */
-  .cal-wrap{display:flex;flex-direction:column;align-items:center}
-  .cal-flower-svg{width:220px;height:auto;margin-bottom:-8px}
-  .cal-box{background:#fff;border:0.5px solid #e8e6e2;border-radius:12px;padding:1.25rem 1.5rem;width:100%;max-width:300px}
-  .cal-month-row{text-align:center;margin-bottom:1rem}
-  .cal-month-num{font-family:'Noto Serif KR',serif;font-size:36px;font-weight:400;color:#2c2c2a;line-height:1}
-  .cal-month-eng{font-size:10px;letter-spacing:3px;color:#b4b2a9;margin-top:2px}
-  .cal-names-row{font-family:'Noto Serif KR',serif;font-size:13px;color:#5f5e5a;text-align:center;margin-bottom:1rem}
-  .cal-grid{display:grid;grid-template-columns:repeat(7,1fr);gap:2px;text-align:center}
-  .cal-grid .day-header{font-size:10px;color:#b4b2a9;padding-bottom:6px;font-weight:400}
-  .cal-grid .day-header:first-child{color:#e8998a}
-  .cal-grid .day-header:last-child{color:#8aabe8}
-  .cal-grid .day{font-size:13px;color:#5f5e5a;padding:4px 0;line-height:1.6}
-  .cal-grid .day.sun{color:#e8998a}
-  .cal-grid .day.sat{color:#8aabe8}
-  .cal-grid .day.empty{color:transparent}
-  .cal-grid .day.highlight{position:relative}
-  .cal-grid .day.highlight span{
-    display:inline-flex;align-items:center;justify-content:center;
-    width:26px;height:26px;border-radius:50%;
-    border:1.5px solid #c9a0a0;color:#2c2c2a;font-weight:500
-  }
-  .cal-add-btn{margin-top:1.25rem;font-size:12px;color:#888780;background:#fafaf8;border:0.5px solid #d3d1c7;border-radius:20px;padding:7px 18px;cursor:pointer;letter-spacing:.5px;transition:background .2s}
-  .cal-add-btn:hover{background:#f0ede8}
-
-  footer{text-align:center;padding:3rem 1.5rem;background:#f5f3ef}
-  .footer-date{font-family:'Noto Serif KR',serif;font-size:20px;font-weight:400;color:#2c2c2a;margin-bottom:.5rem}
-  .footer-place{font-size:12px;color:#888780;letter-spacing:1px}
-</style>
-
-<!-- 카카오맵 API -->
 <script type="text/javascript" src="//dapi.kakao.com/v2/maps/sdk.js?appkey=53bdf8eade17fadc3b3cdc4b7c1dd8c1&autoload=false"></script>
+<style>
+*{margin:0;padding:0;box-sizing:border-box}
+html{scroll-behavior:smooth}
+body{font-family:'Noto Sans KR',sans-serif;background:#f7f6f4;color:#2c2c2a;font-size:14px;line-height:1.8;display:flex;flex-direction:column;align-items:center}
+.page{width:100%;max-width:480px}
+
+.sec{padding:3.5rem 1.6rem}
+.sec:nth-child(odd){background:#fff}
+.sec:nth-child(even){background:#f7f6f4}
+.sec-label{font-size:10px;letter-spacing:4px;color:#bbb8b0;text-align:center;margin-bottom:.5rem}
+.sec-title{font-family:'Noto Serif KR',serif;font-size:19px;font-weight:400;text-align:center;color:#2c2c2a;margin-bottom:.6rem}
+.hairline{width:28px;height:1px;background:#d8d5cf;margin:.6rem auto 2rem}
+
+/* Hero */
+.hero{position:relative;height:100svh;min-height:500px;overflow:hidden;background:#ede9e3;display:flex;align-items:center;justify-content:center}
+.hero-img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;opacity:.45}
+.hero-bg{position:absolute;inset:0;background:linear-gradient(170deg,#ede9e3 0%,#d6cfc4 100%)}
+.hero-content{position:relative;z-index:1;text-align:center;padding:2rem}
+.hero-date{font-size:11px;letter-spacing:4px;color:#7a7570;font-family:'Noto Sans KR',sans-serif;font-weight:300}
+.hero-bar{width:32px;height:1px;background:#b8b0a5;margin:1.2rem auto}
+.hero-names{font-family:'Noto Serif KR',serif;font-size:30px;font-weight:400;color:#2c2c2a;letter-spacing:3px;line-height:1.5}
+.hero-amp{display:block;font-size:20px;color:#b4aca0;margin:.2rem 0}
+.hero-sub{font-size:10px;letter-spacing:4px;color:#7a7570;margin-top:.4rem}
+
+/* 인사말 + 연락하기 */
+.greet-txt{font-family:'Noto Serif KR',serif;font-size:14px;font-weight:300;color:#4e4d4a;line-height:2.1;text-align:center;max-width:300px;margin:0 auto 1.8rem}
+.contact-open-btn{display:block;margin:0 auto;font-family:'Noto Serif KR',serif;font-size:13px;color:#5a5652;background:#fff;border:0.5px solid #ccc8c0;border-radius:24px;padding:.65rem 2rem;cursor:pointer;letter-spacing:.5px;transition:background .2s}
+.contact-open-btn:hover{background:#f0ede8}
+
+/* 모달 */
+.modal-overlay{display:none;position:fixed;inset:0;background:rgba(30,28,26,.5);z-index:500;align-items:flex-end;justify-content:center}
+.modal-overlay.open{display:flex}
+.modal{background:#fff;border-radius:20px 20px 0 0;width:100%;max-width:480px;padding:2rem 1.5rem 2.5rem;position:relative;animation:slideUp .28s ease}
+@keyframes slideUp{from{transform:translateY(50px);opacity:0}to{transform:translateY(0);opacity:1}}
+.modal-close{position:absolute;top:1rem;right:1.2rem;font-size:20px;background:none;border:none;color:#888;cursor:pointer;line-height:1}
+.modal-group{margin-bottom:1.4rem}
+.modal-role{font-size:10px;letter-spacing:3px;color:#bbb8b0;margin-bottom:.6rem}
+.modal-person{display:flex;align-items:center;justify-content:space-between;padding:.7rem .9rem;border:0.5px solid #e8e5e0;border-radius:10px;margin-bottom:.4rem}
+.modal-info .name{font-family:'Noto Serif KR',serif;font-size:15px;color:#2c2c2a}
+.modal-info .rel{font-size:11px;color:#bbb8b0;margin-top:1px}
+.modal-actions{display:flex;gap:8px}
+.m-btn{display:flex;align-items:center;justify-content:center;width:34px;height:34px;border-radius:50%;border:0.5px solid #d8d5cf;background:#f7f6f4;text-decoration:none;font-size:15px;transition:background .2s}
+.m-btn:hover{background:#ede9e3}
+
+/* 달력 */
+.cal-box{background:#fff;border:0.5px solid #e4e1db;border-radius:14px;padding:1.4rem 1.2rem;max-width:320px;margin:0 auto}
+.cal-head{text-align:center;margin-bottom:1rem}
+.cal-month{font-family:'Noto Serif KR',serif;font-size:17px;font-weight:400;color:#2c2c2a}
+.cal-grid{display:grid;grid-template-columns:repeat(7,1fr);text-align:center;gap:2px}
+.cal-dh{font-size:10px;color:#bbb8b0;padding-bottom:6px}
+.cal-dh.su{color:#d97070}.cal-dh.sa{color:#7090d9}
+.cal-d{font-size:13px;color:#5a5652;padding:3px 0;line-height:1.7}
+.cal-d.su{color:#d97070}.cal-d.sa{color:#7090d9}
+.cal-d.empty{visibility:hidden}
+.cal-d.hl{position:relative;line-height:1}
+.cal-d.hl .hl-inner{display:inline-flex;flex-direction:column;align-items:center;gap:3px}
+.cal-d.hl span{display:inline-flex;align-items:center;justify-content:center;width:27px;height:27px;border-radius:50%;background:#fce8e8;border:1.5px solid #d9a0a0;color:#2c2c2a;font-weight:500;font-size:13px}
+.cal-d.hl .hl-time{font-size:9px;color:#c08080;letter-spacing:.3px;white-space:nowrap}
+
+/* D-day */
+.dday-wrap{text-align:center}
+.dday-label{font-size:10px;letter-spacing:4px;color:#bbb8b0;margin-bottom:.5rem}
+.dday-num{font-family:'Noto Serif KR',serif;font-size:52px;font-weight:300;color:#2c2c2a;line-height:1}
+.dday-txt{font-size:13px;color:#7a7570;margin-top:.8rem;font-family:'Noto Serif KR',serif;font-weight:300}
+
+/* 갤러리 */
+.gallery-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:3px}
+.g-item{aspect-ratio:1;overflow:hidden;cursor:pointer;background:#e4dfd8;border-radius:3px}
+.g-item img{width:100%;height:100%;object-fit:cover;transition:transform .3s;display:block}
+.g-item:hover img{transform:scale(1.06)}
+.g-item.hidden{display:none}
+.gallery-more{text-align:center;margin-top:1rem}
+.gallery-more-btn{font-size:12px;color:#7a7570;background:#fff;border:0.5px solid #d8d5cf;border-radius:20px;padding:6px 20px;cursor:pointer;letter-spacing:.5px;transition:background .2s}
+.gallery-more-btn:hover{background:#f0ede8}
+
+/* 라이트박스 */
+.lb{display:none;position:fixed;inset:0;background:rgba(20,18,16,.93);z-index:600;flex-direction:column;align-items:center;justify-content:center}
+.lb.open{display:flex}
+.lb img{max-width:94%;max-height:78vh;object-fit:contain;border-radius:6px}
+.lb-close{position:absolute;top:1.2rem;right:1.2rem;color:#fff;font-size:22px;background:none;border:none;cursor:pointer;opacity:.8}
+.lb-nav{display:flex;gap:2rem;margin-top:1.2rem}
+.lb-btn{color:#fff;background:none;border:0.5px solid rgba(255,255,255,.3);width:38px;height:38px;border-radius:50%;cursor:pointer;font-size:17px;display:flex;align-items:center;justify-content:center}
+.lb-counter{font-size:11px;color:rgba(255,255,255,.5);margin-top:.6rem;letter-spacing:1px}
+
+/* 지도 */
+.map-box{border-radius:12px;overflow:hidden;border:0.5px solid #e4e1db;margin-bottom:1.2rem}
+#map{width:100%;height:230px;display:block}
+.venue-info{background:#fff;border:0.5px solid #e4e1db;border-radius:10px;padding:.9rem 1.1rem;margin-bottom:1rem;font-size:13px;color:#4e4d4a;line-height:1.9}
+.venue-info strong{font-family:'Noto Serif KR',serif;font-size:14px;color:#2c2c2a;display:block;margin-bottom:.2rem}
+.transport{margin-bottom:1.2rem}
+.transport-item{display:flex;gap:.9rem;padding:.8rem 0;border-bottom:0.5px solid #f0ede8}
+.transport-item:last-child{border-bottom:none}
+.t-icon{font-size:18px;flex-shrink:0;margin-top:2px}
+.t-body .t-title{font-size:12px;font-weight:400;color:#2c2c2a;margin-bottom:1px}
+.t-body .t-desc{font-size:12px;color:#7a7570;line-height:1.7}
+.map-links{display:flex;gap:8px;margin-top:.5rem}
+.map-link-btn{flex:1;text-align:center;padding:.6rem 0;border:0.5px solid #d8d5cf;border-radius:10px;font-size:12px;color:#5a5652;text-decoration:none;background:#fff;transition:background .2s}
+.map-link-btn:hover{background:#f0ede8}
+
+/* 마음 전하기 - 접기/펼치기 */
+.account-toggle-wrap{text-align:center;margin-bottom:0}
+.account-toggle-btn{background:none;border:none;cursor:pointer;padding:.4rem;display:inline-flex;flex-direction:column;align-items:center;gap:4px}
+.account-toggle-btn .toggle-label{font-size:11px;color:#bbb8b0;letter-spacing:1px}
+.bracket{width:22px;height:12px;display:block;position:relative}
+.bracket::before,.bracket::after{content:'';position:absolute;width:11px;height:1.5px;background:#bbb8b0;border-radius:1px;transition:transform .25s}
+/* 아래 화살표 (펼치기) */
+.bracket.down::before{left:1px;top:4px;transform:rotate(40deg);transform-origin:left center}
+.bracket.down::after{right:1px;top:4px;transform:rotate(-40deg);transform-origin:right center}
+/* 위 화살표 (접기) */
+.bracket.up::before{left:1px;top:6px;transform:rotate(-40deg);transform-origin:left center}
+.bracket.up::after{right:1px;top:6px;transform:rotate(40deg);transform-origin:right center}
+
+.account-list{overflow:hidden;max-height:0;transition:max-height .4s ease}
+.account-list.open{max-height:600px}
+.account-card{background:#fff;border:0.5px solid #e4e1db;border-radius:10px;padding:.9rem 1.1rem;margin-bottom:.7rem;position:relative}
+.acc-who{font-size:11px;color:#bbb8b0;letter-spacing:.5px;margin-bottom:.2rem}
+.acc-bank{font-family:'Noto Serif KR',serif;font-size:14px;color:#2c2c2a;margin-bottom:.15rem}
+.acc-num{font-size:13px;color:#5a5652;letter-spacing:.5px}
+.copy-btn{position:absolute;top:50%;right:1rem;transform:translateY(-50%);font-size:11px;color:#7a7570;background:#f7f6f4;border:0.5px solid #d8d5cf;border-radius:6px;padding:4px 10px;cursor:pointer}
+.copy-btn:active{background:#e8e5e0}
+
+footer{background:#f0ede8;text-align:center;padding:2.5rem 1.5rem;width:100%;max-width:480px}
+.ft-date{font-family:'Noto Serif KR',serif;font-size:16px;color:#2c2c2a;margin-bottom:.25rem}
+.ft-place{font-size:11px;color:#aaa8a2;letter-spacing:.5px}
+.ft-bar{width:24px;height:1px;background:#d8d5cf;margin:1.2rem auto}
+.ft-names{font-size:11px;color:#bbb8b0;letter-spacing:2px}
+</style>
 </head>
 <body>
+<div class="page">
 
-  
 <!-- ① Hero -->
-<section class="hero" style="padding:0">
-  <div class="hero-placeholder">
-    <svg width="120" height="120" viewBox="0 0 120 120" fill="none">
-      <path d="M60 20 C60 20 20 45 20 72 C20 90 38 100 60 85 C82 100 100 90 100 72 C100 45 60 20 60 20Z" fill="#8a7f72"/>
-    </svg>
-  </div>
+<section class="hero">
+  <div class="hero-bg"></div>
+  <!-- 사진 사용 시 아래 주석 해제 후 경로 수정: src="images/hero.jpg" -->
+  <!-- <img class="hero-img" src="images/hero.jpg" alt="메인 사진"> -->
   <div class="hero-content">
-    <p class="serif" style="font-size:11px;letter-spacing:4px;color:#6e6660">2026 · 09 · 05</p>
-    <div class="hero-divider" style="margin:1rem auto"></div>
-    <div class="hero-names serif">
+    <p class="hero-date">2026 · 09 · 05</p>
+    <div class="hero-bar"></div>
+    <div class="hero-names">
       김낙현
-      <span class="hero-ampersand">&#38;</span>
+      <span class="hero-amp">&amp;</span>
       김지수
     </div>
-    <div class="hero-divider"></div>
+    <div class="hero-bar"></div>
     <p class="hero-sub">WEDDING INVITATION</p>
   </div>
 </section>
 
-<!-- ② 인사말 -->
-<section>
-  <p class="section-label">GREETING</p>
-  <h2 class="section-title serif">인사말</h2>
-  <div class="divider-line"></div>
-  <p class="greeting-text">
+<!-- ② 인사말 + 연락하기 -->
+<section class="sec">
+  <p class="sec-label">GREETING</p>
+  <h2 class="sec-title">인사말</h2>
+  <div class="hairline"></div>
+  <p class="greet-txt">
     서로가 서로에게 하나뿐인 사람이 되어<br>
     평생을 함께 걷고자 합니다.<br><br>
     오랫동안 기다려온 소중한 날,<br>
     귀한 걸음 하시어 저희의 시작을<br>
     함께 축복해 주시면 감사하겠습니다.
   </p>
+  <button class="contact-open-btn" onclick="openModal()">연락하기</button>
 </section>
 
-<!-- ③ 갤러리 -->
-<section>
-  <p class="section-label">GALLERY</p>
-  <h2 class="section-title serif">갤러리</h2>
-  <div class="divider-line"></div>
-  <div class="gallery-grid" id="gallery"></div>
-</section>
-
-<!-- ④ 연락처 -->
-<section>
-  <p class="section-label">CONTACT</p>
-  <h2 class="section-title serif">연락처</h2>
-  <div class="divider-line"></div>
-
-  <div class="contact-group">
-    <p class="contact-role">신랑측</p>
-    <div class="contact-person">
-      <div>
-        <div class="contact-name serif">김낙현</div>
-        <div class="contact-relation">신랑</div>
+<!-- 연락처 모달 -->
+<div class="modal-overlay" id="modal" onclick="overlayClose(event)">
+  <div class="modal">
+    <button class="modal-close" onclick="closeModal()">✕</button>
+    <div class="modal-group">
+      <p class="modal-role">신랑측</p>
+      <div class="modal-person">
+        <div class="modal-info"><div class="name">김낙현</div><div class="rel">신랑</div></div>
+        <div class="modal-actions">
+          <a href="tel:010-0000-0000" class="m-btn">📞</a>
+          <a href="sms:010-0000-0000" class="m-btn">💬</a>
+        </div>
       </div>
-      <div class="contact-actions">
-        <a href="tel:010-0000-0000" class="contact-btn" title="전화">📞</a>
-        <a href="sms:010-0000-0000" class="contact-btn" title="문자">💬</a>
+      <div class="modal-person">
+        <div class="modal-info"><div class="name">김정</div><div class="rel">신랑 아버지</div></div>
+        <div class="modal-actions">
+          <a href="tel:010-0000-0001" class="m-btn">📞</a>
+          <a href="sms:010-0000-0001" class="m-btn">💬</a>
+        </div>
       </div>
-    </div>
-    <div class="contact-person">
-      <div>
-        <div class="contact-name serif">김정</div>
-        <div class="contact-relation">아버지</div>
-      </div>
-      <div class="contact-actions">
-        <a href="tel:010-0000-0001" class="contact-btn" title="전화">📞</a>
-        <a href="sms:010-0000-0001" class="contact-btn" title="문자">💬</a>
+      <div class="modal-person">
+        <div class="modal-info"><div class="name">박미정</div><div class="rel">신랑 어머니</div></div>
+        <div class="modal-actions">
+          <a href="tel:010-0000-0002" class="m-btn">📞</a>
+          <a href="sms:010-0000-0002" class="m-btn">💬</a>
+        </div>
       </div>
     </div>
-    <div class="contact-person">
-      <div>
-        <div class="contact-name serif">박미정</div>
-        <div class="contact-relation">어머니</div>
+    <div class="modal-group">
+      <p class="modal-role">신부측</p>
+      <div class="modal-person">
+        <div class="modal-info"><div class="name">김지수</div><div class="rel">신부</div></div>
+        <div class="modal-actions">
+          <a href="tel:010-0000-0003" class="m-btn">📞</a>
+          <a href="sms:010-0000-0003" class="m-btn">💬</a>
+        </div>
       </div>
-      <div class="contact-actions">
-        <a href="tel:010-0000-0002" class="contact-btn" title="전화">📞</a>
-        <a href="sms:010-0000-0002" class="contact-btn" title="문자">💬</a>
+      <div class="modal-person">
+        <div class="modal-info"><div class="name">김환상</div><div class="rel">신부 아버지</div></div>
+        <div class="modal-actions">
+          <a href="tel:010-0000-0004" class="m-btn">📞</a>
+          <a href="sms:010-0000-0004" class="m-btn">💬</a>
+        </div>
       </div>
-    </div>
-  </div>
-
-  <div class="contact-group">
-    <p class="contact-role">신부측</p>
-    <div class="contact-person">
-      <div>
-        <div class="contact-name serif">김지수</div>
-        <div class="contact-relation">신부</div>
-      </div>
-      <div class="contact-actions">
-        <a href="tel:010-0000-0003" class="contact-btn" title="전화">📞</a>
-        <a href="sms:010-0000-0003" class="contact-btn" title="문자">💬</a>
-      </div>
-    </div>
-    <div class="contact-person">
-      <div>
-        <div class="contact-name serif">김환상</div>
-        <div class="contact-relation">아버지</div>
-      </div>
-      <div class="contact-actions">
-        <a href="tel:010-0000-0004" class="contact-btn" title="전화">📞</a>
-        <a href="sms:010-0000-0004" class="contact-btn" title="문자">💬</a>
+      <div class="modal-person">
+        <div class="modal-info"><div class="name">박미연</div><div class="rel">신부 어머니</div></div>
+        <div class="modal-actions">
+          <a href="tel:010-0000-0005" class="m-btn">📞</a>
+          <a href="sms:010-0000-0005" class="m-btn">💬</a>
+        </div>
       </div>
     </div>
-    <div class="contact-person">
-      <div>
-        <div class="contact-name serif">박미연</div>
-        <div class="contact-relation">어머니</div>
-      </div>
-      <div class="contact-actions">
-        <a href="tel:010-0000-0005" class="contact-btn" title="전화">📞</a>
-        <a href="sms:010-0000-0005" class="contact-btn" title="문자">💬</a>
-      </div>
-    </div>
-  </div>
-</section>
-
-<!-- ⑤ 오시는 길 -->
-<section>
-  <p class="section-label">LOCATION</p>
-  <h2 class="section-title serif">오시는 길</h2>
-  <div class="divider-line"></div>
-  <div class="map-box">
-    <div id="map" style="width:100%; height:250px;"></div>
-  </div>
-  <div class="map-info">
-    <p class="venue serif">고려대학교 교우회관</p>
-    <p>서울특별시 성북구 종암로 13<br>고려대학교 교우회관</p>
-    <p style="margin-top:.75rem;font-size:12px;color:#888780">
-      🚇 지하철 6호선 고려대역 1번 출구 도보 10분<br>
-      🚌 버스 정류장 고려대학교 하차<br>
-      🚗 교내 주차 가능
-    </p>
-    <a href="https://map.kakao.com/link/search/고려대학교 교우회관" class="map-link" target="_blank">카카오맵에서 보기 →</a>
-  </div>
-</section>
-
-<!-- ⑥ 축의금 -->
-<section>
-  <p class="section-label">ACCOUNT</p>
-  <h2 class="section-title serif">마음 전하기</h2>
-  <div class="divider-line"></div>
-  <div class="account-card">
-    <p class="account-who">신랑 김낙현</p>
-    <p class="account-name serif">은행명</p>
-    <p class="account-num">000-000-000000</p>
-    <button class="copy-btn" onclick="copyText('000-000-000000',this)">복사</button>
-  </div>
-  <div class="account-card">
-    <p class="account-who">신부 김지수</p>
-    <p class="account-name serif">은행명</p>
-    <p class="account-num">000-000-000000</p>
-    <button class="copy-btn" onclick="copyText('000-000-000000',this)">복사</button>
-  </div>
-</section>
-
-<!-- ⑦ 달력 -->
-<section>
-  <p class="section-label">DATE</p>
-  <h2 class="section-title serif">날짜</h2>
-  <div class="divider-line"></div>
-  <div class="cal-wrap">
-    <!-- 꽃 화환 SVG -->
-    <svg class="cal-flower-svg" viewBox="0 0 220 110" fill="none" xmlns="http://www.w3.org/2000/svg">
-      <!-- 줄기 아치 -->
-      <path d="M30 100 Q110 10 190 100" stroke="#a8b89a" stroke-width="1.2" fill="none" stroke-dasharray="3 2"/>
-      <!-- 왼쪽 잎들 -->
-      <ellipse cx="38" cy="78" rx="9" ry="5" fill="#b8c9a8" transform="rotate(-40 38 78)"/>
-      <ellipse cx="52" cy="54" rx="8" ry="4" fill="#c8d8b8" transform="rotate(-55 52 54)"/>
-      <ellipse cx="72" cy="34" rx="7" ry="3.5" fill="#b8c9a8" transform="rotate(-65 72 34)"/>
-      <!-- 오른쪽 잎들 -->
-      <ellipse cx="182" cy="78" rx="9" ry="5" fill="#b8c9a8" transform="rotate(40 182 78)"/>
-      <ellipse cx="168" cy="54" rx="8" ry="4" fill="#c8d8b8" transform="rotate(55 168 54)"/>
-      <ellipse cx="148" cy="34" rx="7" ry="3.5" fill="#b8c9a8" transform="rotate(65 148 34)"/>
-      <!-- 꽃들 - 왼쪽 -->
-      <circle cx="30" cy="97" r="7" fill="#f0c8c0"/>
-      <circle cx="30" cy="97" r="3.5" fill="#e8a090"/>
-      <circle cx="47" cy="68" r="6" fill="#e8d0c0"/>
-      <circle cx="47" cy="68" r="3" fill="#d4a888"/>
-      <circle cx="68" cy="44" r="5" fill="#d8c8e8"/>
-      <circle cx="68" cy="44" r="2.5" fill="#b898cc"/>
-      <circle cx="90" cy="26" r="5.5" fill="#f0d8c0"/>
-      <circle cx="90" cy="26" r="2.5" fill="#d4a878"/>
-      <!-- 꽃들 - 오른쪽 -->
-      <circle cx="190" cy="97" r="7" fill="#f0c8c0"/>
-      <circle cx="190" cy="97" r="3.5" fill="#e8a090"/>
-      <circle cx="173" cy="68" r="6" fill="#e8d0c0"/>
-      <circle cx="173" cy="68" r="3" fill="#d4a888"/>
-      <circle cx="152" cy="44" r="5" fill="#d8c8e8"/>
-      <circle cx="152" cy="44" r="2.5" fill="#b898cc"/>
-      <circle cx="130" cy="26" r="5.5" fill="#f0d8c0"/>
-      <circle cx="130" cy="26" r="2.5" fill="#d4a878"/>
-      <!-- 중앙 큰 꽃 -->
-      <circle cx="110" cy="18" r="9" fill="#f4d0c8"/>
-      <circle cx="110" cy="18" r="5" fill="#e8a8a0"/>
-      <!-- 작은 포인트 꽃들 -->
-      <circle cx="59" cy="32" r="3.5" fill="#f0e0c0"/>
-      <circle cx="161" cy="32" r="3.5" fill="#f0e0c0"/>
-      <circle cx="80" cy="20" r="3" fill="#e8c8d8"/>
-      <circle cx="140" cy="20" r="3" fill="#e8c8d8"/>
-    </svg>
-
-    <div class="cal-box">
-      <div class="cal-month-row">
-        <div class="cal-month-num">9</div>
-        <div class="cal-month-eng">Sept.</div>
-      </div>
-      <div class="cal-names-row">김낙현 &amp; 김지수</div>
-      <div class="cal-grid">
-        <div class="day-header">Sun.</div>
-        <div class="day-header">Mon.</div>
-        <div class="day-header">Tue.</div>
-        <div class="day-header">Wed.</div>
-        <div class="day-header">Thu.</div>
-        <div class="day-header">Fri.</div>
-        <div class="day-header">Sat.</div>
-        <!-- 2026년 9월: 1일이 화요일(idx=2) -->
-        <div class="day empty">·</div>
-        <div class="day empty">·</div>
-        <div class="day">1</div>
-        <div class="day">2</div>
-        <div class="day">3</div>
-        <div class="day">4</div>
-        <div class="day sat">5</div>
-        <!-- 실제로 9월 5일은 토요일(2026년) -->
-        <div class="day sun">6</div>
-        <div class="day">7</div>
-        <div class="day">8</div>
-        <div class="day">9</div>
-        <div class="day">10</div>
-        <div class="day">11</div>
-        <div class="day sat">12</div>
-        <div class="day sun">13</div>
-        <div class="day">14</div>
-        <div class="day">15</div>
-        <div class="day">16</div>
-        <div class="day">17</div>
-        <div class="day">18</div>
-        <div class="day sat">19</div>
-        <div class="day sun">20</div>
-        <div class="day">21</div>
-        <div class="day">22</div>
-        <div class="day">23</div>
-        <div class="day">24</div>
-        <div class="day">25</div>
-        <div class="day sat">26</div>
-        <div class="day sun">27</div>
-        <div class="day">28</div>
-        <div class="day">29</div>
-        <div class="day">30</div>
-      </div>
-    </div>
-</section>
-
-<footer>
-  <p class="footer-date serif">2026년 9월 5일 토요일 오후 1시</p>
-  <p class="footer-place" style="margin-top:.5rem">고려대학교 교우회관</p>
-  <div style="width:32px;height:1px;background:#d3d1c7;margin:1.5rem auto"></div>
-  <p style="font-size:11px;color:#b4b2a9;letter-spacing:2px">김낙현 &#38; 김지수</p>
-</footer>
-
-<div class="lightbox" id="lightbox" onclick="closeLB(event)">
-  <button class="lightbox-close" onclick="closeLightbox()">✕</button>
-  <img id="lb-img" src="" alt="">
-  <div class="lb-nav">
-    <button class="lb-btn" onclick="lbNav(-1)">&#8592;</button>
-    <button class="lb-btn" onclick="lbNav(1)">&#8594;</button>
   </div>
 </div>
 
+<!-- ③ 달력 -->
+<section class="sec">
+  <p class="sec-label">DATE</p>
+  <h2 class="sec-title">날짜</h2>
+  <div class="hairline"></div>
+  <div class="cal-box">
+    <div class="cal-head"><p class="cal-month">2026년 9월</p></div>
+    <div class="cal-grid">
+      <div class="cal-dh su">일</div><div class="cal-dh">월</div><div class="cal-dh">화</div>
+      <div class="cal-dh">수</div><div class="cal-dh">목</div><div class="cal-dh">금</div>
+      <div class="cal-dh sa">토</div>
+      <div class="cal-d empty"></div><div class="cal-d empty"></div>
+      <div class="cal-d">1</div><div class="cal-d">2</div><div class="cal-d">3</div><div class="cal-d">4</div>
+      <div class="cal-d sa hl">
+        <div class="hl-inner">
+          <span>5</span>
+          <div class="hl-time">오후 1시</div>
+        </div>
+      </div>
+      <div class="cal-d su">6</div><div class="cal-d">7</div><div class="cal-d">8</div><div class="cal-d">9</div>
+      <div class="cal-d">10</div><div class="cal-d">11</div><div class="cal-d sa">12</div>
+      <div class="cal-d su">13</div><div class="cal-d">14</div><div class="cal-d">15</div><div class="cal-d">16</div>
+      <div class="cal-d">17</div><div class="cal-d">18</div><div class="cal-d sa">19</div>
+      <div class="cal-d su">20</div><div class="cal-d">21</div><div class="cal-d">22</div><div class="cal-d">23</div>
+      <div class="cal-d">24</div><div class="cal-d">25</div><div class="cal-d sa">26</div>
+      <div class="cal-d su">27</div><div class="cal-d">28</div><div class="cal-d">29</div><div class="cal-d">30</div>
+    </div>
+  </div>
+</section>
+
+<!-- ④ D-day -->
+<section class="sec">
+  <div class="dday-wrap">
+    <p class="dday-label">D-DAY</p>
+    <p class="dday-num" id="dday-num">-</p>
+    <p class="dday-txt" id="dday-txt"></p>
+  </div>
+</section>
+
+<!-- ⑤ 갤러리 -->
+<section class="sec">
+  <p class="sec-label">GALLERY</p>
+  <h2 class="sec-title">갤러리</h2>
+  <div class="hairline"></div>
+  <div class="gallery-grid" id="gallery"></div>
+  <div class="gallery-more">
+    <button class="gallery-more-btn" id="gmore-btn" onclick="toggleGallery()">더보기</button>
+  </div>
+</section>
+
+<!-- ⑥ 오시는 길 -->
+<section class="sec">
+  <p class="sec-label">LOCATION</p>
+  <h2 class="sec-title">오시는 길</h2>
+  <div class="hairline"></div>
+  <div class="map-box">
+    <div id="map"></div>
+  </div>
+  <div class="venue-info">
+    <strong>고려대학교 교우회관</strong>
+    서울특별시 성북구 종암로 13
+  </div>
+  <div class="transport">
+    <div class="transport-item">
+      <div class="t-icon">🚇</div>
+      <div class="t-body">
+        <div class="t-title">지하철</div>
+        <div class="t-desc">6호선 고려대역 1번 출구 도보 10분<br>1호선 · 경의중앙선 회기역 도보 15분</div>
+      </div>
+    </div>
+    <div class="transport-item">
+      <div class="t-icon">🚌</div>
+      <div class="t-body">
+        <div class="t-title">버스</div>
+        <div class="t-desc">간선 141, 142, 144 — 고려대 정문 하차<br>지선 2115 — 교우회관 앞 하차</div>
+      </div>
+    </div>
+    <div class="transport-item">
+      <div class="t-icon">🚗</div>
+      <div class="t-body">
+        <div class="t-title">주차</div>
+        <div class="t-desc">교우회관 지하 주차장 이용 가능<br>식 당일 2시간 무료 주차 지원</div>
+      </div>
+    </div>
+  </div>
+  <div class="map-links">
+    <a class="map-link-btn" href="https://map.kakao.com/link/map/고려대학교교우회관,37.5921,127.0351" target="_blank">카카오맵</a>
+    <a class="map-link-btn" href="https://naver.me/FwFBmEWS" target="_blank">네이버지도</a>
+    <a class="map-link-btn" href="https://maps.google.com/?q=37.5921,127.0351" target="_blank">구글맵</a>
+  </div>
+</section>
+
+<!-- ⑦ 마음 전하기 -->
+<section class="sec">
+  <p class="sec-label">ACCOUNT</p>
+  <h2 class="sec-title">마음 전하기</h2>
+  <div class="hairline"></div>
+  <div class="account-toggle-wrap">
+    <button class="account-toggle-btn" id="acc-toggle" onclick="toggleAccount()">
+      <span class="toggle-label" id="acc-label">펼쳐보기</span>
+      <span class="bracket down" id="acc-bracket"></span>
+    </button>
+  </div>
+  <div class="account-list" id="acc-list">
+    <div style="height:.8rem"></div>
+    <div class="account-card">
+      <p class="acc-who">신랑 김낙현</p>
+      <p class="acc-bank">은행명 000-000-000000</p>
+      <button class="copy-btn" onclick="doCopy('000-000-000000',this)">복사</button>
+    </div>
+    <div class="account-card">
+      <p class="acc-who">신랑 아버지 김정</p>
+      <p class="acc-bank">은행명 000-000-000000</p>
+      <button class="copy-btn" onclick="doCopy('000-000-000000',this)">복사</button>
+    </div>
+    <div class="account-card">
+      <p class="acc-who">신랑 어머니 박미정</p>
+     <p class="acc-bank">은행명 000-000-000000</p>
+      <button class="copy-btn" onclick="doCopy('000-000-000000',this)">복사</button>
+    </div>
+    <div class="account-card">
+      <p class="acc-who">신부 김지수</p>
+     <p class="acc-bank">은행명 000-000-000000</p>
+      <button class="copy-btn" onclick="doCopy('000-000-000000',this)">복사</button>
+    </div>
+    <div class="account-card">
+      <p class="acc-who">신부 아버지 김환상</p>
+   <p class="acc-bank">은행명 000-000-000000</p>
+      <button class="copy-btn" onclick="doCopy('000-000-000000',this)">복사</button>
+    </div>
+     <div class="account-card">
+      <p class="acc-who">신부 어머니 박미연</p>
+   <p class="acc-bank">은행명 000-000-000000</p>
+      <button class="copy-btn" onclick="doCopy('000-000-000000',this)">복사</button>
+    </div>
+  </div>
+</section>
+
+<footer>
+  <p class="ft-date">2026년 9월 5일 토요일 오후 1시</p>
+  <p class="ft-place">고려대학교 교우회관</p>
+  <div class="ft-bar"></div>
+  <p class="ft-names">김낙현 &amp; 김지수</p>
+</footer>
+</div>
+
+<!-- 라이트박스 -->
+<div class="lb" id="lb" onclick="lbOverlay(event)">
+  <button class="lb-close" onclick="lbClose()">✕</button>
+  <img id="lb-img" src="" alt="">
+  <div class="lb-nav">
+    <button class="lb-btn" onclick="lbMove(-1)">&#8592;</button>
+    <button class="lb-btn" onclick="lbMove(1)">&#8594;</button>
+  </div>
+  <p class="lb-counter" id="lb-counter"></p>
+</div>
+
 <script>
+/* ── 갤러리 ── */
 const imgs = [
-  'images/MO_00018.jpg',
-  'images/MO_00051.jpg',
-  'images/MO_00107.jpg',
-  'images/MO_00201.jpg',
-  'images/MO_00219.jpg',
-  'images/MO_00233.jpg',
-  'images/MO_00265.jpg',
-  'images/MO_00324.jpg',
-  'images/MO_00354.jpg',
-  'images/MO_00399.jpg',
-  'images/MO_00646.jpg',
-  'images/MO_00658.jpg',
-  'images/MO_00663.jpg',
-  'images/MO_00684.jpg',
-  'images/MO_00723.jpg',
-  'images/MO_00751.jpg',
-  'images/MO_00789.jpg',
-  'images/MO_00815.jpg',
-  'images/MO_00835.jpg',
-  'images/MO_00860.jpg',
-  'images/MO_00898.jpg',
-  'images/MO_00916.jpg',
-  'images/MO_00942.jpg',
+  'images/MO_00018.jpg','images/MO_00051.jpg','images/MO_00107.jpg',
+  'images/MO_00201.jpg','images/MO_00219.jpg','images/MO_00233.jpg',
+  'images/MO_00265.jpg','images/MO_00324.jpg','images/MO_00354.jpg',
+  'images/MO_00399.jpg','images/MO_00646.jpg','images/MO_00658.jpg',
+  'images/MO_00663.jpg','images/MO_00684.jpg','images/MO_00723.jpg',
+  'images/MO_00751.jpg','images/MO_00789.jpg','images/MO_00815.jpg',
+  'images/MO_00835.jpg','images/MO_00860.jpg','images/MO_00898.jpg',
+  'images/MO_00916.jpg','images/MO_00942.jpg',
 ];
+const PREVIEW = 6;
+let galExpanded = false, lbIdx = 0;
 
-const grid = document.getElementById('gallery');
-let curIdx = 0;
-
+const gGrid = document.getElementById('gallery');
 imgs.forEach((src,i) => {
   const div = document.createElement('div');
-  div.className = 'gallery-item';
+  div.className = 'g-item' + (i >= PREVIEW ? ' hidden' : '');
   div.innerHTML = `<img src="${src}" alt="웨딩 사진 ${i+1}" loading="lazy">`;
-  div.onclick = () => openLightbox(i);
-  grid.appendChild(div);
+  div.addEventListener('click', () => lbOpen(i));
+  gGrid.appendChild(div);
 });
 
-// 달력에서 5일 강조 표시
-document.addEventListener('DOMContentLoaded', () => {
-  const days = document.querySelectorAll('.cal-grid .day');
-  days.forEach(d => {
-    if(d.textContent.trim() === '5') {
-      d.classList.add('highlight');
-      d.innerHTML = '<span>5</span>';
-    }
+function toggleGallery() {
+  galExpanded = !galExpanded;
+  document.querySelectorAll('.g-item').forEach((el,i) => {
+    if(i >= PREVIEW) el.classList.toggle('hidden', !galExpanded);
   });
-});
+  document.getElementById('gmore-btn').textContent = galExpanded ? '접기' : '더보기';
+}
 
-function openLightbox(i) {
-  curIdx = i;
+/* ── 라이트박스 ── */
+function lbOpen(i) {
+  lbIdx = i;
   document.getElementById('lb-img').src = imgs[i];
-  document.getElementById('lightbox').classList.add('active');
+  document.getElementById('lb-counter').textContent = `${i+1} / ${imgs.length}`;
+  document.getElementById('lb').classList.add('open');
   document.body.style.overflow = 'hidden';
 }
-function closeLightbox() {
-  document.getElementById('lightbox').classList.remove('active');
-  document.body.style.overflow = '';
+function lbClose() { document.getElementById('lb').classList.remove('open'); document.body.style.overflow = ''; }
+function lbOverlay(e) { if(e.target===document.getElementById('lb')) lbClose(); }
+function lbMove(d) {
+  lbIdx = (lbIdx+d+imgs.length)%imgs.length;
+  document.getElementById('lb-img').src = imgs[lbIdx];
+  document.getElementById('lb-counter').textContent = `${lbIdx+1} / ${imgs.length}`;
 }
-function closeLB(e) {
-  if(e.target === document.getElementById('lightbox')) closeLightbox();
+document.addEventListener('keydown', e => {
+  if(!document.getElementById('lb').classList.contains('open')) return;
+  if(e.key==='ArrowLeft') lbMove(-1);
+  if(e.key==='ArrowRight') lbMove(1);
+  if(e.key==='Escape') lbClose();
+});
+
+/* ── 연락처 모달 ── */
+function openModal() { document.getElementById('modal').classList.add('open'); document.body.style.overflow='hidden'; }
+function closeModal() { document.getElementById('modal').classList.remove('open'); document.body.style.overflow=''; }
+function overlayClose(e) { if(e.target===document.getElementById('modal')) closeModal(); }
+
+/* ── D-day ── */
+(function(){
+  const wed = new Date('2026-09-05T13:00:00+09:00');
+  const now = new Date();
+  const diff = Math.ceil((wed-now)/86400000);
+  const n = document.getElementById('dday-num');
+  const t = document.getElementById('dday-txt');
+  if(diff>0){ n.textContent='D-'+diff; t.textContent=`낙현, 지수의 결혼식이 ${diff}일 남았습니다.`; }
+  else if(diff===0){ n.textContent='D-Day'; t.textContent='오늘 낙현, 지수의 결혼식이 열립니다.'; }
+  else{ n.textContent='D+'+Math.abs(diff); t.textContent=`낙현, 지수가 결혼한 지 ${Math.abs(diff)}일이 지났습니다.`; }
+})();
+
+/* ── 마음 전하기 토글 ── */
+let accOpen = false;
+function toggleAccount() {
+  accOpen = !accOpen;
+  document.getElementById('acc-list').classList.toggle('open', accOpen);
+  document.getElementById('acc-label').textContent = accOpen ? '접기' : '펼쳐보기';
+  document.getElementById('acc-bracket').className = 'bracket ' + (accOpen ? 'up' : 'down');
 }
-function lbNav(dir) {
-  curIdx = (curIdx + dir + imgs.length) % imgs.length;
-  document.getElementById('lb-img').src = imgs[curIdx];
-}
-function copyText(text, btn) {
-  navigator.clipboard.writeText(text).then(() => {
-    const orig = btn.textContent;
-    btn.textContent = '✓ 완료';
-    setTimeout(() => btn.textContent = orig, 1800);
+
+/* ── 복사 ── */
+function doCopy(txt, btn) {
+  navigator.clipboard.writeText(txt).then(() => {
+    const o = btn.textContent; btn.textContent='✓ 완료';
+    setTimeout(() => btn.textContent=o, 1800);
   });
 }
 
-function initMap() {
-  const container = document.getElementById('map'); // 지도를 담을 영역
-  const position = new kakao.maps.LatLng(37.5921, 127.0351); // 고려대학교 교우회관 좌표
-  
-  const options = {
-    center: position, // 지도의 중심좌표
-    level: 3 // 지도의 확대 레벨
-  };
-
-  const map = new kakao.maps.Map(container, options); // 지도 생성
-
-  // 마커 생성
-  const marker = new kakao.maps.Marker({
-    position: position
-  });
-
-  // 마커를 지도 위에 표시
-  marker.setMap(map);
-  
-  // (선택) 지도가 로드된 후 중심을 다시 잡기 위함 (반응형 대응)
-  window.addEventListener('resize', function() {
-    map.setCenter(position);
-  });
-}
-
-// 스크립트 로드 후 바로 실행
-document.addEventListener('DOMContentLoaded', initMap);
+/* ── 카카오맵 ── */
+kakao.maps.load(function(){
+  const pos = new kakao.maps.LatLng(37.5921, 127.0351);
+  const map = new kakao.maps.Map(document.getElementById('map'), { center:pos, level:3 });
+  new kakao.maps.Marker({ position:pos, map:map });
+  window.addEventListener('resize', () => map.setCenter(pos));
+});
 </script>
 </body>
 </html>
