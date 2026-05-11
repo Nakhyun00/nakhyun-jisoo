@@ -516,15 +516,27 @@ function overlayClose(e) { if(e.target===document.getElementById('modal')) close
 
 /* ── D-day ── */
 (function(){
-  const wed = new Date('2026-09-05T13:00:00+09:00');
-  const now = new Date();
-  const diff = Math.ceil((wed-now)/86400000);
+  const wedDate = new Date(2026, 8, 5);
+  wedDate.setHours(0, 0, 0, 0);
+  const today = new Date();
+  today.setHours(0, 0, 0, 0);
+  const diff = Math.round((wedDate - today) / 86400000);
   const n = document.getElementById('dday-num');
   const t = document.getElementById('dday-txt');
-  if(diff>0){ n.textContent='D-'+diff; t.textContent=`낙현, 지수의 결혼식이 ${diff}일 남았습니다.`; }
-  else if(diff===0){ n.textContent='D-Day'; t.textContent='오늘 낙현, 지수의 결혼식이 열립니다.'; }
-  else{ n.textContent='D+'+Math.abs(diff); t.textContent=`낙현, 지수가 결혼한 지 ${Math.abs(diff)}일이 지났습니다.`; }
+
+  if (diff > 0) {
+    n.textContent = 'D-' + diff;
+    t.textContent = `낙현, 지수의 결혼식이 ${diff}일 남았습니다.`;
+  } else if (diff === 0) {
+    n.textContent = 'D-Day';
+    t.textContent = '낙현, 지수의 결혼식이 오늘 진행됩니다.';
+  } else {
+    const passed = Math.abs(diff);
+    n.textContent = 'D+' + passed;
+    t.textContent = `낙현, 지수의 결혼식이 ${passed}일 지났습니다.`;
+  }
 })();
+
 
 /* ── 마음 전하기 토글 ── */
 let accOpen = false;
