@@ -486,7 +486,7 @@ function doCopy(txt, btn) {
 /* ── 카카오맵 ── */
 kakao.maps.load(function(){
   const pos = new kakao.maps.LatLng(37.59204, 127.03569);
-  const map = new kakao.maps.Map(document.getElementById('map'), { center:pos, level:3 });
+  const map = new kakao.maps.Map(document.getElementById('map'), { center:pos, level:4 });
   new kakao.maps.Marker({ position:pos, map:map });
   window.addEventListener('resize', () => map.setCenter(pos));
 });
