@@ -5,7 +5,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>청첩장 · 김낙현 & 김지수</title>
 <link href="https://fonts.googleapis.com/css2?family=Noto+Serif+KR:wght@300;400;500&family=Noto+Sans+KR:wght@300;400&display=swap" rel="stylesheet">
-<script type="text/javascript" src="//dapi.kakao.com/v2/maps/sdk.js?appkey=b9101a3f62bf69d410ed17160d17a39e&autoload=false"></script>
+<script type="text/javascript" src="https://dapi.kakao.com/v2/maps/sdk.js?appkey=b9101a3f62bf69d410ed17160d17a39e&autoload=false"></script>
 <style>
 *{margin:0;padding:0;box-sizing:border-box}
 html{scroll-behavior:smooth}
@@ -484,7 +484,7 @@ function doCopy(txt, btn) {
 
 /* ── 카카오맵 ── */
 kakao.maps.load(function(){
-  const pos = new kakao.maps.LatLng(37.5921, 127.0351);
+  const pos = new kakao.maps.LatLng(37.59204, 127.03569);
   const map = new kakao.maps.Map(document.getElementById('map'), { center:pos, level:3 });
   new kakao.maps.Marker({ position:pos, map:map });
   window.addEventListener('resize', () => map.setCenter(pos));
