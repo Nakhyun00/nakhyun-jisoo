@@ -342,17 +342,17 @@ footer{background:#f0ede8;text-align:center;padding:2.5rem 1.5rem;width:100%;max
     </div>
     <div class="account-card">
       <p class="acc-who">신랑 어머니 박미정</p>
-     <p class="acc-bank">은행명 000-000-000000</p>
+      <p class="acc-bank">은행명 000-000-000000</p>
       <button class="copy-btn" onclick="doCopy('000-000-000000',this)">복사</button>
     </div>
     <div class="account-card">
       <p class="acc-who">신부 김지수</p>
-     <p class="acc-bank">은행명 000-000-000000</p>
+      <p class="acc-bank">은행명 000-000-000000</p>
       <button class="copy-btn" onclick="doCopy('000-000-000000',this)">복사</button>
     </div>
     <div class="account-card">
       <p class="acc-who">신부 아버지 김환상</p>
-   <p class="acc-bank">은행명 000-000-000000</p>
+      <p class="acc-bank">은행명 000-000-000000</p>
       <button class="copy-btn" onclick="doCopy('000-000-000000',this)">복사</button>
     </div>
      <div class="account-card">
@@ -405,15 +405,16 @@ const imgs = [
   { thumb: 'images/thumbnail/thumb18.webp', full: 'images/갤러리18.webp' },
   { thumb: 'images/thumbnail/thumb19.webp', full: 'images/갤러리19.webp' },
   { thumb: 'images/thumbnail/thumb20.webp', full: 'images/갤러리20.webp' },
+  { thumb: 'images/thumbnail/thumb21.webp', full: 'images/갤러리21.webp' },
 ];
 const PREVIEW = 6;
 let galExpanded = false, lbIdx = 0;
 
 const gGrid = document.getElementById('gallery');
-imgs.forEach((src,i) => {
+imgs.forEach((img, i) => { // 'src' -> 'img' 객체로 변경
   const div = document.createElement('div');
   div.className = 'g-item' + (i >= PREVIEW ? ' hidden' : '');
-  div.innerHTML = `<img src="${src}" alt="웨딩 사진 ${i+1}" loading="lazy">`;
+  div.innerHTML = `<img src="${img.thumb}" alt="웨딩 사진 ${i+1}" loading="lazy">`; // .thumb 참조 수정
   div.addEventListener('click', () => lbOpen(i));
   gGrid.appendChild(div);
 });
@@ -429,7 +430,7 @@ function toggleGallery() {
 /* ── 라이트박스 ── */
 function lbOpen(i) {
   lbIdx = i;
-  document.getElementById('lb-img').src = imgs[i];
+  document.getElementById('lb-img').src = imgs[i].full; // .full 참조 수정
   document.getElementById('lb-counter').textContent = `${i+1} / ${imgs.length}`;
   document.getElementById('lb').classList.add('open');
   document.body.style.overflow = 'hidden';
@@ -438,7 +439,7 @@ function lbClose() { document.getElementById('lb').classList.remove('open'); doc
 function lbOverlay(e) { if(e.target===document.getElementById('lb')) lbClose(); }
 function lbMove(d) {
   lbIdx = (lbIdx+d+imgs.length)%imgs.length;
-  document.getElementById('lb-img').src = imgs[lbIdx];
+  document.getElementById('lb-img').src = imgs[lbIdx].full; // .full 참조 수정
   document.getElementById('lb-counter').textContent = `${lbIdx+1} / ${imgs.length}`;
 }
 document.addEventListener('keydown', e => {
