@@ -5,50 +5,84 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>내가 올린 사진 확인하기 · 김낙현 & 김지수</title>
   <link href="https://fonts.googleapis.com/css2?family=Noto+Serif+KR:wght@300;400;500&family=Noto+Sans+KR:wght@300;400&display=swap" rel="stylesheet">
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.10.1/jszip.min.js"></script>
   <style>
     * { margin: 0; padding: 0; box-sizing: border-box; }
     body { font-family: 'Noto Sans KR', sans-serif; background: #f7f6f4; color: #2c2c2a; font-size: 14px; line-height: 1.8; display: flex; justify-content: center; padding: 2rem 1rem; }
-    
     .page { width: 100%; max-width: 450px; background: #fff; border: 0.5px solid #e4e1db; border-radius: 16px; padding: 2.5rem 1.5rem; box-shadow: 0 4px 12px rgba(0,0,0,0.02); text-align: center; }
-    
     .title-label { font-size: 10px; letter-spacing: 4px; color: #bbb8b0; margin-bottom: .5rem; text-transform: uppercase; }
     .title { font-family: 'Noto Serif KR', serif; font-size: 20px; font-weight: 400; color: #2c2c2a; margin-bottom: .6rem; }
     .hairline { width: 28px; height: 1px; background: #d8d5cf; margin: .6rem auto 2rem; }
-    
-    /* 인증 폼 레이아웃 */
-    #auth-form { margin-bottom: 1rem; }
     .form-group { text-align: left; margin-bottom: 1.2rem; }
     .form-group label { display: block; font-size: 11px; color: #bbb8b0; letter-spacing: 1px; margin-bottom: 0.4rem; padding-left: 4px; }
-    
     input[type="text"], input[type="password"] { width: 100%; padding: .75rem 1rem; border: 0.5px solid #d8d5cf; border-radius: 10px; font-family: 'Noto Sans KR', sans-serif; font-size: 13px; color: #2c2c2a; background: #fbfbfa; outline: none; transition: border .2s; }
     input[type="text"]:focus, input[type="password"]:focus { border-color: #a8a5a0; background: #fff; }
-    
     .submit-btn { width: 100%; padding: .85rem; background: #2c2c2a; color: #fff; border: none; border-radius: 24px; font-family: 'Noto Serif KR', serif; font-size: 14px; cursor: pointer; letter-spacing: 1px; transition: background .2s; margin-top: 0.5rem; }
     .submit-btn:hover { background: #4a4845; }
-    
-    /* 결과 뷰 레이아웃 */
-    #result-view { display: none; margin-top: 1rem; animation: fadeIn 0.4s ease; }
+    #result-view, #admin-result-view { display: none; margin-top: 1rem; animation: fadeIn 0.4s ease; text-align: left; }
     @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
+    .user-header { font-family: 'Noto Serif KR', serif; font-size: 16px; color: #4a4845; margin-bottom: 1.5rem; background: #fbfbfa; padding: 10px; border-radius: 8px; border: 0.5px solid #edebe6; text-align: center; }
     
-    .user-header { font-family: 'Noto Serif KR', serif; font-size: 16px; color: #4a4845; margin-bottom: 1.5rem; background: #fbfbfa; padding: 10px; border-radius: 8px; border: 0.5px solid #edebe6; }
-    
-    /* 썸네일 그리드 디자인 */
+    /* 하객용 수직 그리드 레이아웃 (유지) */
     .photo-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 12px; margin-bottom: 2rem; }
+    
+    /* ── 📊 [UX 업그레이드] 관리자 전용 가로 스크롤 레일 아키텍처 ── */
+    .admin-photo-row { 
+      display: flex; 
+      overflow-x: auto; 
+      gap: 12px; 
+      padding-bottom: 12px; 
+      margin-bottom: 1rem;
+      scroll-behavior: smooth;
+      -webkit-overflow-scrolling: touch;
+      scroll-snap-type: x mandatory;
+    }
+    /* 가로 스크롤바 커스텀 스킨 디자인 */
+    .admin-photo-row::-webkit-scrollbar { height: 5px; }
+    .admin-photo-row::-webkit-scrollbar-track { background: #fbfbfa; border-radius: 10px; }
+    .admin-photo-row::-webkit-scrollbar-thumb { background: #e4e1db; border-radius: 10px; }
+    .admin-photo-row::-webkit-scrollbar-thumb:hover { background: #bbb8b0; }
+    
+    /* 가로 배열 시 하위 아이템들이 찌그러지지 않도록 고정 폭 배치 */
+    .admin-photo-row .photo-item { flex: 0 0 145px; scroll-snap-align: start; }
+    
     .photo-item { background: #fbfbfa; border: 0.5px solid #edebe6; border-radius: 8px; padding: 8px; display: flex; flex-direction: column; align-items: center; }
-    
-    .thumb-wrapper { position: relative; width: 100%; padding-bottom: 100%; overflow: hidden; border-radius: 6px; background: #eee; }
+    .thumb-wrapper { position: relative; width: 100%; padding-bottom: 100%; overflow: hidden; border-radius: 6px; background: #eee; transition: transform 0.2s; }
+    .thumb-wrapper:hover { transform: scale(1.02); }
     .thumb-wrapper img { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; }
-    
     .delete-btn { width: 100%; margin-top: 8px; padding: 4px 0; background: #fff; color: #d9534f; border: 0.5px solid #d9534f; border-radius: 6px; font-size: 12px; cursor: pointer; transition: all .2s; }
     .delete-btn:hover { background: #d9534f; color: #fff; }
-    
-    .no-data { font-family: 'Noto Serif KR', serif; color: #7a7570; padding: 3rem 0; }
-    
+    .admin-group-box { background: #fbfbfa; border: 0.5px solid #d8d5cf; border-radius: 12px; padding: 1.2rem 1rem; margin-bottom: 1.5rem; }
+    .admin-group-header { display: flex; justify-content: space-between; align-items: center; border-bottom: 0.5px solid #edebe6; padding-bottom: 0.6rem; margin-bottom: 1rem; }
+    .admin-user-info { font-family: 'Noto Serif KR', serif; font-size: 15px; font-weight: 500; color: #2c2c2a; }
+    .admin-count-badge { font-size: 11px; color: #7a7570; margin-left: 6px; font-weight: normal; }
+    .zip-btn { padding: 5px 14px; background: #ebdccb; color: #5a4f43; border: none; border-radius: 14px; font-size: 11px; font-family: 'Noto Serif KR', serif; cursor: pointer; font-weight: 500; transition: background .2s; }
+    .zip-btn:hover { background: #decbba; }
+    .no-data { font-family: 'Noto Serif KR', serif; color: #7a7570; padding: 3rem 0; text-align: center; width: 100%; }
     .back-btn { display: inline-block; margin-top: 2rem; font-size: 12px; color: #bbb8b0; text-decoration: none; border-bottom: 0.5px solid #d8d5cf; padding-bottom: 2px; }
     .back-btn:hover { color: #7a7570; border-color: #7a7570; }
-    
-    #log { margin-top: 1.5rem; font-size: 12px; color: #d9534f; min-height: 20px; }
+    #log { margin-top: 1.5rem; font-size: 12px; color: #d9534f; min-height: 20px; line-height: 1.6; text-align: center; }
     .progress { color: #7a7570 !important; }
+    .success { color: #6ba870 !important; font-weight: 500; }
+
+    /* ── 📸 [UI 업그레이드] 라이트박스 팝업 전체 화면 오버레이 스타일 ── */
+    .lightbox {
+      display: none; position: fixed; z-index: 10000; left: 0; top: 0; width: 100%; height: 100%;
+      background-color: rgba(15, 15, 15, 0.93); justify-content: center; align-items: center;
+      user-select: none; -webkit-user-select: none; animation: fadeIn 0.25s ease;
+    }
+    .lightbox-content { max-width: 88%; max-height: 78vh; object-fit: contain; border-radius: 6px; box-shadow: 0 10px 30px rgba(0,0,0,0.5); }
+    .lightbox-close { position: absolute; top: 20px; right: 25px; color: #fff; font-size: 38px; cursor: pointer; font-weight: 300; transition: transform 0.2s; }
+    .lightbox-close:hover { transform: scale(1.1); }
+    /* 슬라이더 제어 버튼 디자인 */
+    .lightbox-btn {
+      position: absolute; top: 50%; transform: translateY(-50%); background: rgba(255, 255, 255, 0.08);
+      color: #fff; border: none; font-size: 24px; padding: 12px; cursor: pointer; border-radius: 50%;
+      width: 50px; height: 50px; display: flex; justify-content: center; align-items: center; transition: all 0.2s;
+    }
+    .lightbox-btn:hover { background: rgba(255, 255, 255, 0.25); }
+    .lightbox-prev { left: 16px; }
+    .lightbox-next { right: 16px; }
   </style>
 </head>
 <body>
@@ -58,7 +92,6 @@
   <h1 class="title">내가 올린 사진 확인</h1>
   <div class="hairline"></div>
 
-  <!-- [인증 폼] 이름, 전화번호, 비밀번호 입력 섹션 -->
   <div id="auth-form">
     <div class="form-group">
       <label for="viewer-name">올리는 사람 (이름)</label>
@@ -75,15 +108,26 @@
     <button id="find-btn" class="submit-btn">사진 조회하기</button>
   </div>
 
-  <!-- [결과 뷰] 인증 성공 시 등장하는 썸네일 목록 섹션 -->
   <div id="result-view">
     <div class="user-header" id="user-title"></div>
     <div class="photo-grid" id="photo-container"></div>
   </div>
+
+  <div id="admin-result-view">
+    <div class="user-header" style="background: #5a4f43; color: #fff;">👑 전체 하객 업로드 통합 관리 모드</div>
+    <div id="admin-group-container"></div>
+  </div>
   
   <div id="log"></div>
+  <a href="/photo" class="back-btn">← 사진 업로드로 돌아가기</a>
+</div>
 
-  <a href="/photo" class="back-btn">← 이전으로 돌아가기</a>
+<!-- ── 📸 [UI 추가] 확대 팝업 라이트박스 컨테이너 레이어 ── -->
+<div id="lightbox-modal" class="lightbox">
+  <span class="lightbox-close" id="lightbox-close-trigger">&times;</span>
+  <button class="lightbox-btn lightbox-prev" id="lightbox-prev-trigger">&#10094;</button>
+  <img class="lightbox-content" id="lightbox-main-img" src="" alt="확대 보기">
+  <button class="lightbox-btn lightbox-next" id="lightbox-next-trigger">&#10095;</button>
 </div>
 
 <script type="module">
@@ -94,108 +138,221 @@
 
   const supabase = createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
 
-  async function fetchGuestPhotos() {
+  // 라이트박스 제어용 전역 모듈 변수 파트
+  let activePhotosArray = [];
+  let activePhotoIndex = 0;
+
+  async function handleFindRequest() {
     const name = document.getElementById('viewer-name').value.trim();
     const rawPhone = document.getElementById('viewer-phone').value.trim();
     const pw = document.getElementById('viewer-pw').value.trim();
-    const log = document.getElementById('log');
-    const resultView = document.getElementById('result-view');
-    const photoContainer = document.getElementById('photo-container');
-    const userTitle = document.getElementById('user-title');
+    const phone = rawPhone.replace(/[^0-9]/g, '');
 
     if (!name || !rawPhone || !pw) {
       alert("이름, 전화번호, 비밀번호를 모두 입력해 주세요.");
       return;
     }
 
-    const phone = rawPhone.replace(/[^0-9]/g, '');
-    log.textContent = "장부를 조회하고 있습니다...";
+    const log = document.getElementById('log');
+    log.textContent = "장부를 확인하고 있습니다...";
     log.className = "progress";
-    
+
     try {
-      // 💡 엔지니어링 포인트: s3_key가 'photo/전화번호/'로 시작하는 행을 검색 매칭 기법(like)으로 스캔
-      const { data, error } = await supabase
-         .from('guest_photos')
-         .select('*')
-         .eq('uploader_name', name)
-         .eq('password', pw)
-         .like('s3_key', `photo/${phone}_${pw}/%`);
+      const { data: isAdmin, error: rpcError } = await supabase.rpc('verify_admin', {
+        p_name: name,
+        p_phone: phone,
+        p_pw: pw
+      });
 
-      if (error) throw error;
+      if (rpcError) throw rpcError;
 
-      log.textContent = "";
-      document.getElementById('auth-form').style.display = "none"; // 인증 완료 시 로그인 폼 숨김
-      resultView.style.display = "block";
-      userTitle.innerHTML = `✨ <strong>${name}님</strong>이 선물해주신 사진 목록`;
+      if (isAdmin === true) {
+        const customSupabase = createClient(SUPABASE_URL, SUPABASE_ANON_KEY, {
+          global: { headers: { 'x-admin-phone': phone, 'x-admin-pw': pw } }
+        });
 
-      if (!data || data.length === 0) {
-        photoContainer.innerHTML = `<div class="no-data" style="grid-column: span 2;">조회된 사진이 없습니다.</div>`;
-        return;
+        const { data: allData, error: adminError } = await customSupabase
+          .from('guest_photos')
+          .select('*')
+          .order('uploader_name', { ascending: true });
+
+        if (adminError) throw adminError;
+
+        buildAdminDashboard(allData);
+      } else {
+        const { data: guestData, error: guestError } = await supabase
+          .from('guest_photos')
+          .select('*')
+          .eq('uploader_name', name)
+          .eq('password', pw)
+          .like('s3_key', `photo/${phone}_${pw}/%`);
+
+        if (guestError) throw guestError;
+
+        if (!guestData || guestData.length === 0) {
+          log.textContent = "❌ 입력하신 정보와 일치하는 사진 내역이 없습니다.";
+          log.className = ""; 
+          return; 
+        }
+
+        buildGuestView(name, guestData);
       }
 
-      photoContainer.innerHTML = "";
-      data.forEach(photo => {
+    } catch (err) {
+      console.error(err);
+      log.textContent = "❌ 장부 통신 오류가 발생했습니다.";
+      log.className = "";
+    }
+  }
+
+  function buildGuestView(name, data) {
+    document.getElementById('log').textContent = "";
+    document.getElementById('auth-form').style.display = "none"; 
+    document.getElementById('result-view').style.display = "block";
+    document.getElementById('user-title').innerHTML = `✨ <strong>${name}님</strong>이 선물해주신 사진 목록`;
+    
+    const photoContainer = document.getElementById('photo-container');
+    photoContainer.innerHTML = "";
+    data.forEach(photo => {
+      const item = document.createElement('div');
+      item.className = 'photo-item';
+      item.id = `photo-row-${photo.id}`;
+      item.innerHTML = `
+        <div class="thumb-wrapper" style="cursor:pointer;"><img src="${photo.image_url}" loading="lazy"></div>
+        <button class="delete-btn" onclick="handleDelete(${photo.id}, 'guest')">사진 삭제</button>
+      `;
+      photoContainer.appendChild(item);
+      
+      // 일반 하객 모드에서도 사진 팝업 연결
+      item.querySelector('.thumb-wrapper').addEventListener('click', () => {
+        openLightbox(photoContainer, photo.image_url);
+      });
+    });
+  }
+
+  function buildAdminDashboard(data) {
+    document.getElementById('log').textContent = "";
+    document.getElementById('auth-form').style.display = "none";
+    document.getElementById('admin-result-view').style.display = "block";
+    const groupContainer = document.getElementById('admin-group-container');
+    groupContainer.innerHTML = "";
+    if (data.length === 0) {
+      groupContainer.innerHTML = `<div class="no-data">업로드된 사진이 없습니다.</div>`;
+      return;
+    }
+    const groupedData = {};
+    data.forEach(photo => {
+      if (!groupedData[photo.uploader_name]) groupedData[photo.uploader_name] = [];
+      groupedData[photo.uploader_name].push(photo);
+    });
+    Object.keys(groupedData).forEach(uploaderName => {
+      const photos = groupedData[uploaderName];
+      const groupBox = document.createElement('div');
+      groupBox.className = 'admin-group-box';
+      groupBox.innerHTML = `
+        <div class="admin-group-header">
+          <h3 class="admin-user-info">${uploaderName}<span class="admin-count-badge">총 ${photos.length}장</span></h3>
+          <button class="zip-btn">ZIP 다운로드</button>
+        </div>
+        <!-- 💡 [UX 변경] photo-grid에서 가로 배열 전용 admin-photo-row 클래스로 교체 -->
+        <div class="admin-photo-row"></div>
+      `;
+      const grid = groupBox.querySelector('.admin-photo-row');
+      photos.forEach(photo => {
         const item = document.createElement('div');
         item.className = 'photo-item';
         item.id = `photo-row-${photo.id}`;
         item.innerHTML = `
-          <div class="thumb-wrapper">
-            <img src="${photo.image_url}" alt="하객 업로드 사진" loading="lazy">
-          </div>
-          <button class="delete-btn" data-id="${photo.id}">사진 삭제</button>
+          <div class="thumb-wrapper" style="cursor:pointer;"><img src="${photo.image_url}" loading="lazy"></div>
+          <button class="delete-btn" onclick="handleDelete(${photo.id}, 'admin')">강제 삭제</button>
         `;
-        photoContainer.appendChild(item);
+        grid.appendChild(item);
+        
+        // ── 📸 [UX 추가] 썸네일 클릭 시 가로 배열 그룹 컨텍스트를 인지하여 팝업 실행 ──
+        item.querySelector('.thumb-wrapper').addEventListener('click', () => {
+          openLightbox(grid, photo.image_url);
+        });
       });
-
-      // 삭제 버튼 이벤트 바인딩
-      document.querySelectorAll('.delete-btn').forEach(btn => {
-        btn.addEventListener('click', (e) => handleDelete(e.target.dataset.id));
-      });
-
-    } catch (err) {
-      console.error(err);
-      log.textContent = "❌ 장부 조회 실패: 입력 정보를 다시 확인해 주세요.";
-      log.className = "";
-    }
+      groupContainer.appendChild(groupBox);
+      groupBox.querySelector('.zip-btn').addEventListener('click', () => downloadPersonZip(uploaderName, photos));
+    });
   }
 
-  // 삭제 트랜잭션 함수
-  async function handleDelete(id) {
-    if (!confirm("이 사진을 청첩장 앨범 장부에서 정말 삭제할까요?\n삭제 후에는 복구할 수 없습니다.")) return;
+  // ── 📸 [알고리즘 추가] 실시간 런타임 DOM 이미지 트래킹 기반 라이트박스 트리거 함수 ──
+  function openLightbox(rowContainer, targetSrc) {
+    // 실시간 삭제 리플렉션을 반영하기 위해 클릭한 순간 컨테이너 내의 남은 이미지를 전부 스캔
+    const imgElements = Array.from(rowContainer.querySelectorAll('.thumb-wrapper img'));
+    activePhotosArray = imgElements.map(img => img.src);
+    activePhotoIndex = activePhotosArray.indexOf(targetSrc);
+    
+    if (activePhotoIndex === -1) activePhotoIndex = 0;
+    
+    document.getElementById('lightbox-main-img').src = activePhotosArray[activePhotoIndex];
+    document.getElementById('lightbox-modal').style.display = 'flex';
+  }
 
+  // 라이트박스 탐색 버튼 이벤트 리스너 바인딩 파트
+  document.getElementById('lightbox-close-trigger').addEventListener('click', () => {
+    document.getElementById('lightbox-modal').style.display = 'none';
+  });
+  document.getElementById('lightbox-prev-trigger').addEventListener('click', () => {
+    if (activePhotosArray.length <= 1) return;
+    activePhotoIndex = (activePhotoIndex - 1 + activePhotosArray.length) % activePhotosArray.length;
+    document.getElementById('lightbox-main-img').src = activePhotosArray[activePhotoIndex];
+  });
+  document.getElementById('lightbox-next-trigger').addEventListener('click', () => {
+    if (activePhotosArray.length <= 1) return;
+    activePhotoIndex = (activePhotoIndex + 1) % activePhotosArray.length;
+    document.getElementById('lightbox-main-img').src = activePhotosArray[activePhotoIndex];
+  });
+  // 바깥 배경 클릭 시 팝업 닫기
+  document.getElementById('lightbox-modal').addEventListener('click', (e) => {
+    if (e.target === document.getElementById('lightbox-modal')) {
+      document.getElementById('lightbox-modal').style.display = 'none';
+    }
+  });
+
+  async function downloadPersonZip(name, photos) {
     const log = document.getElementById('log');
-    log.textContent = "장부에서 기록을 지우는 중...";
-    log.className = "progress";
-
+    log.textContent = `압축 중...`;
+    const zip = new JSZip();
     try {
-      const { error } = await supabase
-        .from('guest_photos')
-        .delete()
-        .eq('id', id);
-
-      if (error) throw error;
-
-      log.textContent = "✅ 사진이 정상적으로 삭제 처리되었습니다.";
-      log.className = "success";
-
-      // 성공 시 화면에서 해당 엘리먼트 제거
-      const targetElement = document.getElementById(`photo-row-${id}`);
-      if (targetElement) targetElement.remove();
-
-      // 만약 다 지워서 남은 사진이 없다면 메시지 출력
-      const container = document.getElementById('photo-container');
-      if (container.children.length === 0) {
-        container.innerHTML = `<div class="no-data" style="grid-column: span 2;">조회된 사진이 없습니다.</div>`;
+      for (let i = 0; i < photos.length; i++) {
+        const response = await fetch(photos[i].image_url);
+        const blob = await response.blob();
+        const ext = photos[i].s3_key.split('.').pop() || 'jpg';
+        zip.file(`${name}_${i + 1}.${ext}`, blob);
       }
-
+      const content = await zip.generateAsync({ type: "blob" });
+      const downloadUrl = window.URL.createObjectURL(content);
+      const anchor = document.createElement('a');
+      anchor.href = downloadUrl;
+      anchor.download = `${name}_사진.zip`;
+      anchor.click();
+      log.textContent = `✅ 다운로드 완료`;
     } catch (err) {
-      console.error(err);
-      log.textContent = "❌ 삭제 권한이 없거나 오류가 발생했습니다.";
-      log.className = "";
+      log.textContent = `❌ 다운로드 오류`;
     }
   }
 
-  document.getElementById('find-btn').addEventListener('click', fetchGuestPhotos);
+  window.handleDelete = async function(id, mode) {
+    if (!confirm("삭제하시겠습니까?")) return;
+    try {
+      const { error } = await supabase.from('guest_photos').delete().eq('id', id);
+      if (error) throw error;
+      
+      const target = document.getElementById(`photo-row-${id}`);
+      if (target) {
+        const parentGrid = target.parentElement;
+        target.remove();
+        if(mode === 'admin' && parentGrid.children.length === 0) parentGrid.parentElement.remove();
+      }
+    } catch (err) {
+      alert("삭제 실패");
+    }
+  }
+
+  document.getElementById('find-btn').addEventListener('click', handleFindRequest);
 </script>
 </body>
 </html>
