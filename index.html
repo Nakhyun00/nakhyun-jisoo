@@ -30,6 +30,7 @@ body{font-family:'Noto Sans KR',sans-serif;background:#f7f6f4;color:#2c2c2a;font
 .hero-amp{display:block;font-size:20px;color:#b4aca0;margin:.2rem 0}
 .hero-sub{font-size:10px;letter-spacing:4px;color:#7a7570;margin-top:.4rem}
 
+
 /* 인사말 */
 .greet-txt{font-family:'Noto Serif KR',serif;font-size:14px;font-weight:300;color:#4e4d4a;line-height:2.1;text-align:center;max-width:300px;margin:0 auto 1.8rem}
 .contact-open-btn{display:block;margin:0 auto;font-family:'Noto Serif KR',serif;font-size:13px;color:#5a5652;background:#fff;border:0.5px solid #ccc8c0;border-radius:24px;padding:.65rem 2rem;cursor:pointer;letter-spacing:.5px;transition:background .2s}
@@ -135,6 +136,38 @@ footer{background:#f0ede8;text-align:center;padding:2.5rem 1.5rem;width:100%;max
 .ft-place{font-size:11px;color:#aaa8a2;letter-spacing:.5px}
 .ft-bar{width:24px;height:1px;background:#d8d5cf;margin:1.2rem auto}
 .ft-names{font-size:11px;color:#bbb8b0;letter-spacing:2px}
+
+/* ── [추가] 8. 사진 공유하기 섹션 스타일 ── */
+.photo-share-txt {
+  font-family: 'Noto Serif KR', serif;
+  font-size: 14px;
+  font-weight: 300;
+  color: #4e4d4a;
+  line-height: 2.1;
+  text-align: center;
+  max-width: 320px;
+  margin: 0 auto 1.8rem;
+}
+.photo-link-wrap {
+  text-align: center;
+}
+.photo-upload-btn {
+  display: inline-block;
+  font-family: 'Noto Serif KR', serif;
+  font-size: 13px;
+  color: #fff;
+  background: #2c2c2a;
+  border: none;
+  border-radius: 24px;
+  padding: .75rem 2.5rem;
+  cursor: pointer;
+  letter-spacing: .5px;
+  text-decoration: none;
+  transition: background .2s;
+}
+.photo-upload-btn:hover {
+  background: #4a4845;
+}
 </style>
 </head>
 <body>
@@ -420,6 +453,23 @@ footer{background:#f0ede8;text-align:center;padding:2.5rem 1.5rem;width:100%;max
    <p class="acc-bank">은행명 000-000-000000</p>
       <button class="copy-btn" onclick="doCopy('000-000-000000',this)">복사</button>
     </div>
+  </div>
+</section>
+
+<!-- ⑧ [추가] 사진 공유하기 섹션 (마음 전하기와 footer 사이 배치) -->
+<section class="sec">
+  <p class="sec-label">SHARE MOMENTS</p>
+  <h2 class="sec-title">추억 공유하기</h2>
+  <div class="hairline"></div>
+  <p class="photo-share-txt">
+    저희 두 사람의 소중한 시작의 날,<br>
+    함께 나누었던 행복한 순간과 기억들을<br>
+    사진으로 따뜻하게 공유해 주세요.<br><br>
+    보내주신 아름다운 시간들을 고이 모아<br>
+    평생 감사한 마음으로 소중히 간직하겠습니다.
+  </p>
+  <div class="photo-link-wrap">
+    <a href="/photo" class="photo-upload-btn">사진 업로드하기</a>
   </div>
 </section>
 
