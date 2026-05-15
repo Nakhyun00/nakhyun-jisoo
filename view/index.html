@@ -1,0 +1,201 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>내가 올린 사진 확인하기 · 김낙현 & 김지수</title>
+  <link href="https://fonts.googleapis.com/css2?family=Noto+Serif+KR:wght@300;400;500&family=Noto+Sans+KR:wght@300;400&display=swap" rel="stylesheet">
+  <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    body { font-family: 'Noto Sans KR', sans-serif; background: #f7f6f4; color: #2c2c2a; font-size: 14px; line-height: 1.8; display: flex; justify-content: center; padding: 2rem 1rem; }
+    
+    .page { width: 100%; max-width: 450px; background: #fff; border: 0.5px solid #e4e1db; border-radius: 16px; padding: 2.5rem 1.5rem; box-shadow: 0 4px 12px rgba(0,0,0,0.02); text-align: center; }
+    
+    .title-label { font-size: 10px; letter-spacing: 4px; color: #bbb8b0; margin-bottom: .5rem; text-transform: uppercase; }
+    .title { font-family: 'Noto Serif KR', serif; font-size: 20px; font-weight: 400; color: #2c2c2a; margin-bottom: .6rem; }
+    .hairline { width: 28px; height: 1px; background: #d8d5cf; margin: .6rem auto 2rem; }
+    
+    /* 인증 폼 레이아웃 */
+    #auth-form { margin-bottom: 1rem; }
+    .form-group { text-align: left; margin-bottom: 1.2rem; }
+    .form-group label { display: block; font-size: 11px; color: #bbb8b0; letter-spacing: 1px; margin-bottom: 0.4rem; padding-left: 4px; }
+    
+    input[type="text"], input[type="password"] { width: 100%; padding: .75rem 1rem; border: 0.5px solid #d8d5cf; border-radius: 10px; font-family: 'Noto Sans KR', sans-serif; font-size: 13px; color: #2c2c2a; background: #fbfbfa; outline: none; transition: border .2s; }
+    input[type="text"]:focus, input[type="password"]:focus { border-color: #a8a5a0; background: #fff; }
+    
+    .submit-btn { width: 100%; padding: .85rem; background: #2c2c2a; color: #fff; border: none; border-radius: 24px; font-family: 'Noto Serif KR', serif; font-size: 14px; cursor: pointer; letter-spacing: 1px; transition: background .2s; margin-top: 0.5rem; }
+    .submit-btn:hover { background: #4a4845; }
+    
+    /* 결과 뷰 레이아웃 */
+    #result-view { display: none; margin-top: 1rem; animation: fadeIn 0.4s ease; }
+    @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
+    
+    .user-header { font-family: 'Noto Serif KR', serif; font-size: 16px; color: #4a4845; margin-bottom: 1.5rem; background: #fbfbfa; padding: 10px; border-radius: 8px; border: 0.5px solid #edebe6; }
+    
+    /* 썸네일 그리드 디자인 */
+    .photo-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 12px; margin-bottom: 2rem; }
+    .photo-item { background: #fbfbfa; border: 0.5px solid #edebe6; border-radius: 8px; padding: 8px; display: flex; flex-direction: column; align-items: center; }
+    
+    .thumb-wrapper { position: relative; width: 100%; padding-bottom: 100%; overflow: hidden; border-radius: 6px; background: #eee; }
+    .thumb-wrapper img { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; }
+    
+    .delete-btn { width: 100%; margin-top: 8px; padding: 4px 0; background: #fff; color: #d9534f; border: 0.5px solid #d9534f; border-radius: 6px; font-size: 12px; cursor: pointer; transition: all .2s; }
+    .delete-btn:hover { background: #d9534f; color: #fff; }
+    
+    .no-data { font-family: 'Noto Serif KR', serif; color: #7a7570; padding: 3rem 0; }
+    
+    .back-btn { display: inline-block; margin-top: 2rem; font-size: 12px; color: #bbb8b0; text-decoration: none; border-bottom: 0.5px solid #d8d5cf; padding-bottom: 2px; }
+    .back-btn:hover { color: #7a7570; border-color: #7a7570; }
+    
+    #log { margin-top: 1.5rem; font-size: 12px; color: #d9534f; min-height: 20px; }
+    .progress { color: #7a7570 !important; }
+  </style>
+</head>
+<body>
+
+<div class="page">
+  <p class="title-label">Photo Gallery</p>
+  <h1 class="title">내가 올린 사진 확인</h1>
+  <div class="hairline"></div>
+
+  <!-- [인증 폼] 이름, 전화번호, 비밀번호 입력 섹션 -->
+  <div id="auth-form">
+    <div class="form-group">
+      <label for="viewer-name">올리는 사람 (이름)</label>
+      <input type="text" id="viewer-name" placeholder="업로드 시 작성한 이름">
+    </div>
+    <div class="form-group">
+      <label for="viewer-phone">전화번호</label>
+      <input type="text" id="viewer-phone" placeholder="010-0000-0000">
+    </div>
+    <div class="form-group">
+      <label for="viewer-pw">비밀번호</label>
+      <input type="password" id="viewer-pw" placeholder="업로드 시 설정한 비밀번호">
+    </div>
+    <button id="find-btn" class="submit-btn">사진 조회하기</button>
+  </div>
+
+  <!-- [결과 뷰] 인증 성공 시 등장하는 썸네일 목록 섹션 -->
+  <div id="result-view">
+    <div class="user-header" id="user-title"></div>
+    <div class="photo-grid" id="photo-container"></div>
+  </div>
+  
+  <div id="log"></div>
+
+  <a href="/photo" class="back-btn">← 이전으로 돌아가기</a>
+</div>
+
+<script type="module">
+  import { createClient } from 'https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/+esm'
+
+  const SUPABASE_URL = 'https://aczwxfujkablybpkdpeh.supabase.co'; 
+  const SUPABASE_ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImFjend4ZnVqa2FibHlicGtkcGVoIiwicm9sZSI6ImFub24iLCJpYXQiOjE3Nzg4NDQxMTcsImV4cCI6MjA5NDQyMDExN30.DPsyGgb3nJdNhyiYpgS4GVnqeCFRP_MluUtJCV8SXcc'; 
+
+  const supabase = createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+
+  async function fetchGuestPhotos() {
+    const name = document.getElementById('viewer-name').value.trim();
+    const rawPhone = document.getElementById('viewer-phone').value.trim();
+    const pw = document.getElementById('viewer-pw').value.trim();
+    const log = document.getElementById('log');
+    const resultView = document.getElementById('result-view');
+    const photoContainer = document.getElementById('photo-container');
+    const userTitle = document.getElementById('user-title');
+
+    if (!name || !rawPhone || !pw) {
+      alert("이름, 전화번호, 비밀번호를 모두 입력해 주세요.");
+      return;
+    }
+
+    const phone = rawPhone.replace(/[^0-9]/g, '');
+    log.textContent = "장부를 조회하고 있습니다...";
+    log.className = "progress";
+    
+    try {
+      // 💡 엔지니어링 포인트: s3_key가 'photo/전화번호/'로 시작하는 행을 검색 매칭 기법(like)으로 스캔
+      const { data, error } = await supabase
+         .from('guest_photos')
+         .select('*')
+         .eq('uploader_name', name)
+         .eq('password', pw)
+         .like('s3_key', `photo/${phone}_${pw}/%`);
+
+      if (error) throw error;
+
+      log.textContent = "";
+      document.getElementById('auth-form').style.display = "none"; // 인증 완료 시 로그인 폼 숨김
+      resultView.style.display = "block";
+      userTitle.innerHTML = `✨ <strong>${name}님</strong>이 선물해주신 사진 목록`;
+
+      if (!data || data.length === 0) {
+        photoContainer.innerHTML = `<div class="no-data" style="grid-column: span 2;">조회된 사진이 없습니다.</div>`;
+        return;
+      }
+
+      photoContainer.innerHTML = "";
+      data.forEach(photo => {
+        const item = document.createElement('div');
+        item.className = 'photo-item';
+        item.id = `photo-row-${photo.id}`;
+        item.innerHTML = `
+          <div class="thumb-wrapper">
+            <img src="${photo.image_url}" alt="하객 업로드 사진" loading="lazy">
+          </div>
+          <button class="delete-btn" data-id="${photo.id}">사진 삭제</button>
+        `;
+        photoContainer.appendChild(item);
+      });
+
+      // 삭제 버튼 이벤트 바인딩
+      document.querySelectorAll('.delete-btn').forEach(btn => {
+        btn.addEventListener('click', (e) => handleDelete(e.target.dataset.id));
+      });
+
+    } catch (err) {
+      console.error(err);
+      log.textContent = "❌ 장부 조회 실패: 입력 정보를 다시 확인해 주세요.";
+      log.className = "";
+    }
+  }
+
+  // 삭제 트랜잭션 함수
+  async function handleDelete(id) {
+    if (!confirm("이 사진을 청첩장 앨범 장부에서 정말 삭제할까요?\n삭제 후에는 복구할 수 없습니다.")) return;
+
+    const log = document.getElementById('log');
+    log.textContent = "장부에서 기록을 지우는 중...";
+    log.className = "progress";
+
+    try {
+      const { error } = await supabase
+        .from('guest_photos')
+        .delete()
+        .eq('id', id);
+
+      if (error) throw error;
+
+      log.textContent = "✅ 사진이 정상적으로 삭제 처리되었습니다.";
+      log.className = "success";
+
+      // 성공 시 화면에서 해당 엘리먼트 제거
+      const targetElement = document.getElementById(`photo-row-${id}`);
+      if (targetElement) targetElement.remove();
+
+      // 만약 다 지워서 남은 사진이 없다면 메시지 출력
+      const container = document.getElementById('photo-container');
+      if (container.children.length === 0) {
+        container.innerHTML = `<div class="no-data" style="grid-column: span 2;">조회된 사진이 없습니다.</div>`;
+      }
+
+    } catch (err) {
+      console.error(err);
+      log.textContent = "❌ 삭제 권한이 없거나 오류가 발생했습니다.";
+      log.className = "";
+    }
+  }
+
+  document.getElementById('find-btn').addEventListener('click', fetchGuestPhotos);
+</script>
+</body>
+</html>
