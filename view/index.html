@@ -23,10 +23,8 @@
     @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
     .user-header { font-family: 'Noto Serif KR', serif; font-size: 16px; color: #4a4845; margin-bottom: 1.5rem; background: #fbfbfa; padding: 10px; border-radius: 8px; border: 0.5px solid #edebe6; text-align: center; }
     
-    /* 하객용 수직 그리드 레이아웃 (유지) */
     .photo-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 12px; margin-bottom: 2rem; }
     
-    /* ── 📊 [UX 업그레이드] 관리자 전용 가로 스크롤 레일 아키텍처 ── */
     .admin-photo-row { 
       display: flex; 
       overflow-x: auto; 
@@ -37,13 +35,11 @@
       -webkit-overflow-scrolling: touch;
       scroll-snap-type: x mandatory;
     }
-    /* 가로 스크롤바 커스텀 스킨 디자인 */
     .admin-photo-row::-webkit-scrollbar { height: 5px; }
     .admin-photo-row::-webkit-scrollbar-track { background: #fbfbfa; border-radius: 10px; }
     .admin-photo-row::-webkit-scrollbar-thumb { background: #e4e1db; border-radius: 10px; }
     .admin-photo-row::-webkit-scrollbar-thumb:hover { background: #bbb8b0; }
     
-    /* 가로 배열 시 하위 아이템들이 찌그러지지 않도록 고정 폭 배치 */
     .admin-photo-row .photo-item { flex: 0 0 145px; scroll-snap-align: start; }
     
     .photo-item { background: #fbfbfa; border: 0.5px solid #edebe6; border-radius: 8px; padding: 8px; display: flex; flex-direction: column; align-items: center; }
@@ -65,7 +61,6 @@
     .progress { color: #7a7570 !important; }
     .success { color: #6ba870 !important; font-weight: 500; }
 
-    /* ── 📸 [UI 업그레이드] 라이트박스 팝업 전체 화면 오버레이 스타일 ── */
     .lightbox {
       display: none; position: fixed; z-index: 10000; left: 0; top: 0; width: 100%; height: 100%;
       background-color: rgba(15, 15, 15, 0.93); justify-content: center; align-items: center;
@@ -74,7 +69,6 @@
     .lightbox-content { max-width: 88%; max-height: 78vh; object-fit: contain; border-radius: 6px; box-shadow: 0 10px 30px rgba(0,0,0,0.5); }
     .lightbox-close { position: absolute; top: 20px; right: 25px; color: #fff; font-size: 38px; cursor: pointer; font-weight: 300; transition: transform 0.2s; }
     .lightbox-close:hover { transform: scale(1.1); }
-    /* 슬라이더 제어 버튼 디자인 */
     .lightbox-btn {
       position: absolute; top: 50%; transform: translateY(-50%); background: rgba(255, 255, 255, 0.08);
       color: #fff; border: none; font-size: 24px; padding: 12px; cursor: pointer; border-radius: 50%;
@@ -122,7 +116,6 @@
   <a href="/photo" class="back-btn">← 사진 업로드로 돌아가기</a>
 </div>
 
-<!-- ── 📸 [UI 추가] 확대 팝업 라이트박스 컨테이너 레이어 ── -->
 <div id="lightbox-modal" class="lightbox">
   <span class="lightbox-close" id="lightbox-close-trigger">&times;</span>
   <button class="lightbox-btn lightbox-prev" id="lightbox-prev-trigger">&#10094;</button>
@@ -138,9 +131,10 @@
 
   const supabase = createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
 
-  // 라이트박스 제어용 전역 모듈 변수 파트
   let activePhotosArray = [];
   let activePhotoIndex = 0;
+  // 💡 [관리자용 전역 변수] 삭제 시 관리자 권한 헤더를 유지하기 위해 저장
+  let adminAuth = null;
 
   async function handleFindRequest() {
     const name = document.getElementById('viewer-name').value.trim();
@@ -167,6 +161,9 @@
       if (rpcError) throw rpcError;
 
       if (isAdmin === true) {
+        // 관리자 정보를 전역 변수에 저장 (삭제 시 사용)
+        adminAuth = { name, phone, pw };
+
         const customSupabase = createClient(SUPABASE_URL, SUPABASE_ANON_KEY, {
           global: { headers: { 'x-admin-phone': phone, 'x-admin-pw': pw } }
         });
@@ -217,13 +214,12 @@
       const item = document.createElement('div');
       item.className = 'photo-item';
       item.id = `photo-row-${photo.id}`;
+      // 💡 [수정] ID값을 작은 따옴표('')로 감싸 문자열로 전달
       item.innerHTML = `
         <div class="thumb-wrapper" style="cursor:pointer;"><img src="${photo.image_url}" loading="lazy"></div>
-        <button class="delete-btn" onclick="handleDelete(${photo.id}, 'guest')">사진 삭제</button>
+        <button class="delete-btn" onclick="handleDelete('${photo.id}', 'guest')">사진 삭제</button>
       `;
       photoContainer.appendChild(item);
-      
-      // 일반 하객 모드에서도 사진 팝업 연결
       item.querySelector('.thumb-wrapper').addEventListener('click', () => {
         openLightbox(photoContainer, photo.image_url);
       });
@@ -254,7 +250,6 @@
           <h3 class="admin-user-info">${uploaderName}<span class="admin-count-badge">총 ${photos.length}장</span></h3>
           <button class="zip-btn">ZIP 다운로드</button>
         </div>
-        <!-- 💡 [UX 변경] photo-grid에서 가로 배열 전용 admin-photo-row 클래스로 교체 -->
         <div class="admin-photo-row"></div>
       `;
       const grid = groupBox.querySelector('.admin-photo-row');
@@ -262,13 +257,12 @@
         const item = document.createElement('div');
         item.className = 'photo-item';
         item.id = `photo-row-${photo.id}`;
+        // 💡 [수정] ID값을 작은 따옴표('')로 감싸 문자열로 전달
         item.innerHTML = `
           <div class="thumb-wrapper" style="cursor:pointer;"><img src="${photo.image_url}" loading="lazy"></div>
-          <button class="delete-btn" onclick="handleDelete(${photo.id}, 'admin')">강제 삭제</button>
+          <button class="delete-btn" onclick="handleDelete('${photo.id}', 'admin')">강제 삭제</button>
         `;
         grid.appendChild(item);
-        
-        // ── 📸 [UX 추가] 썸네일 클릭 시 가로 배열 그룹 컨텍스트를 인지하여 팝업 실행 ──
         item.querySelector('.thumb-wrapper').addEventListener('click', () => {
           openLightbox(grid, photo.image_url);
         });
@@ -278,20 +272,15 @@
     });
   }
 
-  // ── 📸 [알고리즘 추가] 실시간 런타임 DOM 이미지 트래킹 기반 라이트박스 트리거 함수 ──
   function openLightbox(rowContainer, targetSrc) {
-    // 실시간 삭제 리플렉션을 반영하기 위해 클릭한 순간 컨테이너 내의 남은 이미지를 전부 스캔
     const imgElements = Array.from(rowContainer.querySelectorAll('.thumb-wrapper img'));
     activePhotosArray = imgElements.map(img => img.src);
     activePhotoIndex = activePhotosArray.indexOf(targetSrc);
-    
     if (activePhotoIndex === -1) activePhotoIndex = 0;
-    
     document.getElementById('lightbox-main-img').src = activePhotosArray[activePhotoIndex];
     document.getElementById('lightbox-modal').style.display = 'flex';
   }
 
-  // 라이트박스 탐색 버튼 이벤트 리스너 바인딩 파트
   document.getElementById('lightbox-close-trigger').addEventListener('click', () => {
     document.getElementById('lightbox-modal').style.display = 'none';
   });
@@ -305,7 +294,6 @@
     activePhotoIndex = (activePhotoIndex + 1) % activePhotosArray.length;
     document.getElementById('lightbox-main-img').src = activePhotosArray[activePhotoIndex];
   });
-  // 바깥 배경 클릭 시 팝업 닫기
   document.getElementById('lightbox-modal').addEventListener('click', (e) => {
     if (e.target === document.getElementById('lightbox-modal')) {
       document.getElementById('lightbox-modal').style.display = 'none';
@@ -335,20 +323,51 @@
     }
   }
 
+  // ── 💡 [삭제 기능 핵심 수정] ──
   window.handleDelete = async function(id, mode) {
-    if (!confirm("삭제하시겠습니까?")) return;
+    if (!confirm("정말로 삭제하시겠습니까?")) return;
+    
+    const log = document.getElementById('log');
+    log.textContent = "삭제 처리 중...";
+    log.className = "progress";
+
     try {
-      const { error } = await supabase.from('guest_photos').delete().eq('id', id);
+      let client = supabase;
+      
+      // 관리자 모드인 경우, 삭제 요청에도 관리자 권한 헤더 주입
+      if (mode === 'admin' && adminAuth) {
+        client = createClient(SUPABASE_URL, SUPABASE_ANON_KEY, {
+          global: { headers: { 
+            'x-admin-phone': adminAuth.phone, 
+            'x-admin-pw': adminAuth.pw 
+          } }
+        });
+      }
+
+      const { error } = await client.from('guest_photos').delete().eq('id', id);
       if (error) throw error;
       
       const target = document.getElementById(`photo-row-${id}`);
       if (target) {
         const parentGrid = target.parentElement;
         target.remove();
-        if(mode === 'admin' && parentGrid.children.length === 0) parentGrid.parentElement.remove();
+        
+        // 관리자 모드에서 특정 유저의 사진이 다 지워지면 박스 자체를 제거
+        if(mode === 'admin' && parentGrid && parentGrid.children.length === 0) {
+          const groupBox = parentGrid.closest('.admin-group-box');
+          if (groupBox) groupBox.remove();
+        }
       }
+
+      log.textContent = "✅ 삭제되었습니다.";
+      log.className = "success";
+      setTimeout(() => { log.textContent = ""; }, 2000);
+
     } catch (err) {
-      alert("삭제 실패");
+      console.error("Delete Error:", err);
+      log.textContent = "❌ 삭제 실패: 권한이 없거나 오류가 발생했습니다.";
+      log.className = "";
+      alert("삭제에 실패했습니다. DB의 DELETE 정책(RLS)을 확인하세요.");
     }
   }
 
