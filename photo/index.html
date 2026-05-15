@@ -1,0 +1,242 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>추억 공유하기 · 김낙현 & 김지수</title>
+  <link href="https://fonts.googleapis.com/css2?family=Noto+Serif+KR:wght@300;400;500&family=Noto+Sans+KR:wght@300;400&display=swap" rel="stylesheet">
+  <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    body { font-family: 'Noto Sans KR', sans-serif; background: #f7f6f4; color: #2c2c2a; font-size: 14px; line-height: 1.8; display: flex; justify-content: center; padding: 2rem 1rem; }
+    
+    .page { width: 100%; max-width: 450px; background: #fff; border: 0.5px solid #e4e1db; border-radius: 16px; padding: 2.5rem 1.5rem; box-shadow: 0 4px 12px rgba(0,0,0,0.02); text-align: center; }
+    
+    .title-label { font-size: 10px; letter-spacing: 4px; color: #bbb8b0; margin-bottom: .5rem; text-transform: uppercase; }
+    .title { font-family: 'Noto Serif KR', serif; font-size: 20px; font-weight: 400; color: #2c2c2a; margin-bottom: .6rem; }
+    .hairline { width: 28px; height: 1px; background: #d8d5cf; margin: .6rem auto 2rem; }
+    
+    .desc { font-family: 'Noto Serif KR', serif; font-size: 13px; font-weight: 300; color: #7a7570; line-height: 2; margin-bottom: 2.5rem; }
+    
+    .form-group { text-align: left; margin-bottom: 1.2rem; }
+    .form-group label { display: block; font-size: 11px; color: #bbb8b0; letter-spacing: 1px; margin-bottom: 0.4rem; padding-left: 4px; }
+    
+    input[type="text"], input[type="password"] { width: 100%; padding: .75rem 1rem; border: 0.5px solid #d8d5cf; border-radius: 10px; font-family: 'Noto Sans KR', sans-serif; font-size: 13px; color: #2c2c2a; background: #fbfbfa; outline: none; transition: border .2s; }
+    input[type="text"]:focus, input[type="password"]:focus { border-color: #a8a5a0; background: #fff; }
+    
+    .file-wrapper { position: relative; width: 100%; margin-top: 1.5rem; margin-bottom: 2rem; }
+    .file-label { display: flex; align-items: center; justify-content: center; width: 100%; padding: 1rem; border: 1px dashed #d8d5cf; border-radius: 10px; background: #fbfbfa; cursor: pointer; transition: all .2s; font-size: 13px; color: #7a7570; }
+    .file-label:hover { background: #f4f2ee; border-color: #a8a5a0; }
+    
+    input[type="file"] { position: absolute; width: 1px; height: 1px; padding: 0; margin: -1px; overflow: hidden; clip: rect(0,0,0,0); border: 0; }
+    
+    .file-name { display: none; font-size: 12px; color: #4a4845; margin-top: 0.5rem; word-break: break-all; font-weight: 500; line-height: 1.5; text-align: left; background: #f7f6f4; padding: 10px; border-radius: 8px; max-height: 120px; overflow-y: auto; }
+    
+    /* [메인] 사진 선물하기 버튼 */
+    .submit-btn { width: 100%; padding: .85rem; background: #2c2c2a; color: #fff; border: none; border-radius: 24px; font-family: 'Noto Serif KR', serif; font-size: 14px; cursor: pointer; letter-spacing: 1px; transition: background .2s; margin-top: 0.5rem; }
+    .submit-btn:hover { background: #4a4845; }
+    .submit-btn:disabled { background: #ccc8c0; cursor: not-allowed; }
+    
+    /* ── 🔥 [추가/수정] view 페이지 연동용 서브 버튼 스타일 ── */
+    .view-link-btn { 
+      display: block; 
+      width: 100%; 
+      padding: .85rem; 
+      background: #ede9e3; /* 메인 톤에 맞춘 고급스럽고 연한 그레이 베이지 */
+      color: #5a5652; 
+      border: none; 
+      border-radius: 24px; 
+      font-family: 'Noto Serif KR', serif; 
+      font-size: 14px; 
+      text-decoration: none; 
+      letter-spacing: 1px; 
+      transition: background .2s; 
+      margin-top: 1.5rem; 
+    }
+    .view-link-btn:hover { background: #e4dfd8; color: #2c2c2a; }
+    
+    .nav-links { margin-top: 1.5rem; text-align: center; }
+    .back-btn { font-size: 12px; color: #bbb8b0; text-decoration: none; border-bottom: 0.5px solid #d8d5cf; padding-bottom: 2px; transition: color .2s; }
+    .back-btn:hover { color: #7a7570; border-color: #7a7570; }
+    
+    #log { margin-top: 1.5rem; font-size: 12px; color: #d9534f; min-height: 20px; font-weight: 400; line-height: 1.6; }
+    .success { color: #6ba870 !important; font-weight: 500; }
+    .progress { color: #7a7570 !important; }
+  </style>
+</head>
+<body>
+
+<div class="page">
+  <p class="title-label">Share Memories</p>
+  <h1 class="title">추억 상자 채우기</h1>
+  <div class="hairline"></div>
+  
+  <p class="desc">
+    오늘의 아름다운 순간들을 들려주세요.<br>
+    여러 장의 사진을 한 번에 선물하실 수 있습니다.
+  </p>
+
+  <div class="form-group">
+    <label for="uploader-name">올리는 사람</label>
+    <input type="text" id="uploader-name" placeholder="성함을 입력해 주세요">
+  </div>
+
+  <div class="form-group">
+    <label for="uploader-phone">전화번호</label>
+    <input type="text" id="uploader-phone" placeholder="010-0000-0000">
+  </div>
+
+  <div class="form-group">
+    <label for="uploader-pw">비밀번호</label>
+    <input type="password" id="uploader-pw" placeholder="사진 조회 및 삭제용 비밀번호">
+  </div>
+
+  <div class="file-wrapper">
+    <label class="file-label" for="file-input">📸 사진 선택하기 (최대 100장)</label>
+    <input type="file" id="file-input" accept="image/*" multiple>
+    <div class="file-name" id="file-name-display"></div>
+  </div>
+
+  <button id="upload-btn" class="submit-btn">사진 선물하기</button>
+
+
+  <!-- ── 🔥 [수정] 뷰 이동 링크 버튼화 및 홈 링크 구조 개선 ── -->
+  <a href="/view" class="view-link-btn">내가 올린 사진 확인 / 삭제하기</a>
+
+  <div class="nav-links">
+    <a href="/" class="back-btn">← 청첩장 홈으로 돌아가기</a>
+  </div>
+</div>
+
+<script type="module">
+  import { createClient } from 'https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/+esm'
+
+  const SUPABASE_URL = 'https://aczwxfujkablybpkdpeh.supabase.co'; 
+  const SUPABASE_ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImFjend4ZnVqa2FibHlicGtkcGVoIiwicm9sZSI6ImFub24iLCJpYXQiOjE3Nzg4NDQxMTcsImV4cCI6MjA5NDQyMDExN30.DPsyGgb3nJdNhyiYpgS4GVnqeCFRP_MluUtJCV8SXcc'; 
+  const AWS_BUCKET_NAME = 'wedding-photos-2026-0905';
+
+  const supabase = createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+
+  const fileInput = document.getElementById('file-input');
+  const fileNameDisplay = document.getElementById('file-name-display');
+  
+  fileInput.addEventListener('change', (e) => {
+    const files = e.target.files;
+    if (files && files.length > 0) {
+      if (files.length > 100) {
+        alert("사진은 한 번에 최대 100장까지만 선택할 수 있습니다.");
+        fileInput.value = '';
+        fileNameDisplay.style.display = 'none';
+        return;
+      }
+      
+      let fileListText = `<strong>선택된 사진 (${files.length}장):</strong><br>`;
+      for (let i = 0; i < files.length; i++) {
+        fileListText += `- ${files[i].name}<br>`;
+      }
+      fileNameDisplay.innerHTML = fileListText;
+      fileNameDisplay.style.display = 'block';
+    } else {
+      fileNameDisplay.style.display = 'none';
+    }
+  });
+
+  async function handleUpload() {
+    const name = document.getElementById('uploader-name').value.trim();
+    const rawPhone = document.getElementById('uploader-phone').value.trim();
+    const pw = document.getElementById('uploader-pw').value.trim();
+    const files = fileInput.files;
+    const btn = document.getElementById('upload-btn');
+    const log = document.getElementById('log');
+
+    if (!name) return alert("보내시는 분의 이름을 입력해 주세요.");
+    if (!rawPhone) return alert("전화번호를 입력해 주세요.");
+    if (!pw) return alert("비밀번호를 입력해 주세요.");
+    if (!files || files.length === 0) return alert("공유할 사진을 선택해 주세요.");
+
+    if (files.length > 100) return alert("한 번에 최대 100장까지만 업로드할 수 있습니다.");
+
+    const phone = rawPhone.replace(/[^0-9]/g, '');
+    if (phone.length < 9) return alert("올바른 전화번호 형식이 아닙니다.");
+
+    const MAX_FILE_SIZE = 500 * 1024 * 1024;
+    for (let i = 0; i < files.length; i++) {
+      if (files[i].size > MAX_FILE_SIZE) {
+        return alert(`[용량 초과] "${files[i].name}" 파일이 500MB를 초과합니다.`);
+      }
+    }
+
+    btn.disabled = true;
+    log.className = "progress";
+
+    const dbRows = [];
+    const totalFiles = files.length;
+
+    try {
+      for (let i = 0; i < totalFiles; i++) {
+        const file = files[i];
+        const currentIdx = i + 1;
+
+        btn.textContent = `사진 전송 중 (${currentIdx}/${totalFiles})`;
+        log.textContent = `[${currentIdx}/${totalFiles}] 주소 요청 중...`;
+
+        const { data, error: urlError } = await supabase.functions.invoke('get-presigned-url', {
+          body: { filename: file.name, fileType: file.type, uploaderName: name, phone: phone, password: pw }
+        });
+
+        if (urlError || !data || data.error) {
+          throw new Error(`"${file.name}" 주소 발급 실패: ${data ? data.error : '서버 오류'}`);
+        }
+
+        const signedUrl = data.signedUrl;
+        const key = data.key;
+
+        log.textContent = `[${currentIdx}/${totalFiles}] 보관소(AWS S3)에 사진 저장 중...`;
+
+        const uploadRes = await fetch(signedUrl, {
+          method: 'PUT',
+          body: file,
+          headers: { 'Content-Type': file.type }
+        });
+
+        if (!uploadRes.ok) throw new Error(`"${file.name}" S3 전송 실패`);
+
+        const imageUrl = `https://${AWS_BUCKET_NAME}.s3.ap-southeast-2.amazonaws.com/${key}`;
+        dbRows.push({
+          uploader_name: name,
+          password: pw,
+          s3_key: key,
+          image_url: imageUrl
+        });
+      }
+
+      log.textContent = "모든 사진 저장 완료! 장부에 최종 기록하는 중...";
+      
+      const { error: dbError } = await supabase
+        .from('guest_photos')
+        .insert(dbRows);
+
+      if (dbError) throw new Error("장부 기록 실패: " + dbError.message);
+
+      log.textContent = `✅ 총 ${totalFiles}장의 사진이 축복 속에 성공적으로 전송되었습니다!`;
+      log.className = "success";
+      
+      document.getElementById('uploader-name').value = '';
+      document.getElementById('uploader-phone').value = '';
+      document.getElementById('uploader-pw').value = '';
+      fileInput.value = '';
+      fileNameDisplay.style.display = 'none';
+
+    } catch (err) {
+      console.error(err);
+      log.textContent = `❌ 업로드 실패: ${err.message}`;
+      log.className = "";
+    } finally {
+      btn.disabled = false;
+      btn.textContent = "사진 선물하기";
+    }
+  }
+
+  document.getElementById('upload-btn').addEventListener('click', handleUpload);
+</script>
+</body>
+</html>
