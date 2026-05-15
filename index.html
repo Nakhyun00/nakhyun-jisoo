@@ -1,358 +1,617 @@
+
 <!DOCTYPE html>
 <html lang="ko">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>내가 올린 사진 확인하기 · 김낙현 & 김지수</title>
-  <link href="https://fonts.googleapis.com/css2?family=Noto+Serif+KR:wght@300;400;500&family=Noto+Sans+KR:wght@300;400&display=swap" rel="stylesheet">
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.10.1/jszip.min.js"></script>
-  <style>
-    * { margin: 0; padding: 0; box-sizing: border-box; }
-    body { font-family: 'Noto Sans KR', sans-serif; background: #f7f6f4; color: #2c2c2a; font-size: 14px; line-height: 1.8; display: flex; justify-content: center; padding: 2rem 1rem; }
-    .page { width: 100%; max-width: 450px; background: #fff; border: 0.5px solid #e4e1db; border-radius: 16px; padding: 2.5rem 1.5rem; box-shadow: 0 4px 12px rgba(0,0,0,0.02); text-align: center; }
-    .title-label { font-size: 10px; letter-spacing: 4px; color: #bbb8b0; margin-bottom: .5rem; text-transform: uppercase; }
-    .title { font-family: 'Noto Serif KR', serif; font-size: 20px; font-weight: 400; color: #2c2c2a; margin-bottom: .6rem; }
-    .hairline { width: 28px; height: 1px; background: #d8d5cf; margin: .6rem auto 2rem; }
-    .form-group { text-align: left; margin-bottom: 1.2rem; }
-    .form-group label { display: block; font-size: 11px; color: #bbb8b0; letter-spacing: 1px; margin-bottom: 0.4rem; padding-left: 4px; }
-    input[type="text"], input[type="password"] { width: 100%; padding: .75rem 1rem; border: 0.5px solid #d8d5cf; border-radius: 10px; font-family: 'Noto Sans KR', sans-serif; font-size: 13px; color: #2c2c2a; background: #fbfbfa; outline: none; transition: border .2s; }
-    input[type="text"]:focus, input[type="password"]:focus { border-color: #a8a5a0; background: #fff; }
-    .submit-btn { width: 100%; padding: .85rem; background: #2c2c2a; color: #fff; border: none; border-radius: 24px; font-family: 'Noto Serif KR', serif; font-size: 14px; cursor: pointer; letter-spacing: 1px; transition: background .2s; margin-top: 0.5rem; }
-    .submit-btn:hover { background: #4a4845; }
-    #result-view, #admin-result-view { display: none; margin-top: 1rem; animation: fadeIn 0.4s ease; text-align: left; }
-    @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
-    .user-header { font-family: 'Noto Serif KR', serif; font-size: 16px; color: #4a4845; margin-bottom: 1.5rem; background: #fbfbfa; padding: 10px; border-radius: 8px; border: 0.5px solid #edebe6; text-align: center; }
-    
-    /* 하객용 수직 그리드 레이아웃 (유지) */
-    .photo-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 12px; margin-bottom: 2rem; }
-    
-    /* ── 📊 [UX 업그레이드] 관리자 전용 가로 스크롤 레일 아키텍처 ── */
-    .admin-photo-row { 
-      display: flex; 
-      overflow-x: auto; 
-      gap: 12px; 
-      padding-bottom: 12px; 
-      margin-bottom: 1rem;
-      scroll-behavior: smooth;
-      -webkit-overflow-scrolling: touch;
-      scroll-snap-type: x mandatory;
-    }
-    /* 가로 스크롤바 커스텀 스킨 디자인 */
-    .admin-photo-row::-webkit-scrollbar { height: 5px; }
-    .admin-photo-row::-webkit-scrollbar-track { background: #fbfbfa; border-radius: 10px; }
-    .admin-photo-row::-webkit-scrollbar-thumb { background: #e4e1db; border-radius: 10px; }
-    .admin-photo-row::-webkit-scrollbar-thumb:hover { background: #bbb8b0; }
-    
-    /* 가로 배열 시 하위 아이템들이 찌그러지지 않도록 고정 폭 배치 */
-    .admin-photo-row .photo-item { flex: 0 0 145px; scroll-snap-align: start; }
-    
-    .photo-item { background: #fbfbfa; border: 0.5px solid #edebe6; border-radius: 8px; padding: 8px; display: flex; flex-direction: column; align-items: center; }
-    .thumb-wrapper { position: relative; width: 100%; padding-bottom: 100%; overflow: hidden; border-radius: 6px; background: #eee; transition: transform 0.2s; }
-    .thumb-wrapper:hover { transform: scale(1.02); }
-    .thumb-wrapper img { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; }
-    .delete-btn { width: 100%; margin-top: 8px; padding: 4px 0; background: #fff; color: #d9534f; border: 0.5px solid #d9534f; border-radius: 6px; font-size: 12px; cursor: pointer; transition: all .2s; }
-    .delete-btn:hover { background: #d9534f; color: #fff; }
-    .admin-group-box { background: #fbfbfa; border: 0.5px solid #d8d5cf; border-radius: 12px; padding: 1.2rem 1rem; margin-bottom: 1.5rem; }
-    .admin-group-header { display: flex; justify-content: space-between; align-items: center; border-bottom: 0.5px solid #edebe6; padding-bottom: 0.6rem; margin-bottom: 1rem; }
-    .admin-user-info { font-family: 'Noto Serif KR', serif; font-size: 15px; font-weight: 500; color: #2c2c2a; }
-    .admin-count-badge { font-size: 11px; color: #7a7570; margin-left: 6px; font-weight: normal; }
-    .zip-btn { padding: 5px 14px; background: #ebdccb; color: #5a4f43; border: none; border-radius: 14px; font-size: 11px; font-family: 'Noto Serif KR', serif; cursor: pointer; font-weight: 500; transition: background .2s; }
-    .zip-btn:hover { background: #decbba; }
-    .no-data { font-family: 'Noto Serif KR', serif; color: #7a7570; padding: 3rem 0; text-align: center; width: 100%; }
-    .back-btn { display: inline-block; margin-top: 2rem; font-size: 12px; color: #bbb8b0; text-decoration: none; border-bottom: 0.5px solid #d8d5cf; padding-bottom: 2px; }
-    .back-btn:hover { color: #7a7570; border-color: #7a7570; }
-    #log { margin-top: 1.5rem; font-size: 12px; color: #d9534f; min-height: 20px; line-height: 1.6; text-align: center; }
-    .progress { color: #7a7570 !important; }
-    .success { color: #6ba870 !important; font-weight: 500; }
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>청첩장 · 김낙현 & 김지수</title>
+<link href="https://fonts.googleapis.com/css2?family=Noto+Serif+KR:wght@300;400;500&family=Noto+Sans+KR:wght@300;400&display=swap" rel="stylesheet">
+<script type="text/javascript" src="https://dapi.kakao.com/v2/maps/sdk.js?appkey=b9101a3f62bf69d410ed17160d17a39e&autoload=false"></script>
+<style>
+*{margin:0;padding:0;box-sizing:border-box}
+html{scroll-behavior:smooth}
+body{font-family:'Noto Sans KR',sans-serif;background:#f7f6f4;color:#2c2c2a;font-size:14px;line-height:1.8;display:flex;flex-direction:column;align-items:center}
+.page{width:100%;max-width:480px}
+.sec{padding:3.5rem 1.6rem}
+.sec:nth-child(odd){background:#fff}
+.sec:nth-child(even){background:#f7f6f4}
+.sec-label{font-size:10px;letter-spacing:4px;color:#bbb8b0;text-align:center;margin-bottom:.5rem}
+.sec-title{font-family:'Noto Serif KR',serif;font-size:19px;font-weight:400;text-align:center;color:#2c2c2a;margin-bottom:.6rem}
+.hairline{width:28px;height:1px;background:#d8d5cf;margin:.6rem auto 2rem}
 
-    /* ── 📸 [UI 업그레이드] 라이트박스 팝업 전체 화면 오버레이 스타일 ── */
-    .lightbox {
-      display: none; position: fixed; z-index: 10000; left: 0; top: 0; width: 100%; height: 100%;
-      background-color: rgba(15, 15, 15, 0.93); justify-content: center; align-items: center;
-      user-select: none; -webkit-user-select: none; animation: fadeIn 0.25s ease;
-    }
-    .lightbox-content { max-width: 88%; max-height: 78vh; object-fit: contain; border-radius: 6px; box-shadow: 0 10px 30px rgba(0,0,0,0.5); }
-    .lightbox-close { position: absolute; top: 20px; right: 25px; color: #fff; font-size: 38px; cursor: pointer; font-weight: 300; transition: transform 0.2s; }
-    .lightbox-close:hover { transform: scale(1.1); }
-    /* 슬라이더 제어 버튼 디자인 */
-    .lightbox-btn {
-      position: absolute; top: 50%; transform: translateY(-50%); background: rgba(255, 255, 255, 0.08);
-      color: #fff; border: none; font-size: 24px; padding: 12px; cursor: pointer; border-radius: 50%;
-      width: 50px; height: 50px; display: flex; justify-content: center; align-items: center; transition: all 0.2s;
-    }
-    .lightbox-btn:hover { background: rgba(255, 255, 255, 0.25); }
-    .lightbox-prev { left: 16px; }
-    .lightbox-next { right: 16px; }
-  </style>
+/* Hero */
+.hero{position:relative;height:100svh;min-height:500px;overflow:hidden;background:#ede9e3;display:flex;align-items:center;justify-content:center}
+.hero-bg{position:absolute;inset:0;background:linear-gradient(170deg,#ede9e3 0%,#d6cfc4 100%)}
+.hero-img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;opacity:.45}
+.hero-content{position:relative;z-index:1;text-align:center;padding:2rem}
+.hero-date{font-size:11px;letter-spacing:4px;color:#7a7570;font-weight:300}
+.hero-bar{width:32px;height:1px;background:#b8b0a5;margin:1.2rem auto}
+.hero-names{font-family:'Noto Serif KR',serif;font-size:30px;font-weight:400;color:#2c2c2a;letter-spacing:3px;line-height:1.5}
+.hero-amp{display:block;font-size:20px;color:#b4aca0;margin:.2rem 0}
+.hero-sub{font-size:10px;letter-spacing:4px;color:#7a7570;margin-top:.4rem}
+
+
+/* 인사말 */
+.greet-txt{font-family:'Noto Serif KR',serif;font-size:14px;font-weight:300;color:#4e4d4a;line-height:2.1;text-align:center;max-width:300px;margin:0 auto 1.8rem}
+.contact-open-btn{display:block;margin:0 auto;font-family:'Noto Serif KR',serif;font-size:13px;color:#5a5652;background:#fff;border:0.5px solid #ccc8c0;border-radius:24px;padding:.65rem 2rem;cursor:pointer;letter-spacing:.5px;transition:background .2s}
+.contact-open-btn:hover{background:#f0ede8}
+
+/* 모달 */
+.modal-overlay{display:none;position:fixed;inset:0;background:rgba(30,28,26,.5);z-index:500;align-items:flex-end;justify-content:center}
+.modal-overlay.open{display:flex}
+.modal{background:#fff;border-radius:20px 20px 0 0;width:100%;max-width:480px;padding:2rem 1.5rem 2.5rem;position:relative;animation:slideUp .28s ease}
+@keyframes slideUp{from{transform:translateY(50px);opacity:0}to{transform:translateY(0);opacity:1}}
+.modal-close{position:absolute;top:1rem;right:1.2rem;font-size:20px;background:none;border:none;color:#888;cursor:pointer}
+.modal-group{margin-bottom:1.4rem}
+.modal-role{font-size:10px;letter-spacing:3px;color:#bbb8b0;margin-bottom:.6rem}
+.modal-person{display:flex;align-items:center;justify-content:space-between;padding:.7rem .9rem;border:0.5px solid #e8e5e0;border-radius:10px;margin-bottom:.4rem}
+.modal-info .name{font-family:'Noto Serif KR',serif;font-size:15px;color:#2c2c2a}
+.modal-info .rel{font-size:11px;color:#bbb8b0;margin-top:1px}
+.modal-actions{display:flex;gap:8px}
+.m-btn{display:flex;align-items:center;justify-content:center;width:34px;height:34px;border-radius:50%;border:0.5px solid #d8d5cf;background:#f7f6f4;text-decoration:none;font-size:15px;transition:background .2s}
+.m-btn:hover{background:#ede9e3}
+
+/* 달력 */
+.cal-box{background:#fff;border:0.5px solid #e4e1db;border-radius:14px;padding:1.4rem 1.2rem;max-width:320px;margin:0 auto}
+.cal-head{text-align:center;margin-bottom:1rem}
+.cal-month{font-family:'Noto Serif KR',serif;font-size:17px;font-weight:400;color:#2c2c2a}
+.cal-grid{display:grid;grid-template-columns:repeat(7,1fr);text-align:center;gap:2px}
+.cal-dh{font-size:10px;color:#bbb8b0;padding-bottom:6px}
+.cal-dh.su{color:#d97070}.cal-dh.sa{color:#7090d9}
+.cal-d{font-size:13px;color:#5a5652;padding:3px 0;line-height:1.7}
+.cal-d.su{color:#d97070}.cal-d.sa{color:#7090d9}
+.cal-d.empty{visibility:hidden}
+.cal-d.hl{line-height:1}
+.cal-d.hl .hl-inner{display:inline-flex;flex-direction:column;align-items:center;gap:3px}
+.cal-d.hl span{display:inline-flex;align-items:center;justify-content:center;width:27px;height:27px;border-radius:50%;background:#fce8e8;border:1.5px solid #d9a0a0;color:#2c2c2a;font-weight:500;font-size:13px}
+.cal-d.hl .hl-time{font-size:9px;color:#c08080;letter-spacing:.3px;white-space:nowrap}
+
+/* D-day */
+.dday-wrap{text-align:center}
+.dday-label{font-size:10px;letter-spacing:4px;color:#bbb8b0;margin-bottom:.5rem}
+.dday-num{font-family:'Noto Serif KR',serif;font-size:52px;font-weight:300;color:#2c2c2a;line-height:1}
+.dday-txt{font-size:13px;color:#7a7570;margin-top:.8rem;font-family:'Noto Serif KR',serif;font-weight:300}
+
+/* ── 1. 갤러리: 반응형 이미지 + 1:1 강제 ── */
+.gallery-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:3px}
+.g-item{position:relative;width:100%;padding-bottom:100%;overflow:hidden;cursor:pointer;background:#e4dfd8;border-radius:3px}
+.g-item img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;transition:transform .3s;display:block}
+.g-item:hover img{transform:scale(1.06)}
+.g-item.hidden{display:none}
+.gallery-more{text-align:center;margin-top:1rem}
+.gallery-more-btn{font-size:12px;color:#7a7570;background:#fff;border:0.5px solid #d8d5cf;border-radius:20px;padding:6px 20px;cursor:pointer;letter-spacing:.5px;transition:background .2s}
+.gallery-more-btn:hover{background:#f0ede8}
+
+/* 라이트박스 */
+.lb{display:none;position:fixed;inset:0;background:rgba(20,18,16,.93);z-index:600;flex-direction:column;align-items:center;justify-content:center}
+.lb.open{display:flex}
+.lb img{max-width:94%;max-height:78vh;object-fit:contain;border-radius:6px}
+.lb-close{position:absolute;top:1.2rem;right:1.2rem;color:#fff;font-size:22px;background:none;border:none;cursor:pointer;opacity:.8}
+.lb-nav{display:flex;gap:2rem;margin-top:1.2rem}
+.lb-btn{color:#fff;background:none;border:0.5px solid rgba(255,255,255,.3);width:38px;height:38px;border-radius:50%;cursor:pointer;font-size:17px;display:flex;align-items:center;justify-content:center}
+.lb-counter{font-size:11px;color:rgba(255,255,255,.5);margin-top:.6rem;letter-spacing:1px}
+
+/* 지도 */
+.map-box{border-radius:12px;overflow:hidden;border:0.5px solid #e4e1db;margin-bottom:1.2rem}
+#map{width:100%;height:230px;display:block}
+.venue-info{background:#fff;border:0.5px solid #e4e1db;border-radius:10px;padding:.9rem 1.1rem;margin-bottom:1rem;font-size:13px;color:#4e4d4a;line-height:1.9}
+.venue-info strong{font-family:'Noto Serif KR',serif;font-size:14px;color:#2c2c2a;display:block;margin-bottom:.2rem}
+
+/* ── 4. 지도 앱 링크 버튼 ── */
+.map-links{display:flex;gap:8px;margin-bottom:1.4rem}
+.map-link-btn{flex:1;display:flex;align-items:center;justify-content:center;gap:6px;padding:.55rem 0;border:0.5px solid #d8d5cf;border-radius:10px;font-size:12px;color:#2c2c2a;text-decoration:none;background:#fff;transition:background .2s;font-weight:400}
+.map-link-btn:hover{background:#f0ede8}
+.map-app-icon{width:20px;height:20px;border-radius:5px;flex-shrink:0;display:flex;align-items:center;justify-content:center;font-size:11px;font-weight:700;color:#fff;letter-spacing:0}
+
+/* ── 3. 교통 픽토그램 (SVG 흑백) ── */
+.transport{margin-bottom:1.2rem}
+.transport-item{display:flex;gap:.9rem;padding:.85rem 0;border-bottom:0.5px solid #f0ede8;align-items:flex-start}
+.transport-item:last-child{border-bottom:none}
+.t-picto{width:36px;height:36px;flex-shrink:0;display:flex;align-items:center;justify-content:center;margin-top:1px}
+.t-picto svg{width:24px;height:24px;stroke:#4a4845;fill:none;stroke-width:1.6;stroke-linecap:round;stroke-linejoin:round}
+.t-body .t-title{font-size:12px;font-weight:500;color:#2c2c2a;margin-bottom:2px}
+.t-body .t-desc{font-size:12px;color:#7a7570;line-height:1.75}
+
+/* 마음 전하기 */
+.account-toggle-wrap{text-align:center;margin-bottom:0}
+.account-toggle-btn{background:none;border:none;cursor:pointer;padding:.4rem;display:inline-flex;flex-direction:column;align-items:center;gap:4px}
+.toggle-label{font-size:11px;color:#bbb8b0;letter-spacing:1px}
+.bracket{width:22px;height:12px;display:block;position:relative}
+.bracket::before,.bracket::after{content:'';position:absolute;width:11px;height:1.5px;background:#bbb8b0;border-radius:1px;transition:transform .25s}
+.bracket.down::before{left:1px;top:4px;transform:rotate(40deg);transform-origin:left center}
+.bracket.down::after{right:1px;top:4px;transform:rotate(-40deg);transform-origin:right center}
+.bracket.up::before{left:1px;top:6px;transform:rotate(-40deg);transform-origin:left center}
+.bracket.up::after{right:1px;top:6px;transform:rotate(40deg);transform-origin:right center}
+.account-list{overflow:hidden;max-height:0;transition:max-height .4s ease}
+.account-list.open{max-height:700px}
+.account-card{background:#fff;border:0.5px solid #e4e1db;border-radius:10px;padding:.9rem 1.1rem;margin-bottom:.7rem;position:relative}
+.acc-who{font-size:11px;color:#bbb8b0;letter-spacing:.5px;margin-bottom:.2rem}
+.acc-bank{font-family:'Noto Serif KR',serif;font-size:14px;color:#2c2c2a;margin-bottom:.15rem}
+.acc-num{font-size:13px;color:#5a5652;letter-spacing:.5px}
+.copy-btn{position:absolute;top:50%;right:1rem;transform:translateY(-50%);font-size:11px;color:#7a7570;background:#f7f6f4;border:0.5px solid #d8d5cf;border-radius:6px;padding:4px 10px;cursor:pointer}
+.copy-btn:active{background:#e8e5e0}
+
+footer{background:#f0ede8;text-align:center;padding:2.5rem 1.5rem;width:100%;max-width:480px}
+.ft-date{font-family:'Noto Serif KR',serif;font-size:16px;color:#2c2c2a;margin-bottom:.25rem}
+.ft-place{font-size:11px;color:#aaa8a2;letter-spacing:.5px}
+.ft-bar{width:24px;height:1px;background:#d8d5cf;margin:1.2rem auto}
+.ft-names{font-size:11px;color:#bbb8b0;letter-spacing:2px}
+
+/* ── [추가] 8. 사진 공유하기 섹션 스타일 ── */
+.photo-share-txt {
+  font-family: 'Noto Serif KR', serif;
+  font-size: 14px;
+  font-weight: 300;
+  color: #4e4d4a;
+  line-height: 2.1;
+  text-align: center;
+  max-width: 320px;
+  margin: 0 auto 1.8rem;
+}
+.photo-link-wrap {
+  text-align: center;
+}
+.photo-upload-btn {
+  display: inline-block;
+  font-family: 'Noto Serif KR', serif;
+  font-size: 13px;
+  color: #fff;
+  background: #2c2c2a;
+  border: none;
+  border-radius: 24px;
+  padding: .75rem 2.5rem;
+  cursor: pointer;
+  letter-spacing: .5px;
+  text-decoration: none;
+  transition: background .2s;
+}
+.photo-upload-btn:hover {
+  background: #4a4845;
+}
+</style>
 </head>
 <body>
-
 <div class="page">
-  <p class="title-label">Photo Gallery</p>
-  <h1 class="title">내가 올린 사진 확인</h1>
+
+<!-- ① Hero -->
+<section class="hero">
+  <div class="hero-bg"></div>
+  <!-- 사진 사용 시 아래 주석 해제 후 경로 수정: src="images/hero.jpg" -->
+  <!-- <img class="hero-img" src="images/hero.jpg" alt="메인 사진"> -->
+  <div class="hero-content">
+    <p class="hero-date">2026 · 09 · 05</p>
+    <div class="hero-bar"></div>
+    <div class="hero-names">
+      김낙현
+      <span class="hero-amp">&amp;</span>
+      김지수
+    </div>
+    <div class="hero-bar"></div>
+    <p class="hero-sub">WEDDING INVITATION</p>
+  </div>
+</section>
+
+<!-- ② 인사말 + 연락하기 -->
+<section class="sec">
+  <p class="sec-label">GREETING</p>
+  <h2 class="sec-title">인사말</h2>
   <div class="hairline"></div>
+  <p class="greet-txt">
+    서로가 서로에게 하나뿐인 사람이 되어<br>
+    평생을 함께 걷고자 합니다.<br><br>
+    오랫동안 기다려온 소중한 날,<br>
+    귀한 걸음 하시어 저희의 시작을<br>
+    함께 축복해 주시면 감사하겠습니다.
+  </p>
+  <button class="contact-open-btn" onclick="openModal()">연락하기</button>
+</section>
 
-  <div id="auth-form">
-    <div class="form-group">
-      <label for="viewer-name">올리는 사람 (이름)</label>
-      <input type="text" id="viewer-name" placeholder="업로드 시 작성한 이름">
-    </div>
-    <div class="form-group">
-      <label for="viewer-phone">전화번호</label>
-      <input type="text" id="viewer-phone" placeholder="010-0000-0000">
-    </div>
-    <div class="form-group">
-      <label for="viewer-pw">비밀번호</label>
-      <input type="password" id="viewer-pw" placeholder="업로드 시 설정한 비밀번호">
-    </div>
-    <button id="find-btn" class="submit-btn">사진 조회하기</button>
-  </div>
-
-  <div id="result-view">
-    <div class="user-header" id="user-title"></div>
-    <div class="photo-grid" id="photo-container"></div>
-  </div>
-
-  <div id="admin-result-view">
-    <div class="user-header" style="background: #5a4f43; color: #fff;">👑 전체 하객 업로드 통합 관리 모드</div>
-    <div id="admin-group-container"></div>
-  </div>
-  
-  <div id="log"></div>
-  <a href="/photo" class="back-btn">← 사진 업로드로 돌아가기</a>
-</div>
-
-<!-- ── 📸 [UI 추가] 확대 팝업 라이트박스 컨테이너 레이어 ── -->
-<div id="lightbox-modal" class="lightbox">
-  <span class="lightbox-close" id="lightbox-close-trigger">&times;</span>
-  <button class="lightbox-btn lightbox-prev" id="lightbox-prev-trigger">&#10094;</button>
-  <img class="lightbox-content" id="lightbox-main-img" src="" alt="확대 보기">
-  <button class="lightbox-btn lightbox-next" id="lightbox-next-trigger">&#10095;</button>
-</div>
-
-<script type="module">
-  import { createClient } from 'https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/+esm'
-
-  const SUPABASE_URL = 'https://aczwxfujkablybpkdpeh.supabase.co'; 
-  const SUPABASE_ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImFjend4ZnVqa2FibHlicGtkcGVoIiwicm9sZSI6ImFub24iLCJpYXQiOjE3Nzg4NDQxMTcsImV4cCI6MjA5NDQyMDExN30.DPsyGgb3nJdNhyiYpgS4GVnqeCFRP_MluUtJCV8SXcc'; 
-
-  const supabase = createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
-
-  // 라이트박스 제어용 전역 모듈 변수 파트
-  let activePhotosArray = [];
-  let activePhotoIndex = 0;
-
-  async function handleFindRequest() {
-    const name = document.getElementById('viewer-name').value.trim();
-    const rawPhone = document.getElementById('viewer-phone').value.trim();
-    const pw = document.getElementById('viewer-pw').value.trim();
-    const phone = rawPhone.replace(/[^0-9]/g, '');
-
-    if (!name || !rawPhone || !pw) {
-      alert("이름, 전화번호, 비밀번호를 모두 입력해 주세요.");
-      return;
-    }
-
-    const log = document.getElementById('log');
-    log.textContent = "장부를 확인하고 있습니다...";
-    log.className = "progress";
-
-    try {
-      const { data: isAdmin, error: rpcError } = await supabase.rpc('verify_admin', {
-        p_name: name,
-        p_phone: phone,
-        p_pw: pw
-      });
-
-      if (rpcError) throw rpcError;
-
-      if (isAdmin === true) {
-        const customSupabase = createClient(SUPABASE_URL, SUPABASE_ANON_KEY, {
-          global: { headers: { 'x-admin-phone': phone, 'x-admin-pw': pw } }
-        });
-
-        const { data: allData, error: adminError } = await customSupabase
-          .from('guest_photos')
-          .select('*')
-          .order('uploader_name', { ascending: true });
-
-        if (adminError) throw adminError;
-
-        buildAdminDashboard(allData);
-      } else {
-        const { data: guestData, error: guestError } = await supabase
-          .from('guest_photos')
-          .select('*')
-          .eq('uploader_name', name)
-          .eq('password', pw)
-          .like('s3_key', `photo/${phone}_${pw}/%`);
-
-        if (guestError) throw guestError;
-
-        if (!guestData || guestData.length === 0) {
-          log.textContent = "❌ 입력하신 정보와 일치하는 사진 내역이 없습니다.";
-          log.className = ""; 
-          return; 
-        }
-
-        buildGuestView(name, guestData);
-      }
-
-    } catch (err) {
-      console.error(err);
-      log.textContent = "❌ 장부 통신 오류가 발생했습니다.";
-      log.className = "";
-    }
-  }
-
-  function buildGuestView(name, data) {
-    document.getElementById('log').textContent = "";
-    document.getElementById('auth-form').style.display = "none"; 
-    document.getElementById('result-view').style.display = "block";
-    document.getElementById('user-title').innerHTML = `✨ <strong>${name}님</strong>이 선물해주신 사진 목록`;
-    
-    const photoContainer = document.getElementById('photo-container');
-    photoContainer.innerHTML = "";
-    data.forEach(photo => {
-      const item = document.createElement('div');
-      item.className = 'photo-item';
-      item.id = `photo-row-${photo.id}`;
-      item.innerHTML = `
-        <div class="thumb-wrapper" style="cursor:pointer;"><img src="${photo.image_url}" loading="lazy"></div>
-        <button class="delete-btn" onclick="handleDelete(${photo.id}, 'guest')">사진 삭제</button>
-      `;
-      photoContainer.appendChild(item);
-      
-      // 일반 하객 모드에서도 사진 팝업 연결
-      item.querySelector('.thumb-wrapper').addEventListener('click', () => {
-        openLightbox(photoContainer, photo.image_url);
-      });
-    });
-  }
-
-  function buildAdminDashboard(data) {
-    document.getElementById('log').textContent = "";
-    document.getElementById('auth-form').style.display = "none";
-    document.getElementById('admin-result-view').style.display = "block";
-    const groupContainer = document.getElementById('admin-group-container');
-    groupContainer.innerHTML = "";
-    if (data.length === 0) {
-      groupContainer.innerHTML = `<div class="no-data">업로드된 사진이 없습니다.</div>`;
-      return;
-    }
-    const groupedData = {};
-    data.forEach(photo => {
-      if (!groupedData[photo.uploader_name]) groupedData[photo.uploader_name] = [];
-      groupedData[photo.uploader_name].push(photo);
-    });
-    Object.keys(groupedData).forEach(uploaderName => {
-      const photos = groupedData[uploaderName];
-      const groupBox = document.createElement('div');
-      groupBox.className = 'admin-group-box';
-      groupBox.innerHTML = `
-        <div class="admin-group-header">
-          <h3 class="admin-user-info">${uploaderName}<span class="admin-count-badge">총 ${photos.length}장</span></h3>
-          <button class="zip-btn">ZIP 다운로드</button>
+<!-- 연락처 모달 -->
+<div class="modal-overlay" id="modal" onclick="overlayClose(event)">
+  <div class="modal">
+    <button class="modal-close" onclick="closeModal()">✕</button>
+    <div class="modal-group">
+      <p class="modal-role">신랑측</p>
+      <div class="modal-person">
+        <div class="modal-info"><div class="name">김낙현</div><div class="rel">신랑</div></div>
+        <div class="modal-actions">
+          <a href="tel:010-0000-0000" class="m-btn">📞</a>
+          <a href="sms:010-0000-0000" class="m-btn">💬</a>
         </div>
-        <!-- 💡 [UX 변경] photo-grid에서 가로 배열 전용 admin-photo-row 클래스로 교체 -->
-        <div class="admin-photo-row"></div>
-      `;
-      const grid = groupBox.querySelector('.admin-photo-row');
-      photos.forEach(photo => {
-        const item = document.createElement('div');
-        item.className = 'photo-item';
-        item.id = `photo-row-${photo.id}`;
-        item.innerHTML = `
-          <div class="thumb-wrapper" style="cursor:pointer;"><img src="${photo.image_url}" loading="lazy"></div>
-          <button class="delete-btn" onclick="handleDelete(${photo.id}, 'admin')">강제 삭제</button>
-        `;
-        grid.appendChild(item);
-        
-        // ── 📸 [UX 추가] 썸네일 클릭 시 가로 배열 그룹 컨텍스트를 인지하여 팝업 실행 ──
-        item.querySelector('.thumb-wrapper').addEventListener('click', () => {
-          openLightbox(grid, photo.image_url);
-        });
-      });
-      groupContainer.appendChild(groupBox);
-      groupBox.querySelector('.zip-btn').addEventListener('click', () => downloadPersonZip(uploaderName, photos));
-    });
-  }
+      </div>
+      <div class="modal-person">
+        <div class="modal-info"><div class="name">김정</div><div class="rel">신랑 아버지</div></div>
+        <div class="modal-actions">
+          <a href="tel:010-0000-0001" class="m-btn">📞</a>
+          <a href="sms:010-0000-0001" class="m-btn">💬</a>
+        </div>
+      </div>
+      <div class="modal-person">
+        <div class="modal-info"><div class="name">박미정</div><div class="rel">신랑 어머니</div></div>
+        <div class="modal-actions">
+          <a href="tel:010-0000-0002" class="m-btn">📞</a>
+          <a href="sms:010-0000-0002" class="m-btn">💬</a>
+        </div>
+      </div>
+    </div>
+    <div class="modal-group">
+      <p class="modal-role">신부측</p>
+      <div class="modal-person">
+        <div class="modal-info"><div class="name">김지수</div><div class="rel">신부</div></div>
+        <div class="modal-actions">
+          <a href="tel:010-0000-0003" class="m-btn">📞</a>
+          <a href="sms:010-0000-0003" class="m-btn">💬</a>
+        </div>
+      </div>
+      <div class="modal-person">
+        <div class="modal-info"><div class="name">김환상</div><div class="rel">신부 아버지</div></div>
+        <div class="modal-actions">
+          <a href="tel:010-0000-0004" class="m-btn">📞</a>
+          <a href="sms:010-0000-0004" class="m-btn">💬</a>
+        </div>
+      </div>
+      <div class="modal-person">
+        <div class="modal-info"><div class="name">박미연</div><div class="rel">신부 어머니</div></div>
+        <div class="modal-actions">
+          <a href="tel:010-0000-0005" class="m-btn">📞</a>
+          <a href="sms:010-0000-0005" class="m-btn">💬</a>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
 
-  // ── 📸 [알고리즘 추가] 실시간 런타임 DOM 이미지 트래킹 기반 라이트박스 트리거 함수 ──
-  function openLightbox(rowContainer, targetSrc) {
-    // 실시간 삭제 리플렉션을 반영하기 위해 클릭한 순간 컨테이너 내의 남은 이미지를 전부 스캔
-    const imgElements = Array.from(rowContainer.querySelectorAll('.thumb-wrapper img'));
-    activePhotosArray = imgElements.map(img => img.src);
-    activePhotoIndex = activePhotosArray.indexOf(targetSrc);
-    
-    if (activePhotoIndex === -1) activePhotoIndex = 0;
-    
-    document.getElementById('lightbox-main-img').src = activePhotosArray[activePhotoIndex];
-    document.getElementById('lightbox-modal').style.display = 'flex';
-  }
+<!-- ③ 달력 -->
+<section class="sec">
+  <p class="sec-label">DATE</p>
+  <h2 class="sec-title">날짜</h2>
+  <div class="hairline"></div>
+  <div class="cal-box">
+    <div class="cal-head"><p class="cal-month">2026년 9월</p></div>
+    <div class="cal-grid">
+      <div class="cal-dh su">일</div><div class="cal-dh">월</div><div class="cal-dh">화</div>
+      <div class="cal-dh">수</div><div class="cal-dh">목</div><div class="cal-dh">금</div>
+      <div class="cal-dh sa">토</div>
+      <div class="cal-d empty"></div><div class="cal-d empty"></div>
+      <div class="cal-d">1</div><div class="cal-d">2</div><div class="cal-d">3</div><div class="cal-d">4</div>
+      <div class="cal-d sa hl">
+        <div class="hl-inner">
+          <span>5</span>
+          <div class="hl-time">오후 1시</div>
+        </div>
+      </div>
+      <div class="cal-d su">6</div><div class="cal-d">7</div><div class="cal-d">8</div><div class="cal-d">9</div>
+      <div class="cal-d">10</div><div class="cal-d">11</div><div class="cal-d sa">12</div>
+      <div class="cal-d su">13</div><div class="cal-d">14</div><div class="cal-d">15</div><div class="cal-d">16</div>
+      <div class="cal-d">17</div><div class="cal-d">18</div><div class="cal-d sa">19</div>
+      <div class="cal-d su">20</div><div class="cal-d">21</div><div class="cal-d">22</div><div class="cal-d">23</div>
+      <div class="cal-d">24</div><div class="cal-d">25</div><div class="cal-d sa">26</div>
+      <div class="cal-d su">27</div><div class="cal-d">28</div><div class="cal-d">29</div><div class="cal-d">30</div>
+    </div>
+  </div>
+</section>
 
-  // 라이트박스 탐색 버튼 이벤트 리스너 바인딩 파트
-  document.getElementById('lightbox-close-trigger').addEventListener('click', () => {
-    document.getElementById('lightbox-modal').style.display = 'none';
+<!-- ④ D-day -->
+<section class="sec">
+  <div class="dday-wrap">
+    <p class="dday-label">D-DAY</p>
+    <p class="dday-num" id="dday-num">-</p>
+    <p class="dday-txt" id="dday-txt"></p>
+  </div>
+</section>
+
+<!-- ⑤ 갤러리 -->
+<section class="sec">
+  <p class="sec-label">GALLERY</p>
+  <h2 class="sec-title">갤러리</h2>
+  <div class="hairline"></div>
+  <div class="gallery-grid" id="gallery"></div>
+  <div class="gallery-more">
+    <button class="gallery-more-btn" id="gmore-btn" onclick="toggleGallery()">더보기</button>
+  </div>
+</section>
+
+<!-- ⑥ 오시는 길 -->
+<section class="sec">
+  <p class="sec-label">LOCATION</p>
+  <h2 class="sec-title">오시는 길</h2>
+  <div class="hairline"></div>
+  <div class="map-box">
+    <div id="map"></div>
+  </div>
+  <div class="venue-info">
+    <strong>고려대학교 교우회관</strong>
+    서울특별시 성북구 종암로 13
+  </div>
+ 
+  <!-- 4. 지도 앱 링크 (브랜드 아이콘 SVG) -->
+  <div class="map-links">
+    <a class="map-link-btn" href="https://map.kakao.com/?map_type=TYPE_MAP&target=car&rt=,,507877.0000000027,1136799.9999999965&rt1=&rt2=%EA%B3%A0%EB%A0%A4%EB%8C%80%ED%95%99%EA%B5%90%20%EA%B5%90%EC%9A%B0%ED%9A%8C%EA%B4%80&rtIds=,17565864" target="_blank">
+      <!-- 카카오맵 아이콘 -->
+      <svg width="20" height="20" viewBox="0 0 20 20" style="flex-shrink:0">
+        <rect width="20" height="20" rx="5" fill="#FEE500"/>
+        <path d="M10 4.5c-3.59 0-6.5 2.24-6.5 5 0 1.77 1.12 3.33 2.82 4.24l-.72 2.63a.25.25 0 0 0 .38.27L8.97 14.8c.34.04.69.07 1.03.07 3.59 0 6.5-2.24 6.5-5s-2.91-5-6.5-5z" fill="#3C1E1E"/>
+      </svg>
+      카카오맵
+    </a>
+    <a class="map-link-btn" href="https://map.naver.com/p/directions/-/3zk57R,2AN7gX,%EA%B3%A0%EB%A0%A4%EB%8C%80%ED%95%99%EA%B5%90%20%EC%84%9C%EC%9A%B8%EC%BA%A0%ED%8D%BC%EC%8A%A4%EA%B5%90%EC%9A%B0%ED%9A%8C%EA%B4%80,18912226,PLACE_POI/-/transit?c=15.00,0,0,0,dh" target="_blank">
+      <!-- 네이버지도 아이콘 -->
+      <svg width="20" height="20" viewBox="0 0 20 20" style="flex-shrink:0">
+        <rect width="20" height="20" rx="5" fill="#03C75A"/>
+        <path d="M11.3 10.22L8.6 6H6v8h2.7V9.78L11.4 14H14V6h-2.7z" fill="#fff"/>
+      </svg>
+      네이버지도
+    </a>
+    <a class="map-link-btn" href="https://www.google.com/maps/dir//%EA%B3%A0%EB%A0%A4%EB%8C%80%ED%95%99%EA%B5%90+%EA%B5%90%EC%9A%B0%ED%9A%8C%EA%B4%80+%EC%84%9C%EC%9A%B8%ED%8A%B9%EB%B3%84%EC%8B%9C+%EC%84%B1%EB%B6%81%EA%B5%AC+%EC%A2%85%EC%95%94%EB%8F%99+29-26/data=!3m1!4b1!4m17!1m7!3m6!1s0x357cbcbc8d707a77:0x195d6ec549202318!2z6rOg66Ck64yA7ZWZ6rWQIOq1kOyasO2ajOq0gA!8m2!3d37.5919972!4d127.035654!16s%2Fg%2F12cnz8f9l!4m8!1m0!1m5!1m1!1s0x357cbcbc8d707a77:0x195d6ec549202318!2m2!1d127.035654!2d37.5919972!3e3?entry=ttu" target="_blank">
+      <!-- 구글맵 아이콘 -->
+      <svg width="20" height="20" viewBox="0 0 20 20" style="flex-shrink:0">
+        <rect width="20" height="20" rx="5" fill="#fff" stroke="#e0ddd8" stroke-width="0.5"/>
+        <path d="M10 3.5A3.75 3.75 0 0 0 6.25 7.25c0 2.6 3.75 9.25 3.75 9.25s3.75-6.65 3.75-9.25A3.75 3.75 0 0 0 10 3.5z" fill="#EA4335"/>
+        <circle cx="10" cy="7.25" r="1.5" fill="#fff"/>
+      </svg>
+      구글맵
+    </a>
+  </div>
+
+  <!-- 3. 흑백 픽토그램 교통 안내 -->
+  <div class="transport">
+    <div class="transport-item">
+      <div class="t-picto">
+        <!-- 지하철 픽토그램 -->
+        <svg viewBox="0 0 24 24">
+          <rect x="4" y="3" width="16" height="14" rx="3"/>
+          <line x1="4" y1="9" x2="20" y2="9"/>
+          <line x1="9" y1="17" x2="7" y2="21"/>
+          <line x1="15" y1="17" x2="17" y2="21"/>
+          <circle cx="8.5" cy="13" r="1.2" fill="#4a4845" stroke="none"/>
+          <circle cx="15.5" cy="13" r="1.2" fill="#4a4845" stroke="none"/>
+        </svg>
+      </div>
+      <div class="t-body">
+        <div class="t-title">지하철</div>
+        <div class="t-desc">6호선 고려대역 1번 출구 도보 10분<br>1호선 · 경의중앙선 회기역 도보 15분</div>
+      </div>
+    </div>
+    <div class="transport-item">
+      <div class="t-picto">
+        <!-- 버스 픽토그램 -->
+        <svg viewBox="0 0 24 24">
+          <rect x="3" y="4" width="18" height="13" rx="2.5"/>
+          <line x1="3" y1="9" x2="21" y2="9"/>
+          <line x1="12" y1="4" x2="12" y2="17"/>
+          <line x1="7" y1="17" x2="5.5" y2="20"/>
+          <line x1="17" y1="17" x2="18.5" y2="20"/>
+          <circle cx="7" cy="19.5" r="1.3" fill="#4a4845" stroke="none"/>
+          <circle cx="17" cy="19.5" r="1.3" fill="#4a4845" stroke="none"/>
+        </svg>
+      </div>
+      <div class="t-body">
+        <div class="t-title">버스</div>
+        <div class="t-desc">간선 141, 142, 144 — 고려대 정문 하차<br>지선 2115 — 교우회관 앞 하차</div>
+      </div>
+    </div>
+    <div class="transport-item">
+      <div class="t-picto">
+        <!-- 자동차 픽토그램 -->
+        <svg viewBox="0 0 24 24">
+          <path d="M5 11l2-5h10l2 5"/>
+          <rect x="2" y="11" width="20" height="7" rx="2"/>
+          <line x1="2" y1="14" x2="22" y2="14"/>
+          <circle cx="6.5" cy="19.5" r="2" fill="#4a4845" stroke="none"/>
+          <circle cx="17.5" cy="19.5" r="2" fill="#4a4845" stroke="none"/>
+          <line x1="12" y1="11" x2="12" y2="18"/>
+        </svg>
+      </div>
+      <div class="t-body">
+        <div class="t-title">주차</div>
+        <div class="t-desc">교우회관 지하 주차장 이용 가능<br>식 당일 2시간 무료 주차 지원</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ⑦ 마음 전하기 -->
+<section class="sec">
+  <p class="sec-label">ACCOUNT</p>
+  <h2 class="sec-title">마음 전하기</h2>
+  <div class="hairline"></div>
+  <div class="account-toggle-wrap">
+    <button class="account-toggle-btn" id="acc-toggle" onclick="toggleAccount()">
+      <span class="toggle-label" id="acc-label">펼쳐보기</span>
+      <span class="bracket down" id="acc-bracket"></span>
+    </button>
+  </div>
+  <div class="account-list" id="acc-list">
+    <div style="height:.8rem"></div>
+    <div class="account-card">
+      <p class="acc-who">신랑 김낙현</p>
+      <p class="acc-bank">은행명 000-000-000000</p>
+      <button class="copy-btn" onclick="doCopy('000-000-000000',this)">복사</button>
+    </div>
+    <div class="account-card">
+      <p class="acc-who">신랑 아버지 김정</p>
+      <p class="acc-bank">은행명 000-000-000000</p>
+      <button class="copy-btn" onclick="doCopy('000-000-000000',this)">복사</button>
+    </div>
+    <div class="account-card">
+      <p class="acc-who">신랑 어머니 박미정</p>
+      <p class="acc-bank">은행명 000-000-000000</p>
+      <button class="copy-btn" onclick="doCopy('000-000-000000',this)">복사</button>
+    </div>
+    <div class="account-card">
+      <p class="acc-who">신부 김지수</p>
+      <p class="acc-bank">은행명 000-000-000000</p>
+      <button class="copy-btn" onclick="doCopy('000-000-000000',this)">복사</button>
+    </div>
+    <div class="account-card">
+      <p class="acc-who">신부 아버지 김환상</p>
+      <p class="acc-bank">은행명 000-000-000000</p>
+      <button class="copy-btn" onclick="doCopy('000-000-000000',this)">복사</button>
+    </div>
+     <div class="account-card">
+      <p class="acc-who">신부 어머니 박미연</p>
+   <p class="acc-bank">은행명 000-000-000000</p>
+      <button class="copy-btn" onclick="doCopy('000-000-000000',this)">복사</button>
+    </div>
+  </div>
+</section>
+
+<!-- ⑧ [추가] 사진 공유하기 섹션 (마음 전하기와 footer 사이 배치) -->
+<section class="sec">
+  <p class="sec-label">SHARE MOMENTS</p>
+  <h2 class="sec-title">추억 공유하기</h2>
+  <div class="hairline"></div>
+  <p class="photo-share-txt">
+    저희 두 사람의 소중한 시작의 날,<br>
+    함께 나누었던 행복한 순간과 기억들을<br>
+    사진으로 따뜻하게 공유해 주세요.<br><br>
+    보내주신 아름다운 시간들을 고이 모아<br>
+    평생 감사한 마음으로 소중히 간직하겠습니다.
+  </p>
+  <div class="photo-link-wrap">
+    <a href="/photo" class="photo-upload-btn">사진 업로드하기</a>
+  </div>
+</section>
+
+<footer>
+  <p class="ft-date">2026년 9월 5일 토요일 오후 1시</p>
+  <p class="ft-place">고려대학교 교우회관</p>
+  <div class="ft-bar"></div>
+  <p class="ft-names">김낙현 &amp; 김지수</p>
+</footer>
+</div>
+
+<!-- 라이트박스 -->
+<div class="lb" id="lb" onclick="lbOverlay(event)">
+  <button class="lb-close" onclick="lbClose()">✕</button>
+  <img id="lb-img" src="" alt="">
+  <div class="lb-nav">
+    <button class="lb-btn" onclick="lbMove(-1)">&#8592;</button>
+    <button class="lb-btn" onclick="lbMove(1)">&#8594;</button>
+  </div>
+  <p class="lb-counter" id="lb-counter"></p>
+</div>
+
+<script>
+/* ── 갤러리 ── */
+const imgs = [
+  { thumb: 'images/thumbnail/thumb1.webp', full: 'images/갤러리1.webp' },
+  { thumb: 'images/thumbnail/thumb2.webp', full: 'images/갤러리2.webp' },
+  { thumb: 'images/thumbnail/thumb3.webp', full: 'images/갤러리3.webp' },
+  { thumb: 'images/thumbnail/thumb4.webp', full: 'images/갤러리4.webp' },
+  { thumb: 'images/thumbnail/thumb5.webp', full: 'images/갤러리5.webp' },
+  { thumb: 'images/thumbnail/thumb6.webp', full: 'images/갤러리6.webp' },
+  { thumb: 'images/thumbnail/thumb7.webp', full: 'images/갤러리7.webp' },
+  { thumb: 'images/thumbnail/thumb8.webp', full: 'images/갤러리8.webp' },
+  { thumb: 'images/thumbnail/thumb9.webp', full: 'images/갤러리9.webp' },
+  { thumb: 'images/thumbnail/thumb10.webp', full: 'images/갤러리10.webp' },
+  { thumb: 'images/thumbnail/thumb11.webp', full: 'images/갤러리11.webp' },
+  { thumb: 'images/thumbnail/thumb12.webp', full: 'images/갤러리12.webp' },
+  { thumb: 'images/thumbnail/thumb13.webp', full: 'images/갤러리13.webp' },
+  { thumb: 'images/thumbnail/thumb14.webp', full: 'images/갤러리14.webp' },
+  { thumb: 'images/thumbnail/thumb15.webp', full: 'images/갤러리15.webp' },
+  { thumb: 'images/thumbnail/thumb16.webp', full: 'images/갤러리16.webp' },
+  { thumb: 'images/thumbnail/thumb17.webp', full: 'images/갤러리17.webp' },
+  { thumb: 'images/thumbnail/thumb18.webp', full: 'images/갤러리18.webp' },
+  { thumb: 'images/thumbnail/thumb19.webp', full: 'images/갤러리19.webp' },
+  { thumb: 'images/thumbnail/thumb20.webp', full: 'images/갤러리20.webp' },
+  { thumb: 'images/thumbnail/thumb21.webp', full: 'images/갤러리21.webp' },
+];
+const PREVIEW = 6;
+let galExpanded = false, lbIdx = 0;
+
+const gGrid = document.getElementById('gallery');
+imgs.forEach((img, i) => { // 'src' -> 'img' 객체로 변경
+  const div = document.createElement('div');
+  div.className = 'g-item' + (i >= PREVIEW ? ' hidden' : '');
+  div.innerHTML = `<img src="${img.thumb}" alt="웨딩 사진 ${i+1}" loading="lazy">`; // .thumb 참조 수정
+  div.addEventListener('click', () => lbOpen(i));
+  gGrid.appendChild(div);
+});
+
+function toggleGallery() {
+  galExpanded = !galExpanded;
+  document.querySelectorAll('.g-item').forEach((el,i) => {
+    if(i >= PREVIEW) el.classList.toggle('hidden', !galExpanded);
   });
-  document.getElementById('lightbox-prev-trigger').addEventListener('click', () => {
-    if (activePhotosArray.length <= 1) return;
-    activePhotoIndex = (activePhotoIndex - 1 + activePhotosArray.length) % activePhotosArray.length;
-    document.getElementById('lightbox-main-img').src = activePhotosArray[activePhotoIndex];
-  });
-  document.getElementById('lightbox-next-trigger').addEventListener('click', () => {
-    if (activePhotosArray.length <= 1) return;
-    activePhotoIndex = (activePhotoIndex + 1) % activePhotosArray.length;
-    document.getElementById('lightbox-main-img').src = activePhotosArray[activePhotoIndex];
-  });
-  // 바깥 배경 클릭 시 팝업 닫기
-  document.getElementById('lightbox-modal').addEventListener('click', (e) => {
-    if (e.target === document.getElementById('lightbox-modal')) {
-      document.getElementById('lightbox-modal').style.display = 'none';
-    }
-  });
+  document.getElementById('gmore-btn').textContent = galExpanded ? '접기' : '더보기';
+}
 
-  async function downloadPersonZip(name, photos) {
-    const log = document.getElementById('log');
-    log.textContent = `압축 중...`;
-    const zip = new JSZip();
-    try {
-      for (let i = 0; i < photos.length; i++) {
-        const response = await fetch(photos[i].image_url);
-        const blob = await response.blob();
-        const ext = photos[i].s3_key.split('.').pop() || 'jpg';
-        zip.file(`${name}_${i + 1}.${ext}`, blob);
-      }
-      const content = await zip.generateAsync({ type: "blob" });
-      const downloadUrl = window.URL.createObjectURL(content);
-      const anchor = document.createElement('a');
-      anchor.href = downloadUrl;
-      anchor.download = `${name}_사진.zip`;
-      anchor.click();
-      log.textContent = `✅ 다운로드 완료`;
-    } catch (err) {
-      log.textContent = `❌ 다운로드 오류`;
-    }
+/* ── 라이트박스 ── */
+function lbOpen(i) {
+  lbIdx = i;
+  document.getElementById('lb-img').src = imgs[i].full; // .full 참조 수정
+  document.getElementById('lb-counter').textContent = `${i+1} / ${imgs.length}`;
+  document.getElementById('lb').classList.add('open');
+  document.body.style.overflow = 'hidden';
+}
+function lbClose() { document.getElementById('lb').classList.remove('open'); document.body.style.overflow = ''; }
+function lbOverlay(e) { if(e.target===document.getElementById('lb')) lbClose(); }
+function lbMove(d) {
+  lbIdx = (lbIdx+d+imgs.length)%imgs.length;
+  document.getElementById('lb-img').src = imgs[lbIdx].full; // .full 참조 수정
+  document.getElementById('lb-counter').textContent = `${lbIdx+1} / ${imgs.length}`;
+}
+document.addEventListener('keydown', e => {
+  if(!document.getElementById('lb').classList.contains('open')) return;
+  if(e.key==='ArrowLeft') lbMove(-1);
+  if(e.key==='ArrowRight') lbMove(1);
+  if(e.key==='Escape') lbClose();
+});
+
+/* ── 연락처 모달 ── */
+function openModal() { document.getElementById('modal').classList.add('open'); document.body.style.overflow='hidden'; }
+function closeModal() { document.getElementById('modal').classList.remove('open'); document.body.style.overflow=''; }
+function overlayClose(e) { if(e.target===document.getElementById('modal')) closeModal(); }
+
+/* ── D-day ── */
+(function(){
+  const wedDate = new Date(2026, 8, 5);
+  wedDate.setHours(0, 0, 0, 0);
+  const today = new Date();
+  today.setHours(0, 0, 0, 0);
+  const diff = Math.round((wedDate - today) / 86400000);
+  const n = document.getElementById('dday-num');
+  const t = document.getElementById('dday-txt');
+
+  if (diff > 0) {
+    n.textContent = 'D-' + diff;
+    t.textContent = `낙현, 지수의 결혼식이 ${diff}일 남았습니다.`;
+  } else if (diff === 0) {
+    n.textContent = 'D-Day';
+    t.textContent = '낙현, 지수의 결혼식이 오늘 진행됩니다.';
+  } else {
+    const passed = Math.abs(diff);
+    n.textContent = 'D+' + passed;
+    t.textContent = `낙현, 지수의 결혼식이 ${passed}일 지났습니다.`;
   }
+})();
 
-  window.handleDelete = async function(id, mode) {
-    if (!confirm("삭제하시겠습니까?")) return;
-    try {
-      const { error } = await supabase.from('guest_photos').delete().eq('id', id);
-      if (error) throw error;
-      
-      const target = document.getElementById(`photo-row-${id}`);
-      if (target) {
-        const parentGrid = target.parentElement;
-        target.remove();
-        if(mode === 'admin' && parentGrid.children.length === 0) parentGrid.parentElement.remove();
-      }
-    } catch (err) {
-      alert("삭제 실패");
-    }
-  }
 
-  document.getElementById('find-btn').addEventListener('click', handleFindRequest);
+/* ── 마음 전하기 토글 ── */
+let accOpen = false;
+function toggleAccount() {
+  accOpen = !accOpen;
+  document.getElementById('acc-list').classList.toggle('open', accOpen);
+  document.getElementById('acc-label').textContent = accOpen ? '접기' : '펼쳐보기';
+  document.getElementById('acc-bracket').className = 'bracket ' + (accOpen ? 'up' : 'down');
+}
+
+/* ── 복사 ── */
+function doCopy(txt, btn) {
+  navigator.clipboard.writeText(txt).then(() => {
+    const o = btn.textContent; btn.textContent='✓ 완료';
+    setTimeout(() => btn.textContent=o, 1800);
+  });
+}
+
+/* ── 카카오맵 ── */
+kakao.maps.load(function(){
+  const pos = new kakao.maps.LatLng(37.59204, 127.03569);
+  const map = new kakao.maps.Map(document.getElementById('map'), { center:pos, level:4 });
+  new kakao.maps.Marker({ position:pos, map:map });
+  window.addEventListener('resize', () => map.setCenter(pos));
+});
 </script>
 </body>
 </html>
