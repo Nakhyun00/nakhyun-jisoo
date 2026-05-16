@@ -18,120 +18,105 @@
 <style>
 *{margin:0;padding:0;box-sizing:border-box}
 html{scroll-behavior:smooth}
-body{font-family:'Noto Sans KR',sans-serif;background:#f7f6f4;color:#2c2c2a;font-size:14px;line-height:1.8;display:flex;flex-direction:column;align-items:center}
+body{font-family:'Noto Sans KR',sans-serif;background:#ffffff;color:#2c2c2a;font-size:14px;line-height:1.8;display:flex;flex-direction:column;align-items:center}
 .page{width:100%;max-width:480px}
-.sec{padding:3.5rem 1.6rem}
-.sec:nth-child(odd){background:#fff}
-.sec:nth-child(even){background:#f7f6f4}
-.sec-label{font-size:10px;letter-spacing:4px;color:#bbb8b0;text-align:center;margin-bottom:.5rem}
-.sec-title{font-family:'Noto Serif KR',serif;font-size:19px;font-weight:400;text-align:center;color:#2c2c2a;margin-bottom:.6rem}
-.hairline{width:28px;height:1px;background:#d8d5cf;margin:.6rem auto 2rem}
+
+/* 구역 구분선 */
+.sec{padding:3.5rem 1.6rem;background:#ffffff;position:relative}
+.sec::after{content:'';position:absolute;bottom:0;left:10%;width:80%;height:1px;background:#eaeaea}
+
+.sec-label{font-size:10px;letter-spacing:4px;color:#a0a0a0;text-align:center;margin-bottom:.5rem}
+.sec-title{font-family:'Noto Serif KR',serif;font-size:19px;font-weight:400;text-align:center;color:#111111;margin-bottom:.6rem}
+.hairline{width:28px;height:1px;background:#e0e0e0;margin:.6rem auto 2rem}
 
 /* Hero */
-.hero{position:relative;height:100svh;min-height:500px;overflow:hidden;background:#ede9e3;display:flex;align-items:center;justify-content:center}
-.hero-bg{position:absolute;inset:0;background:linear-gradient(170deg,#ede9e3 0%,#d6cfc4 100%)}
-.hero-img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;opacity:.45}
+.hero{position:relative;height:100svh;min-height:500px;overflow:hidden;background:#ffffff;display:flex;align-items:center;justify-content:center}
+.hero-bg{position:absolute;inset:0;background:#ffffff}
+.hero-img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;opacity:.3}
 .hero-content{position:relative;z-index:1;text-align:center;padding:2rem}
-.hero-date{font-size:11px;letter-spacing:4px;color:#7a7570;font-weight:300}
-.hero-bar{width:32px;height:1px;background:#b8b0a5;margin:1.2rem auto}
-.hero-names{font-family:'Noto Serif KR',serif;font-size:30px;font-weight:400;color:#2c2c2a;letter-spacing:3px;line-height:1.5}
-.hero-amp{display:block;font-size:20px;color:#b4aca0;margin:.2rem 0}
-.hero-sub{font-size:10px;letter-spacing:4px;color:#7a7570;margin-top:.4rem}
+.hero-date{font-size:11px;letter-spacing:4px;color:#888888;font-weight:300}
+.hero-bar{width:32px;height:1px;background:#dcdcdc;margin:1.2rem auto}
+.hero-names{font-family:'Noto Serif KR',serif;font-size:30px;font-weight:400;color:#111111;letter-spacing:3px;line-height:1.5}
+.hero-amp{display:block;font-size:20px;color:#aaaaaa;margin:.2rem 0}
+.hero-sub{font-size:10px;letter-spacing:4px;color:#888888;margin-top:.4rem}
 
 /* 인사말 */
-.greet-txt{font-family:'Noto Serif KR',serif;font-size:14px;font-weight:300;color:#4e4d4a;line-height:2.1;text-align:center;max-width:300px;margin:0 auto 1.8rem}
-.contact-open-btn{display:block;margin:0 auto;font-family:'Noto Serif KR',serif;font-size:13px;color:#5a5652;background:#fff;border:0.5px solid #ccc8c0;border-radius:24px;padding:.65rem 2rem;cursor:pointer;letter-spacing:.5px;transition:background .2s}
-.contact-open-btn:hover{background:#f0ede8}
+.greet-txt{font-family:'Noto Serif KR',serif;font-size:14px;font-weight:300;color:#333333;line-height:2.1;text-align:center;max-width:300px;margin:0 auto 1.8rem}
+.contact-open-btn{display:block;margin:0 auto;font-family:'Noto Serif KR',serif;font-size:13px;color:#444444;background:#ffffff;border:0.5px solid #d0d0d0;border-radius:24px;padding:.65rem 2rem;cursor:pointer;letter-spacing:.5px;transition:all .2s}
+.contact-open-btn:hover{background:#ffffff;border-color:#999999}
 
 /* 모달 */
-.modal-overlay{display:none;position:fixed;inset:0;background:rgba(30,28,26,.5);z-index:500;align-items:flex-end;justify-content:center}
+.modal-overlay{display:none;position:fixed;inset:0;background:rgba(0,0,0,0.3);z-index:500;align-items:flex-end;justify-content:center}
 .modal-overlay.open{display:flex}
-.modal{background:#fff;border-radius:20px 20px 0 0;width:100%;max-width:480px;padding:2rem 1.5rem 2.5rem;position:relative;animation:slideUp .28s ease}
+.modal{background:#ffffff;border-radius:20px 20px 0 0;width:100%;max-width:480px;padding:2rem 1.5rem 2.5rem;position:relative;animation:slideUp .28s ease}
 @keyframes slideUp{from{transform:translateY(50px);opacity:0}to{transform:translateY(0);opacity:1}}
-.modal-close{position:absolute;top:1rem;right:1.2rem;font-size:20px;background:none;border:none;color:#888;cursor:pointer}
+.modal-close{position:absolute;top:1rem;right:1.2rem;font-size:20px;background:none;border:none;color:#aaaaaa;cursor:pointer}
 .modal-group{margin-bottom:1.4rem}
-.modal-role{font-size:10px;letter-spacing:3px;color:#bbb8b0;margin-bottom:.6rem}
-.modal-person{display:flex;align-items:center;justify-content:space-between;padding:.7rem .9rem;border:0.5px solid #e8e5e0;border-radius:10px;margin-bottom:.4rem}
-.modal-info .name{font-family:'Noto Serif KR',serif;font-size:15px;color:#2c2c2a}
-.modal-info .rel{font-size:11px;color:#bbb8b0;margin-top:1px}
+.modal-role{font-size:10px;letter-spacing:3px;color:#999999;margin-bottom:.6rem}
+.modal-person{display:flex;align-items:center;justify-content:space-between;padding:.7rem .9rem;border:0.5px solid #eaeaea;border-radius:10px;margin-bottom:.4rem;background:#ffffff}
+.modal-info .name{font-family:'Noto Serif KR',serif;font-size:15px;color:#222222}
+.modal-info .rel{font-size:11px;color:#aaaaaa;margin-top:1px}
 .modal-actions{display:flex;gap:8px}
-.m-btn{display:flex;align-items:center;justify-content:center;width:34px;height:34px;border-radius:50%;border:0.5px solid #d8d5cf;background:#f7f6f4;text-decoration:none;font-size:15px;transition:background .2s}
-.m-btn:hover{background:#ede9e3}
+.m-btn{display:flex;align-items:center;justify-content:center;width:34px;height:34px;border-radius:50%;border:0.5px solid #e0e0e0;background:#ffffff;text-decoration:none;font-size:15px;transition:background .2s}
+.m-btn:hover{background:#ffffff}
 
 /* 달력 */
-.cal-box{background:#fff;border:0.5px solid #e4e1db;border-radius:14px;padding:1.4rem 1.2rem;max-width:320px;margin:0 auto}
+.cal-box{background:#ffffff;border:0.5px solid #eaeaea;border-radius:14px;padding:1.4rem 1.2rem;max-width:320px;margin:0 auto}
 .cal-head{text-align:center;margin-bottom:1rem}
-.cal-month{font-family:'Noto Serif KR',serif;font-size:17px;font-weight:400;color:#2c2c2a}
+.cal-month{font-family:'Noto Serif KR',serif;font-size:17px;font-weight:400;color:#111111}
 .cal-grid{display:grid;grid-template-columns:repeat(7,1fr);text-align:center;gap:2px}
-.cal-dh{font-size:10px;color:#bbb8b0;padding-bottom:6px}
-.cal-dh.su{color:#d97070}.cal-dh.sa{color:#7090d9}
-.cal-d{font-size:13px;color:#5a5652;padding:3px 0;line-height:1.7}
-.cal-d.su{color:#d97070}.cal-d.sa{color:#7090d9}
+.cal-dh{font-size:10px;color:#999999;padding-bottom:6px}
+.cal-dh.su{color:#e26a6a}.cal-dh.sa{color:#5b7dbd}
+.cal-d{font-size:13px;color:#444444;padding:3px 0;line-height:1.7}
+.cal-d.su{color:#e26a6a}.cal-d.sa{color:#5b7dbd}
 .cal-d.empty{visibility:hidden}
 .cal-d.hl{line-height:1}
 .cal-d.hl .hl-inner{display:inline-flex;flex-direction:column;align-items:center;gap:3px}
-.cal-d.hl span{display:inline-flex;align-items:center;justify-content:center;width:27px;height:27px;border-radius:50%;background:#fce8e8;border:1.5px solid #d9a0a0;color:#2c2c2a;font-weight:500;font-size:13px}
-.cal-d.hl .hl-time{font-size:9px;color:#c08080;letter-spacing:.3px;white-space:nowrap}
+.cal-d.hl span{display:inline-flex;align-items:center;justify-content:center;width:27px;height:27px;border-radius:50%;background:#e26a6a;color:#ffffff;font-weight:500;font-size:13px}
+.cal-d.hl .hl-time{font-size:9px;color:#b26b6b;letter-spacing:.3px;white-space:nowrap}
 
 /* D-day */
 .dday-wrap{text-align:center}
-.dday-label{font-size:10px;letter-spacing:4px;color:#bbb8b0;margin-bottom:.5rem}
-.dday-num{font-family:'Noto Serif KR',serif;font-size:52px;font-weight:300;color:#2c2c2a;line-height:1}
-.dday-txt{font-size:13px;color:#7a7570;margin-top:.8rem;font-family:'Noto Serif KR',serif;font-weight:300}
+.dday-label{font-size:10px;letter-spacing:4px;color:#a0a0a0;margin-bottom:.5rem}
+.dday-num{font-family:'Noto Serif KR',serif;font-size:52px;font-weight:300;color:#111111;line-height:1}
+.dday-txt{font-size:13px;color:#555555;margin-top:.8rem;font-family:'Noto Serif KR',serif;font-weight:300}
 
 /* 갤러리 */
 .gallery-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:3px}
-.g-item{position:relative;width:100%;padding-bottom:100%;overflow:hidden;cursor:pointer;background:#e4dfd8;border-radius:3px}
+.g-item{position:relative;width:100%;padding-bottom:100%;overflow:hidden;cursor:pointer;background:#ffffff;border-radius:3px}
 .g-item img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;transition:transform .3s;display:block}
 .g-item:hover img{transform:scale(1.06)}
 .g-item.hidden{display:none}
 .gallery-more{text-align:center;margin-top:1rem}
-.gallery-more-btn{font-size:12px;color:#7a7570;background:#fff;border:0.5px solid #d8d5cf;border-radius:20px;padding:6px 20px;cursor:pointer;letter-spacing:.5px;transition:background .2s}
-.gallery-more-btn:hover{background:#f0ede8}
+.gallery-more-btn{font-size:12px;color:#666666;background:#ffffff;border:0.5px solid #e0e0e0;border-radius:20px;padding:6px 20px;cursor:pointer;letter-spacing:.5px;transition:all .2s}
+.gallery-more-btn:hover{background:#ffffff;border-color:#b5b5b5}
 
-/* 🔥 [수정] 라이트박스 - 모바일 갤러리 앱 로직 */
-.lb{display:none;position:fixed;inset:0;background:rgba(20,18,16,.96);z-index:600;flex-direction:column;align-items:center;justify-content:center;overflow:hidden;touch-action:none}
+/* 라이트박스 */
+.lb{display:none;position:fixed;inset:0;background:#ffffff;z-index:600;flex-direction:column;align-items:center;justify-content:center;overflow:hidden;touch-action:none}
 .lb.open{display:flex}
-
-.lb-window{
-  width:100%;height:80vh;position:relative;overflow:hidden;
-}
-/* 슬라이더 본체: 3장 분량의 너비를 가짐 */
-.lb-slider{
-  display:flex;width:300%;height:100%;
-  transform:translateX(-33.3333%); /* 처음에 중앙 이미지를 보여줌 */
-  will-change:transform;
-}
-.lb-slide-item{
-  width:33.3333%;height:100%;
-  display:flex;align-items:center;justify-content:center;
-  flex-shrink:0;user-select:none;
-}
-.lb-slide-item img{
-  max-width:94%;max-height:100%;
-  object-fit:contain;border-radius:6px;
-  pointer-events:none; /* 이미지 드래그 고스트 현상 방지 */
-}
-
-.lb-close{position:absolute;top:1.2rem;right:1.2rem;color:#fff;font-size:22px;background:none;border:none;cursor:pointer;opacity:.8;z-index:601}
+.lb-window{width:100%;height:80vh;position:relative;overflow:hidden}
+.lb-slider{display:flex;width:300%;height:100%;transform:translateX(-33.3333%);will-change:transform}
+.lb-slide-item{width:33.3333%;height:100%;display:flex;align-items:center;justify-content:center;flex-shrink:0;user-select:none}
+.lb-slide-item img{max-width:94%;max-height:100%;object-fit:contain;border-radius:6px;pointer-events:none}
+.lb-close{position:absolute;top:1.2rem;right:1.2rem;color:#2c2c2a;font-size:22px;background:none;border:none;cursor:pointer;opacity:.8;z-index:601}
 .lb-nav{display:flex;gap:2rem;margin-top:1.2rem;z-index:601}
-.lb-btn{color:#fff;background:none;border:0.5px solid rgba(255,255,255,.3);width:38px;height:38px;border-radius:50%;cursor:pointer;font-size:17px;display:flex;align-items:center;justify-content:center}
-.lb-counter{font-size:11px;color:rgba(255,255,255,.5);margin-top:.6rem;letter-spacing:1px;z-index:601}
+.lb-btn{color:#2c2c2a;background:none;border:0.5px solid rgba(0,0,0,.3);width:38px;height:38px;border-radius:50%;cursor:pointer;font-size:17px;display:flex;align-items:center;justify-content:center}
+.lb-counter{font-size:11px;color:rgba(0,0,0,.5);margin-top:.6rem;letter-spacing:1px;z-index:601}
 
 /* 지도 */
 .map-box{border-radius:12px;overflow:hidden;border:0.5px solid #e4e1db;margin-bottom:1.2rem}
 #map{width:100%;height:230px;display:block}
-.venue-info{background:#fff;border:0.5px solid #e4e1db;border-radius:10px;padding:.9rem 1.1rem;margin-bottom:1rem;font-size:13px;color:#4e4d4a;line-height:1.9}
+.venue-info{background:#ffffff;border:0.5px solid #e4e1db;border-radius:10px;padding:.9rem 1.1rem;margin-bottom:1rem;font-size:13px;color:#4e4d4a;line-height:1.9}
 .venue-info strong{font-family:'Noto Serif KR',serif;font-size:14px;color:#2c2c2a;display:block;margin-bottom:.2rem}
 
 /* 지도 앱 링크 버튼 */
 .map-links{display:flex;gap:8px;margin-bottom:1.4rem}
-.map-link-btn{flex:1;display:flex;align-items:center;justify-content:center;gap:6px;padding:.55rem 0;border:0.5px solid #d8d5cf;border-radius:10px;font-size:12px;color:#2c2c2a;text-decoration:none;background:#fff;transition:background .2s;font-weight:400}
-.map-link-btn:hover{background:#f0ede8}
+.map-link-btn{flex:1;display:flex;align-items:center;justify-content:center;gap:6px;padding:.55rem 0;border:0.5px solid #d8d5cf;border-radius:10px;font-size:12px;color:#2c2c2a;text-decoration:none;background:#ffffff;transition:background .2s;font-weight:400}
+.map-link-btn:hover{background:#ffffff}
 
 /* 교통 픽토그램 */
 .transport{margin-bottom:1.2rem}
-.transport-item{display:flex;gap:.9rem;padding:.85rem 0;border-bottom:0.5px solid #f0ede8;align-items:flex-start}
+.transport-item{display:flex;gap:.9rem;padding:.85rem 0;border-bottom:0.5px solid #eaeaea;align-items:flex-start}
 .transport-item:last-child{border-bottom:none}
 .t-picto{width:36px;height:36px;flex-shrink:0;display:flex;align-items:center;justify-content:center;margin-top:1px}
 .t-picto svg{width:24px;height:24px;stroke:#4a4845;fill:none;stroke-width:1.6;stroke-linecap:round;stroke-linejoin:round}
@@ -140,28 +125,42 @@ body{font-family:'Noto Sans KR',sans-serif;background:#f7f6f4;color:#2c2c2a;font
 
 /* 마음 전하기 */
 .account-toggle-wrap{text-align:center;margin-bottom:0}
-.account-toggle-btn{background:none;border:none;cursor:pointer;padding:.4rem;display:inline-flex;flex-direction:column;align-items:center;gap:4px}
-.toggle-label{font-size:11px;color:#bbb8b0;letter-spacing:1px}
-.bracket{width:22px;height:12px;display:block;position:relative}
-.bracket::before,.bracket::after{content:'';position:absolute;width:11px;height:1.5px;background:#bbb8b0;border-radius:1px;transition:transform .25s}
-.bracket.down::before{left:1px;top:4px;transform:rotate(40deg);transform-origin:left center}
-.bracket.down::after{right:1px;top:4px;transform:rotate(-40deg);transform-origin:right center}
-.bracket.up::before{left:1px;top:6px;transform:rotate(-40deg);transform-origin:left center}
-.bracket.up::after{right:1px;top:6px;transform:rotate(40deg);transform-origin:right center}
+.account-toggle-btn{background:0;border:0;cursor:pointer;padding:.4rem;display:inline-flex;flex-direction:column;align-items:center;gap:4px}
+.toggle-label{font-size:11px;color:#4a4845;letter-spacing:1px}
+.bracket{width:22px;height:12px;display:block;position:relative;margin-top:6px}
+.bracket::before,.bracket::after{content:'';position:absolute;width:12px;height:1.5px;background:#bbb8b0;border-radius:1px;transition:all .25s ease}
+.bracket::before{right:50%;transform-origin:right center}
+.bracket::after{left:50%;transform-origin:left center}
+
+.bracket.down::before{top:9px;transform:rotate(35deg)}
+.bracket.down::after{top:9px;transform:rotate(-35deg)}
+.bracket.up::before{top:3px;transform:rotate(-35deg)}
+.bracket.up::after{top:3px;transform:rotate(35deg)}
+
 .account-list{overflow:hidden;max-height:0;transition:max-height .4s ease}
 .account-list.open{max-height:700px}
-.account-card{background:#fff;border:0.5px solid #e4e1db;border-radius:10px;padding:.9rem 1.1rem;margin-bottom:.7rem;position:relative}
+.account-card{background:#ffffff;border:0.5px solid #e4e1db;border-radius:10px;padding:.9rem 1.1rem;margin-bottom:.7rem;position:relative}
 .acc-who{font-size:11px;color:#bbb8b0;letter-spacing:.5px;margin-bottom:.2rem}
 .acc-bank{font-family:'Noto Serif KR',serif;font-size:14px;color:#2c2c2a;margin-bottom:.15rem}
 .acc-num{font-size:13px;color:#5a5652;letter-spacing:.5px}
-.copy-btn{position:absolute;top:50%;right:1rem;transform:translateY(-50%);font-size:11px;color:#7a7570;background:#f7f6f4;border:0.5px solid #d8d5cf;border-radius:6px;padding:4px 10px;cursor:pointer}
-.copy-btn:active{background:#e8e5e0}
+.copy-btn{position:absolute;top:50%;right:1rem;transform:translateY(-50%);font-size:11px;color:#7a7570;background:#ffffff;border:0.5px solid #d8d5cf;border-radius:6px;padding:4px 10px;cursor:pointer}
+.copy-btn:active{background:#ffffff}
 
-footer{background:#f0ede8;text-align:center;padding:2.5rem 1.5rem;width:100%;max-width:480px}
+.account-list{overflow:hidden;max-height:0;transition:max-height .4s ease}
+.account-list.open{max-height:700px}
+.account-card{background:#ffffff;border:0.5px solid #e4e1db;border-radius:10px;padding:.9rem 1.1rem;margin-bottom:.7rem;position:relative}
+.acc-who{font-size:11px;color:#bbb8b0;letter-spacing:.5px;margin-bottom:.2rem}
+.acc-bank{font-family:'Noto Serif KR',serif;font-size:14px;color:#2c2c2a;margin-bottom:.15rem}
+.acc-num{font-size:13px;color:#5a5652;letter-spacing:.5px}
+.copy-btn{position:absolute;top:50%;right:1rem;transform:translateY(-50%);font-size:11px;color:#7a7570;background:#ffffff;border:0.5px solid #d8d5cf;border-radius:6px;padding:4px 10px;cursor:pointer}
+.copy-btn:active{background:#ffffff}
+
+/* 푸터 화이트 리스킨 */
+footer{background:#ffffff;text-align:center;padding:2.5rem 1.5rem;width:100%;max-width:480px}
 .ft-date{font-family:'Noto Serif KR',serif;font-size:16px;color:#2c2c2a;margin-bottom:.25rem}
 .ft-place{font-size:11px;color:#aaa8a2;letter-spacing:.5px}
 .ft-bar{width:24px;height:1px;background:#d8d5cf;margin:1.2rem auto}
-.ft-names{font-size:11px;color:#bbb8b0;letter-spacing:2px}
+.ft-names{font-size:8px;color:#bbb8b0;letter-spacing:1.6px}
 
 /* 사진 공유하기 */
 .photo-share-txt{font-family:'Noto Serif KR',serif;font-size:14px;font-weight:300;color:#4e4d4a;line-height:2.1;text-align:center;max-width:320px;margin:0 auto 1.8rem}
@@ -354,7 +353,7 @@ footer{background:#f0ede8;text-align:center;padding:2.5rem 1.5rem;width:100%;max
       </div>
       <div class="t-body">
         <div class="t-title">지하철</div>
-        <div class="t-desc">6호선 고려대역 1번 출구 도보 10분<br>1호선 · 경의중앙선 회기역 도보 15분</div>
+        <div class="t-desc">6호선 고려대역 2번 출구 도보 10분<br></div>
       </div>
     </div>
     <div class="transport-item">
@@ -362,16 +361,16 @@ footer{background:#f0ede8;text-align:center;padding:2.5rem 1.5rem;width:100%;max
         <svg viewBox="0 0 24 24">
           <rect x="3" y="4" width="18" height="13" rx="2.5"/>
           <line x1="3" y1="9" x2="21" y2="9"/>
-          <line x1="12" y1="4" x2="12" y2="17"/>
+          <line x1="12" y1="4" x2="12" y2="9"/>
           <line x1="7" y1="17" x2="5.5" y2="20"/>
           <line x1="17" y1="17" x2="18.5" y2="20"/>
-          <circle cx="7" cy="19.5" r="1.3" fill="#4a4845" stroke="none"/>
-          <circle cx="17" cy="19.5" r="1.3" fill="#4a4845" stroke="none"/>
+          <circle cx="7" cy="19.5" r="2" fill="#4a4845" stroke="none"/>
+          <circle cx="17" cy="19.5" r="2" fill="#4a4845" stroke="none"/>
         </svg>
       </div>
       <div class="t-body">
         <div class="t-title">버스</div>
-        <div class="t-desc">간선 141, 142, 144 — 고려대 정문 하차<br>지선 2115 — 교우회관 앞 하차</div>
+        <div class="t-desc">간선 101, 110B, 121, 130, 141, 148 — 고대역 정류장 하차<br>지선 1017, 1111, 1213, 7211 — 고대역 정류장 하차</div>
       </div>
     </div>
     <div class="transport-item">
@@ -387,7 +386,7 @@ footer{background:#f0ede8;text-align:center;padding:2.5rem 1.5rem;width:100%;max
       </div>
       <div class="t-body">
         <div class="t-title">주차</div>
-        <div class="t-desc">교우회관 지하 주차장 이용 가능<br>식 당일 2시간 무료 주차 지원</div>
+        <div class="t-desc">교우회관 주차장 이용 가능 / 식 당일 2시간 무료 주차 지원</div>
       </div>
     </div>
   </div>
@@ -443,11 +442,10 @@ footer{background:#f0ede8;text-align:center;padding:2.5rem 1.5rem;width:100%;max
   <h2 class="sec-title">추억 공유하기</h2>
   <div class="hairline"></div>
   <p class="photo-share-txt">
-    저희 두 사람의 소중한 시작의 날,<br>
     함께 나누었던 행복한 순간과 기억들을<br>
     사진으로 따뜻하게 공유해 주세요.<br><br>
     보내주신 아름다운 시간들을 고이 모아<br>
-    평생 감사한 마음으로 소중히 간직하겠습니다.
+    평생 소중히 간직하겠습니다.
   </p>
   <div class="photo-link-wrap">
     <a href="/photo" class="photo-upload-btn">사진 업로드하기</a>
@@ -458,7 +456,7 @@ footer{background:#f0ede8;text-align:center;padding:2.5rem 1.5rem;width:100%;max
   <p class="ft-date">2026년 9월 5일 토요일 오후 1시</p>
   <p class="ft-place">고려대학교 교우회관</p>
   <div class="ft-bar"></div>
-  <p class="ft-names">김낙현 &amp; 김지수</p>
+  <p class="ft-names"> &copy; 2026 김낙현&amp;김지수 All rights reserved.</p>
 </footer>
 </div>
 
