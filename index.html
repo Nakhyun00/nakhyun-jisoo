@@ -16,157 +16,308 @@
 <link href="https://fonts.googleapis.com/css2?family=Noto+Serif+KR:wght@300;400;500&family=Noto+Sans+KR:wght@300;400&display=swap" rel="stylesheet">
 <script type="text/javascript" src="https://dapi.kakao.com/v2/maps/sdk.js?appkey=b9101a3f62bf69d410ed17160d17a39e&autoload=false"></script>
 <style>
+/* ── 🤍 Base & Typography (따뜻한 린넨 톤 한 방울) ── */
 *{margin:0;padding:0;box-sizing:border-box}
 html{scroll-behavior:smooth}
-body{font-family:'Noto Sans KR',sans-serif;background:#ffffff;color:#2c2c2a;font-size:14px;line-height:1.8;display:flex;flex-direction:column;align-items:center}
-.page{width:100%;max-width:480px}
+body{
+  font-family:'Noto Sans KR',sans-serif;
+  background:#faf9f6; /* 바탕을 부드러운 크림 오프화이트로 변경하여 본체가 도드라지게 처리 */
+  color:#42423e; /* 감성적인 웜 차콜 */
+  font-size:14px;
+  line-height:1.85;
+  display:flex;
+  flex-direction:column;
+  align-items:center;
+  -webkit-font-smoothing:antialiased;
+}
 
-/* 구역 구분선 */
-.sec{padding:3.5rem 1.6rem;background:#ffffff;position:relative}
-.sec::after{content:'';position:absolute;bottom:0;left:10%;width:80%;height:1px;background:#eaeaea}
+/* ── 🕊️ 패브릭/실크 냅킨 폴딩 효과의 핵심 ── */
+.page{
+  width:100%;
+  max-width:480px;
+  background:#ffffff;
+  position:relative;
+  /* 양 끝단에 아주 약한 베이지 테두리 지정 */
+  border-left: 1px solid #eee9e0;
+  border-right: 1px solid #eee9e0;
+  /* 안쪽으로 부드럽게 접힌 실크 주름 음영 처리 (시각적 촉감 극대화) */
+  box-shadow: 
+    inset 16px 0 24px -12px rgba(226, 218, 203, 0.6), 
+    inset -16px 0 24px -12px rgba(226, 218, 203, 0.6),
+    0 10px 60px rgba(165, 155, 135, 0.05);
+}
 
-.sec-label{font-size:10px;letter-spacing:4px;color:#a0a0a0;text-align:center;margin-bottom:.5rem}
-.sec-title{font-family:'Noto Serif KR',serif;font-size:19px;font-weight:400;text-align:center;color:#111111;margin-bottom:.6rem}
-.hairline{width:28px;height:1px;background:#e0e0e0;margin:.6rem auto 2rem}
+/* ── ✨ Section & Dividers ── */
+.sec{
+  padding:5.5rem 2.2rem;
+  background:#ffffff;
+  position:relative;
+}
+.sec::after{
+  content:'';
+  position:absolute;
+  bottom:0;
+  left:15%;
+  width:70%;
+  height:1px;
+  background:linear-gradient(to right, transparent, #eae6de 20%, #eae6de 80%, transparent);
+}
 
-/* Hero */
+.sec-label{font-size:10px;letter-spacing:5px;color:#bcae99;text-align:center;margin-bottom:.7rem;text-transform:uppercase}
+.sec-title{font-family:'Noto Serif KR',serif;font-size:20px;font-weight:400;text-align:center;color:#1a1a1a;margin-bottom:.6rem;letter-spacing:0.5px}
+.hairline{width:24px;height:1px;background:#e3ded6;margin:0.8rem auto 2.5rem}
+
+/* ── 🪵 Hero ── */
 .hero{position:relative;height:100svh;min-height:500px;overflow:hidden;background:#ffffff;display:flex;align-items:center;justify-content:center}
 .hero-bg{position:absolute;inset:0;background:#ffffff}
-.hero-img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;opacity:.3}
-.hero-content{position:relative;z-index:1;text-align:center;padding:2rem}
-.hero-date{font-size:11px;letter-spacing:4px;color:#888888;font-weight:300}
-.hero-bar{width:32px;height:1px;background:#dcdcdc;margin:1.2rem auto}
-.hero-names{font-family:'Noto Serif KR',serif;font-size:30px;font-weight:400;color:#111111;letter-spacing:3px;line-height:1.5}
-.hero-amp{display:block;font-size:20px;color:#aaaaaa;margin:.2rem 0}
-.hero-sub{font-size:10px;letter-spacing:4px;color:#888888;margin-top:.4rem}
+.hero-img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;opacity:.38;filter:sepia(10%) contrast(95%)}
+.hero-content{
+  position:relative;
+  z-index:1;
+  text-align:center;
+  padding:2rem;
+  animation:fadeInUp 1.2s ease-out;
+}
+@keyframes fadeInUp{from{opacity:0;transform:translateY(20px)}to{opacity:1;transform:translateY(0)}}
+.hero-date{font-size:11px;letter-spacing:5px;color:#a3998a;font-weight:300}
+.hero-bar{width:1px;height:24px;background:#e3ded6;margin:1.5rem auto}
+.hero-names{font-family:'Noto Serif KR',serif;font-size:28px;font-weight:400;color:#111111;letter-spacing:4px;line-height:1.6}
+.hero-amp{display:block;font-size:18px;color:#d6cbd7;margin:.4rem 0;font-weight:300}
+.hero-sub{font-size:10px;letter-spacing:4px;color:#a3998a;margin-top:.6rem}
 
-/* 인사말 */
-.greet-txt{font-family:'Noto Serif KR',serif;font-size:14px;font-weight:300;color:#333333;line-height:2.1;text-align:center;max-width:300px;margin:0 auto 1.8rem}
-.contact-open-btn{display:block;margin:0 auto;font-family:'Noto Serif KR',serif;font-size:13px;color:#444444;background:#ffffff;border:0.5px solid #d0d0d0;border-radius:24px;padding:.65rem 2rem;cursor:pointer;letter-spacing:.5px;transition:all .2s}
-.contact-open-btn:hover{background:#ffffff;border-color:#999999}
+/* ── ✍🏻 인사말 & 버튼 (실크 스킨 버튼) ── */
+.greet-txt{font-family:'Noto Serif KR',serif;font-size:14px;font-weight:300;color:#52524e;line-height:2.2;text-align:center;max-width:300px;margin:0 auto 2.2rem}
+.contact-open-btn, .gallery-more-btn, .map-link-btn{
+  display:block;
+  margin:0 auto;
+  font-family:'Noto Serif KR',serif;
+  font-size:12px;
+  color:#61615c;
+  background:#ffffff;
+  border:1px solid #e8e3d9;
+  border-radius:30px;
+  padding:.7rem 2.2rem;
+  cursor:pointer;
+  letter-spacing:1px;
+  box-shadow:0 2px 8px rgba(214,205,189,0.1);
+  transition:all .3s cubic-bezier(0.4, 0, 0.2, 1);
+}
+.contact-open-btn:hover, .gallery-more-btn:hover, .map-link-btn:hover{
+  background:#ffffff;
+  border-color:#c4b9a5;
+  transform:translateY(-1px);
+  box-shadow:0 4px 12px rgba(214,205,189,0.25);
+}
 
-/* 모달 */
-.modal-overlay{display:none;position:fixed;inset:0;background:rgba(0,0,0,0.3);z-index:500;align-items:flex-end;justify-content:center}
-.modal-overlay.open{display:flex}
-.modal{background:#ffffff;border-radius:20px 20px 0 0;width:100%;max-width:480px;padding:2rem 1.5rem 2.5rem;position:relative;animation:slideUp .28s ease}
-@keyframes slideUp{from{transform:translateY(50px);opacity:0}to{transform:translateY(0);opacity:1}}
-.modal-close{position:absolute;top:1rem;right:1.2rem;font-size:20px;background:none;border:none;color:#aaaaaa;cursor:pointer}
-.modal-group{margin-bottom:1.4rem}
-.modal-role{font-size:10px;letter-spacing:3px;color:#999999;margin-bottom:.6rem}
-.modal-person{display:flex;align-items:center;justify-content:space-between;padding:.7rem .9rem;border:0.5px solid #eaeaea;border-radius:10px;margin-bottom:.4rem;background:#ffffff}
-.modal-info .name{font-family:'Noto Serif KR',serif;font-size:15px;color:#222222}
-.modal-info .rel{font-size:11px;color:#aaaaaa;margin-top:1px}
-.modal-actions{display:flex;gap:8px}
-.m-btn{display:flex;align-items:center;justify-content:center;width:34px;height:34px;border-radius:50%;border:0.5px solid #e0e0e0;background:#ffffff;text-decoration:none;font-size:15px;transition:background .2s}
-.m-btn:hover{background:#ffffff}
-
-/* 달력 */
-.cal-box{background:#ffffff;border:0.5px solid #eaeaea;border-radius:14px;padding:1.4rem 1.2rem;max-width:320px;margin:0 auto}
-.cal-head{text-align:center;margin-bottom:1rem}
-.cal-month{font-family:'Noto Serif KR',serif;font-size:17px;font-weight:400;color:#111111}
-.cal-grid{display:grid;grid-template-columns:repeat(7,1fr);text-align:center;gap:2px}
-.cal-dh{font-size:10px;color:#999999;padding-bottom:6px}
-.cal-dh.su{color:#e26a6a}.cal-dh.sa{color:#5b7dbd}
-.cal-d{font-size:13px;color:#444444;padding:3px 0;line-height:1.7}
-.cal-d.su{color:#e26a6a}.cal-d.sa{color:#5b7dbd}
+/* ── 🗓️ 모던 카디널 달력 ── */
+.cal-box{
+  background:#ffffff;
+  border:1px solid #f2ede4;
+  border-radius:16px;
+  padding:1.8rem 1.4rem;
+  max-width:328px;
+  margin:0 auto;
+  box-shadow:0 10px 30px rgba(214,205,189,0.1);
+}
+.cal-head{text-align:center;margin-bottom:1.4rem}
+.cal-month{font-family:'Noto Serif KR',serif;font-size:18px;font-weight:400;color:#1a1a1a;letter-spacing:1px}
+.cal-grid{display:grid;grid-template-columns:repeat(7,1fr);text-align:center;gap:4px 2px}
+.cal-dh{font-size:10px;color:#b2aa9d;padding-bottom:8px;font-weight:500}
+.cal-dh.su{color:#d96a6a}.cal-dh.sa{color:#6a89d9}
+.cal-d{font-size:13px;color:#61615c;padding:4px 0;line-height:1.7;font-weight:300}
+.cal-d.su{color:#d96a6a}.cal-d.sa{color:#6a89d9}
 .cal-d.empty{visibility:hidden}
 .cal-d.hl{line-height:1}
-.cal-d.hl .hl-inner{display:inline-flex;flex-direction:column;align-items:center;gap:3px}
-.cal-d.hl span{display:inline-flex;align-items:center;justify-content:center;width:27px;height:27px;border-radius:50%;background:#e26a6a;color:#ffffff;font-weight:500;font-size:13px}
-.cal-d.hl .hl-time{font-size:9px;color:#b26b6b;letter-spacing:.3px;white-space:nowrap}
+.cal-d.hl .hl-inner{display:inline-flex;flex-direction:column;align-items:center;gap:4px}
+.cal-d.hl span{
+  display:inline-flex;
+  align-items:center;
+  justify-content:center;
+  width:26px;
+  height:26px;
+  border-radius:50%;
+  background:#e26a6a;
+  color:#ffffff;
+  font-weight:500;
+  font-size:12px;
+  box-shadow:0 3px 8px rgba(226,106,106,0.3);
+}
+.cal-d.hl .hl-time{font-size:9px;color:#b26b6b;letter-spacing:.3px;white-space:nowrap;margin-top:2px}
 
-/* D-day */
-.dday-wrap{text-align:center}
-.dday-label{font-size:10px;letter-spacing:4px;color:#a0a0a0;margin-bottom:.5rem}
-.dday-num{font-family:'Noto Serif KR',serif;font-size:52px;font-weight:300;color:#111111;line-height:1}
-.dday-txt{font-size:13px;color:#555555;margin-top:.8rem;font-family:'Noto Serif KR',serif;font-weight:300}
+/* ── 🕰️ D-day ── */
+.dday-wrap{text-align:center;padding:0.5rem 0}
+.dday-label{font-size:11px;letter-spacing:4px;color:#a69b8a;margin-bottom:.6rem}
+.dday-num{font-family:'Noto Serif KR',serif;font-size:56px;font-weight:200;color:#111111;line-height:1;letter-spacing:-1px}
+.dday-txt{font-size:13px;color:#70706b;margin-top:1rem;font-family:'Noto Serif KR',serif;font-weight:300;letter-spacing:0.5px}
 
-/* 갤러리 */
-.gallery-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:3px}
-.g-item{position:relative;width:100%;padding-bottom:100%;overflow:hidden;cursor:pointer;background:#ffffff;border-radius:3px}
-.g-item img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;transition:transform .3s;display:block}
-.g-item:hover img{transform:scale(1.06)}
-.g-item.hidden{display:none}
-.gallery-more{text-align:center;margin-top:1rem}
-.gallery-more-btn{font-size:12px;color:#666666;background:#ffffff;border:0.5px solid #e0e0e0;border-radius:20px;padding:6px 20px;cursor:pointer;letter-spacing:.5px;transition:all .2s}
-.gallery-more-btn:hover{background:#ffffff;border-color:#b5b5b5}
+/* ── 🖼️ 갤러리 (오류 수정본) ── */
+.gallery-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:4px;padding:0 0.2rem}
+.g-item{position:relative;width:100%;padding-bottom:100%;overflow:hidden;cursor:pointer;background:#fafafa;border-radius:4px}
+.g-item img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;transition:transform .4s ease;display:block}
+.g-item:hover img{transform:scale(1.05)}
 
-/* 라이트박스 */
-.lb{display:none;position:fixed;inset:0;background:#ffffff;z-index:600;flex-direction:column;align-items:center;justify-content:center;overflow:hidden;touch-action:none}
-.lb.open{display:flex}
-.lb-window{width:100%;height:80vh;position:relative;overflow:hidden}
-.lb-slider{display:flex;width:300%;height:100%;transform:translateX(-33.3333%);will-change:transform}
-.lb-slide-item{width:33.3333%;height:100%;display:flex;align-items:center;justify-content:center;flex-shrink:0;user-select:none}
-.lb-slide-item img{max-width:94%;max-height:100%;object-fit:contain;border-radius:6px;pointer-events:none}
-.lb-close{position:absolute;top:1.2rem;right:1.2rem;color:#2c2c2a;font-size:22px;background:none;border:none;cursor:pointer;opacity:.8;z-index:601}
-.lb-nav{display:flex;gap:2rem;margin-top:1.2rem;z-index:601}
-.lb-btn{color:#2c2c2a;background:none;border:0.5px solid rgba(0,0,0,.3);width:38px;height:38px;border-radius:50%;cursor:pointer;font-size:17px;display:flex;align-items:center;justify-content:center}
-.lb-counter{font-size:11px;color:rgba(0,0,0,.5);margin-top:.6rem;letter-spacing:1px;z-index:601}
+/* 💡 이 스타일이 추가되어야 6장만 남고 나머지가 숨겨지며, 더보기 기능이 작동합니다 */
+.g-item.hidden{display:none !important} 
 
-/* 지도 */
-.map-box{border-radius:12px;overflow:hidden;border:0.5px solid #e4e1db;margin-bottom:1.2rem}
-#map{width:100%;height:230px;display:block}
-.venue-info{background:#ffffff;border:0.5px solid #e4e1db;border-radius:10px;padding:.9rem 1.1rem;margin-bottom:1rem;font-size:13px;color:#4e4d4a;line-height:1.9}
-.venue-info strong{font-family:'Noto Serif KR',serif;font-size:14px;color:#2c2c2a;display:block;margin-bottom:.2rem}
+.gallery-more{text-align:center;margin-top:1.5rem}
+/* ── 🗺️ 지도 구역 ── */
+.map-box{border-radius:14px;overflow:hidden;border:1px solid #ebdcd0;margin-bottom:1.4rem;box-shadow:0 6px 20px rgba(214,205,189,0.08)}
+#map{width:100%;height:240px;display:block;filter:sepia(8%) grayscale(5%)}
+.venue-info{
+  background:#ffffff;
+  border:1px solid #f5efe6;
+  border-radius:12px;
+  padding:1.1rem 1.3rem;
+  margin-bottom:1.2rem;
+  font-size:13px;
+  color:#61615c;
+  line-height:2.0;
+  box-shadow:0 4px 15px rgba(0,0,0,0.01)
+}
+.venue-info strong{font-family:'Noto Serif KR',serif;font-size:15px;color:#1a1a1a;display:block;margin-bottom:.3rem;letter-spacing:0.5px}
+.map-links{display:flex;gap:8px;margin-bottom:1.6rem}
+.map-link-btn{flex:1;text-align:center;padding:.65rem 0;margin:0;font-size:12px}
 
-/* 지도 앱 링크 버튼 */
-.map-links{display:flex;gap:8px;margin-bottom:1.4rem}
-.map-link-btn{flex:1;display:flex;align-items:center;justify-content:center;gap:6px;padding:.55rem 0;border:0.5px solid #d8d5cf;border-radius:10px;font-size:12px;color:#2c2c2a;text-decoration:none;background:#ffffff;transition:background .2s;font-weight:400}
-.map-link-btn:hover{background:#ffffff}
-
-/* 교통 픽토그램 */
-.transport{margin-bottom:1.2rem}
-.transport-item{display:flex;gap:.9rem;padding:.85rem 0;border-bottom:0.5px solid #eaeaea;align-items:flex-start}
+/* ── 🚌 교통 정보 ── */
+.transport{margin-bottom:0.5rem}
+.transport-item{display:flex;gap:1.1rem;padding:1.1rem 0;border-bottom:1px solid #faf6f0;align-items:flex-start}
 .transport-item:last-child{border-bottom:none}
-.t-picto{width:36px;height:36px;flex-shrink:0;display:flex;align-items:center;justify-content:center;margin-top:1px}
-.t-picto svg{width:24px;height:24px;stroke:#4a4845;fill:none;stroke-width:1.6;stroke-linecap:round;stroke-linejoin:round}
-.t-body .t-title{font-size:12px;font-weight:500;color:#2c2c2a;margin-bottom:2px}
-.t-body .t-desc{font-size:12px;color:#7a7570;line-height:1.75}
+.t-picto{width:32px;height:32px;flex-shrink:0;display:flex;align-items:center;justify-content:center;background:#faf8f5;border-radius:50%}
+.t-picto svg{width:18px;height:18px;stroke:#787873;fill:none;stroke-width:1.5}
+.t-body .t-title{font-size:12px;font-weight:500;color:#222220;margin-bottom:4px;letter-spacing:0.3px}
+.t-body .t-desc{font-size:12px;color:#82827d;line-height:1.8}
 
-/* 마음 전하기 */
-.account-toggle-wrap{text-align:center;margin-bottom:0}
-.account-toggle-btn{background:0;border:0;cursor:pointer;padding:.4rem;display:inline-flex;flex-direction:column;align-items:center;gap:4px}
-.toggle-label{font-size:11px;color:#4a4845;letter-spacing:1px}
-.bracket{width:22px;height:12px;display:block;position:relative;margin-top:6px}
-.bracket::before,.bracket::after{content:'';position:absolute;width:12px;height:1.5px;background:#bbb8b0;border-radius:1px;transition:all .25s ease}
+/* ── 🤍 마음 전하기 (계좌) ── */
+.account-toggle-wrap{text-align:center}
+.account-toggle-btn{background:0;border:0;cursor:pointer;padding:.6rem;display:inline-flex;flex-direction:column;align-items:center;gap:6px}
+.toggle-label{font-size:11px;color:#8c8273;letter-spacing:1.5px;font-family:'Noto Serif KR',serif}
+.bracket{width:22px;height:12px;display:block;position:relative;margin-top:4px}
+.bracket::before,.bracket::after{content:'';position:absolute;width:12px;height:1.5px;background:#c2b9aa;border-radius:1px;transition:all .3s ease}
 .bracket::before{right:50%;transform-origin:right center}
 .bracket::after{left:50%;transform-origin:left center}
+.bracket.down::before{top:9px;transform:rotate(32deg)}
+.bracket.down::after{top:9px;transform:rotate(-32deg)}
+.bracket.up::before{top:3px;transform:rotate(-32deg)}
+.bracket.up::after{top:3px;transform:rotate(32deg)}
 
-.bracket.down::before{top:9px;transform:rotate(35deg)}
-.bracket.down::after{top:9px;transform:rotate(-35deg)}
-.bracket.up::before{top:3px;transform:rotate(-35deg)}
-.bracket.up::after{top:3px;transform:rotate(35deg)}
+.account-list{overflow:hidden;max-height:0;transition:max-height .45s cubic-bezier(0.4, 0, 0.2, 1)}
+.account-list.open{max-height:700px;margin-top:1.5rem}
+.account-card{
+  background:#ffffff;
+  border:1px solid #f5efe6;
+  border-radius:12px;
+  padding:1.1rem 1.3rem;
+  margin-bottom:.8rem;
+  position:relative;
+  box-shadow:0 4px 15px rgba(214,205,189,0.08);
+  text-align:left;
+}
+.acc-who{font-size:11px;color:#aba294;letter-spacing:1px;margin-bottom:.3rem}
+.acc-bank{font-family:'Noto Serif KR',serif;font-size:14px;color:#222220;margin-bottom:.2rem;font-weight:500}
+.acc-num{font-size:13px;color:#6b6b66;letter-spacing:.3px}
+.copy-btn{
+  position:absolute;
+  top:50%;
+  right:1.2rem;
+  transform:translateY(-50%);
+  font-size:11px;
+  color:#73736e;
+  background:#ffffff;
+  border:1px solid #e8e3d9;
+  border-radius:6px;
+  padding:5px 12px;
+  cursor:pointer;
+  letter-spacing:0.5px;
+  transition:all .2s;
+}
+.copy-btn:hover{background:#faf8f5;border-color:#cbd3c1}
 
-.account-list{overflow:hidden;max-height:0;transition:max-height .4s ease}
-.account-list.open{max-height:700px}
-.account-card{background:#ffffff;border:0.5px solid #e4e1db;border-radius:10px;padding:.9rem 1.1rem;margin-bottom:.7rem;position:relative}
-.acc-who{font-size:11px;color:#bbb8b0;letter-spacing:.5px;margin-bottom:.2rem}
-.acc-bank{font-family:'Noto Serif KR',serif;font-size:14px;color:#2c2c2a;margin-bottom:.15rem}
-.acc-num{font-size:13px;color:#5a5652;letter-spacing:.5px}
-.copy-btn{position:absolute;top:50%;right:1rem;transform:translateY(-50%);font-size:11px;color:#7a7570;background:#ffffff;border:0.5px solid #d8d5cf;border-radius:6px;padding:4px 10px;cursor:pointer}
-.copy-btn:active{background:#ffffff}
-
-.account-list{overflow:hidden;max-height:0;transition:max-height .4s ease}
-.account-list.open{max-height:700px}
-.account-card{background:#ffffff;border:0.5px solid #e4e1db;border-radius:10px;padding:.9rem 1.1rem;margin-bottom:.7rem;position:relative}
-.acc-who{font-size:11px;color:#bbb8b0;letter-spacing:.5px;margin-bottom:.2rem}
-.acc-bank{font-family:'Noto Serif KR',serif;font-size:14px;color:#2c2c2a;margin-bottom:.15rem}
-.acc-num{font-size:13px;color:#5a5652;letter-spacing:.5px}
-.copy-btn{position:absolute;top:50%;right:1rem;transform:translateY(-50%);font-size:11px;color:#7a7570;background:#ffffff;border:0.5px solid #d8d5cf;border-radius:6px;padding:4px 10px;cursor:pointer}
-.copy-btn:active{background:#ffffff}
-
-/* 푸터 화이트 리스킨 */
-footer{background:#ffffff;text-align:center;padding:2.5rem 1.5rem;width:100%;max-width:480px}
-.ft-date{font-family:'Noto Serif KR',serif;font-size:16px;color:#2c2c2a;margin-bottom:.25rem}
-.ft-place{font-size:11px;color:#aaa8a2;letter-spacing:.5px}
-.ft-bar{width:24px;height:1px;background:#d8d5cf;margin:1.2rem auto}
-.ft-names{font-size:8px;color:#bbb8b0;letter-spacing:1.6px}
-
-/* 사진 공유하기 */
-.photo-share-txt{font-family:'Noto Serif KR',serif;font-size:14px;font-weight:300;color:#4e4d4a;line-height:2.1;text-align:center;max-width:320px;margin:0 auto 1.8rem}
+/* ── ✉️ 사진 공유하기 ── */
+.photo-share-txt{font-family:'Noto Serif KR',serif;font-size:14px;font-weight:300;color:#61615c;line-height:2.2;text-align:center;max-width:320px;margin:0 auto 2rem}
 .photo-link-wrap{text-align:center}
-.photo-upload-btn{display:inline-block;font-family:'Noto Serif KR',serif;font-size:13px;color:#fff;background:#2c2c2a;border:none;border-radius:24px;padding:.75rem 2.5rem;cursor:pointer;letter-spacing:.5px;text-decoration:none;transition:background .2s}
-.photo-upload-btn:hover{background:#4a4845}
+.photo-upload-btn{
+  display:inline-block;
+  font-family:'Noto Serif KR',serif;
+  font-size:13px;
+  color:#fff;
+  background:#4a4a46;
+  border:none;
+  border-radius:30px;
+  padding:.85rem 3rem;
+  cursor:pointer;
+  letter-spacing:1px;
+  text-decoration:none;
+  box-shadow:0 4px 15px rgba(74,74,70,0.15);
+  transition:all .3s ease;
+}
+.photo-upload-btn:hover{
+  background:#333330;
+  transform:translateY(-1px);
+  box-shadow:0 6px 20px rgba(74,74,70,0.25);
+}
+
+/* ── 🤍 Footer ── */
+footer{background:#ffffff;text-align:center;padding:4rem 1.5rem;width:100%;max-width:480px;position:relative}
+footer::before{
+  content:'';position:absolute;top:0;left:45%;width:10%;height:1px;background:#e3ded6;
+}
+.ft-date{font-family:'Noto Serif KR',serif;font-size:15px;color:#4a4a46;margin-bottom:.3rem;letter-spacing:1px}
+.ft-place{font-size:11px;color:#b2aa9d;letter-spacing:1px}
+.ft-bar{width:16px;height:1px;background:#e3ded6;margin:1.5rem auto}
+.ft-names{font-size:9px;color:#c2b9aa;letter-spacing:3px;text-transform:uppercase}
+
+/* ── 🖼️ Lightbox & Modal (오버레이 스킨) ── */
+.modal-overlay, .lb{display:none;position:fixed;inset:0;background:rgba(255,255,255,0.97);z-index:500;align-items:flex-end;justify-content:center;backdrop-filter:blur(5px)}
+.modal-overlay.open, .lb.open{display:flex}
+.modal{
+  background:#ffffff;
+  border-radius:24px 24px 0 0;
+  width:100%;
+  max-width:480px;
+  padding:2.5rem 1.8rem 3rem;
+  position:relative;
+  box-shadow:0 -10px 40px rgba(165,155,135,0.08);
+  animation:slideUp .32s cubic-bezier(0.16, 1, 0.3, 1);
+}
+@keyframes slideUp{from{transform:translateY(100%)}to{transform:translateY(0)}}
+.modal-close{position:absolute;top:1.2rem;right:1.5rem;font-size:22px;background:none;border:none;color:#aaa;cursor:pointer}
+.modal-group{margin-bottom:1.6rem}
+.modal-role{font-size:10px;letter-spacing:3px;color:#a3998a;margin-bottom:.7rem;text-transform:uppercase}
+.modal-person{display:flex;align-items:center;justify-content:space-between;padding:.8rem 1rem;border:1px solid #f5efe6;border-radius:12px;margin-bottom:.5rem;background:#ffffff;box-shadow:0 2px 8px rgba(0,0,0,0.01)}
+.modal-info .name{font-family:'Noto Serif KR',serif;font-size:15px;color:#1a1a1a;font-weight:500}
+.modal-info .rel{font-size:11px;color:#b2aa9d;margin-top:2px}
+.modal-actions{display:flex;gap:8px}
+.m-btn{
+  display:flex;align-items:center;justify-content:center;width:36px;height:36px;border-radius:50%;
+  border:1px solid #e8e3d9;background:#ffffff;text-decoration:none;font-size:14px;color:#61615c;transition:all .2s;
+}
+.m-btn:hover{background:#faf8f5;border-color:#c4b9a5}
+
+/* ── 🖼️ 라이트박스 (화살표 위치 오류 수정) ── */
+.lb{
+  display:none;
+  position:fixed;
+  inset:0;
+  background:rgba(255,255,255,0.97);
+  z-index:600;
+  flex-direction:column; /* 요소를 세로로 배치하여 화살표가 사진 아래로 가게 합니다 */
+  align-items:center;
+  justify-content:center;
+  backdrop-filter:blur(5px);
+}
+.lb.open{display:flex}
+
+.lb-window{width:100%;height:75vh;position:relative;overflow:hidden}
+.lb-slider{display:flex;width:300%;height:100%;transform:translateX(-33.3333%);will-change:transform}
+.lb-slide-item{width:33.3333%;height:100%;display:flex;align-items:center;justify-content:center;flex-shrink:0;user-select:none}
+.lb-slide-item img{max-width:92%;max-height:100%;object-fit:contain;border-radius:8px;box-shadow:0 15px 40px rgba(165,155,135,0.12);pointer-events:none}
+.lb-close{position:absolute;top:1.5rem;right:1.5rem;color:#1a1a1a;font-size:24px;background:none;border:none;cursor:pointer;opacity:.7;z-index:601}
+
+/* 화살표 내비게이션 및 카운터 정렬 */
+.lb-nav{display:flex;gap:2rem;margin-top:1.5rem;z-index:601}
+.lb-btn{color:#1a1a1a;background:none;border:1px solid rgba(0,0,0,.1);width:40px;height:40px;border-radius:50%;cursor:pointer;font-size:16px;display:flex;align-items:center;justify-content:center;transition:all .2s}
+.lb-btn:hover{background:#f5efe6;border-color:rgba(0,0,0,0.2)}
+.lb-counter{font-size:11px;color:#888;margin-top:.8rem;letter-spacing:1px;z-index:601}
 </style>
 </head>
 <body>
