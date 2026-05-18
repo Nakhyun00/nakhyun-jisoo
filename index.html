@@ -14,15 +14,18 @@
 <meta property="og:url"         content="https://nakhyun-jisoo.vercel.app/">
 
 <link href="https://fonts.googleapis.com/css2?family=Noto+Serif+KR:wght@300;400;500&family=Noto+Sans+KR:wght@300;400&display=swap" rel="stylesheet">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+
 <script type="text/javascript" src="https://dapi.kakao.com/v2/maps/sdk.js?appkey=b9101a3f62bf69d410ed17160d17a39e&autoload=false"></script>
 <style>
-/* ── 🤍 Base & Typography (따뜻한 린넨 톤 한 방울) ── */
+/* ── Base & Typography── */
 *{margin:0;padding:0;box-sizing:border-box}
 html{scroll-behavior:smooth}
 body{
   font-family:'Noto Sans KR',sans-serif;
-  background:#faf9f6; /* 바탕을 부드러운 크림 오프화이트로 변경하여 본체가 도드라지게 처리 */
-  color:#42423e; /* 감성적인 웜 차콜 */
+  background:#faf9f6; 
+  color:#111111; 
   font-size:14px;
   line-height:1.85;
   display:flex;
@@ -30,24 +33,20 @@ body{
   align-items:center;
   -webkit-font-smoothing:antialiased;
 }
-
-/* ── 🕊️ 패브릭/실크 냅킨 폴딩 효과의 핵심 ── */
 .page{
-  width:100%;
-  max-width:480px;
+  width:93%;
+  max-width:420px;
   background:#ffffff;
   position:relative;
-  /* 양 끝단에 아주 약한 베이지 테두리 지정 */
   border-left: 1px solid #eee9e0;
   border-right: 1px solid #eee9e0;
-  /* 안쪽으로 부드럽게 접힌 실크 주름 음영 처리 (시각적 촉감 극대화) */
   box-shadow: 
     inset 16px 0 24px -12px rgba(226, 218, 203, 0.6), 
     inset -16px 0 24px -12px rgba(226, 218, 203, 0.6),
     0 10px 60px rgba(165, 155, 135, 0.05);
 }
 
-/* ── ✨ Section & Dividers ── */
+/* ── Section & Dividers ── */
 .sec{
   padding:5.5rem 2.2rem;
   background:#ffffff;
@@ -67,25 +66,86 @@ body{
 .sec-title{font-family:'Noto Serif KR',serif;font-size:20px;font-weight:400;text-align:center;color:#1a1a1a;margin-bottom:.6rem;letter-spacing:0.5px}
 .hairline{width:24px;height:1px;background:#e3ded6;margin:0.8rem auto 2.5rem}
 
-/* ── 🪵 Hero ── */
-.hero{position:relative;height:100svh;min-height:500px;overflow:hidden;background:#ffffff;display:flex;align-items:center;justify-content:center}
-.hero-bg{position:absolute;inset:0;background:#ffffff}
-.hero-img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;opacity:.38;filter:sepia(10%) contrast(95%)}
+/* ── Hero ── */
+.hero{
+  position:relative;
+  height:100svh;
+  min-height:550px;
+  overflow:hidden;
+  background:#ffffff;
+  display:flex;
+  flex-direction:column;
+  align-items:center;
+  justify-content:center;
+  padding:2rem 0;
+  gap:2.2rem; 
+}
+.hero-bg{position:absolute;inset:0;background:#ffffff;z-index:0}
+
+.hero-card {
+  position:relative;
+  z-index:1;
+  width: 80%; 
+  animation: fadeIn 1s ease-out;
+}
+.hero-img-box {
+  width: 100%;
+  aspect-ratio: 2 / 3; 
+  overflow: hidden;
+  border-radius:7px;
+}
+.hero-img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
 .hero-content{
   position:relative;
   z-index:1;
   text-align:center;
-  padding:2rem;
-  animation:fadeInUp 1.2s ease-out;
+  width: 100%;
+  padding: 0 2rem;
+  animation: fadeInUp 1s ease-out .2s both;
 }
-@keyframes fadeInUp{from{opacity:0;transform:translateY(20px)}to{opacity:1;transform:translateY(0)}}
-.hero-date{font-size:11px;letter-spacing:5px;color:#a3998a;font-weight:300}
-.hero-bar{width:1px;height:24px;background:#e3ded6;margin:1.5rem auto}
-.hero-names{font-family:'Noto Serif KR',serif;font-size:28px;font-weight:400;color:#111111;letter-spacing:4px;line-height:1.6}
-.hero-amp{display:block;font-size:18px;color:#d6cbd7;margin:.4rem 0;font-weight:300}
-.hero-sub{font-size:10px;letter-spacing:4px;color:#a3998a;margin-top:.6rem}
 
-/* ── ✍🏻 인사말 & 버튼 (실크 스킨 버튼) ── */
+.hero-date{
+  font-family: 'Noto Serif KR', serif;
+  font-size:13px;
+  letter-spacing:3px;
+  color:#111111; 
+  font-weight:500; 
+  margin-bottom: 0.5rem;
+}
+.hero-venue{
+  font-family:'Noto Serif KR',serif;
+  font-size:14px;
+  letter-spacing:1px;
+  color:#111111; 
+  font-weight: 300;
+  margin-bottom: 1.5rem;
+}
+.hero-names{
+  font-family:'Noto Serif KR',serif;
+  font-size:25px; 
+  font-weight:400;
+  color:#111111; 
+  letter-spacing:4px;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+}
+.hero-amp{
+  font-family: 'Georgia', 'Times New Roman', serif;
+  font-style: italic;
+  font-size: 21px;
+  color: #4a4238; 
+  font-weight: 300;
+}
+
+@keyframes fadeIn { from{opacity:0} to{opacity:1} }
+@keyframes fadeInUp { from{opacity:0;transform:translateY(15px)} to{opacity:1;transform:translateY(0)} }
+/* ── 인사말 & 버튼 ── */
 .greet-txt{font-family:'Noto Serif KR',serif;font-size:14px;font-weight:300;color:#52524e;line-height:2.2;text-align:center;max-width:300px;margin:0 auto 2.2rem}
 .contact-open-btn, .gallery-more-btn, .map-link-btn{
   display:block;
@@ -109,11 +169,11 @@ body{
   box-shadow:0 4px 12px rgba(214,205,189,0.25);
 }
 
-/* ── 🗓️ 모던 카디널 달력 ── */
+/* ── 모던 카디널 달력 ── */
 .cal-box{
   background:#ffffff;
   border:1px solid #f2ede4;
-  border-radius:16px;
+  border-radius:13px;
   padding:1.8rem 1.4rem;
   max-width:328px;
   margin:0 auto;
@@ -144,29 +204,29 @@ body{
 }
 .cal-d.hl .hl-time{font-size:9px;color:#b26b6b;letter-spacing:.3px;white-space:nowrap;margin-top:2px}
 
-/* ── 🕰️ D-day ── */
+/* ──  D-day ── */
 .dday-wrap{text-align:center;padding:0.5rem 0}
 .dday-label{font-size:11px;letter-spacing:4px;color:#a69b8a;margin-bottom:.6rem}
 .dday-num{font-family:'Noto Serif KR',serif;font-size:56px;font-weight:200;color:#111111;line-height:1;letter-spacing:-1px}
 .dday-txt{font-size:13px;color:#70706b;margin-top:1rem;font-family:'Noto Serif KR',serif;font-weight:300;letter-spacing:0.5px}
 
-/* ── 🖼️ 갤러리 (오류 수정본) ── */
+/* ──  갤러리 (오류 수정본) ── */
 .gallery-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:4px;padding:0 0.2rem}
 .g-item{position:relative;width:100%;padding-bottom:100%;overflow:hidden;cursor:pointer;background:#fafafa;border-radius:4px}
 .g-item img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;transition:transform .4s ease;display:block}
 .g-item:hover img{transform:scale(1.05)}
 
-/* 💡 이 스타일이 추가되어야 6장만 남고 나머지가 숨겨지며, 더보기 기능이 작동합니다 */
+/*  6장만 남고 더보기 기능*/
 .g-item.hidden{display:none !important} 
 
 .gallery-more{text-align:center;margin-top:1.5rem}
-/* ── 🗺️ 지도 구역 ── */
-.map-box{border-radius:14px;overflow:hidden;border:1px solid #ebdcd0;margin-bottom:1.4rem;box-shadow:0 6px 20px rgba(214,205,189,0.08)}
+/* ──  지도 구역 ── */
+.map-box{border-radius:10px;overflow:hidden;border:1px solid #ebdcd0;margin-bottom:1.4rem;box-shadow:0 6px 20px rgba(214,205,189,0.08)}
 #map{width:100%;height:240px;display:block;filter:sepia(8%) grayscale(5%)}
 .venue-info{
   background:#ffffff;
   border:1px solid #f5efe6;
-  border-radius:12px;
+  border-radius:10px;
   padding:1.1rem 1.3rem;
   margin-bottom:1.2rem;
   font-size:13px;
@@ -176,18 +236,18 @@ body{
 }
 .venue-info strong{font-family:'Noto Serif KR',serif;font-size:15px;color:#1a1a1a;display:block;margin-bottom:.3rem;letter-spacing:0.5px}
 .map-links{display:flex;gap:8px;margin-bottom:1.6rem}
-.map-link-btn{flex:1;text-align:center;padding:.65rem 0;margin:0;font-size:12px}
+.map-link-btn{flex:1;text-align:center;padding:.65rem 0;border-radius:10px;margin:0;text-decoration:none;display:flex;align-items:center;justify-content:center;gap:6px;color:#111111}
 
-/* ── 🚌 교통 정보 ── */
+/* ──  교통 정보 ── */
 .transport{margin-bottom:0.5rem}
 .transport-item{display:flex;gap:1.1rem;padding:1.1rem 0;border-bottom:1px solid #faf6f0;align-items:flex-start}
 .transport-item:last-child{border-bottom:none}
 .t-picto{width:32px;height:32px;flex-shrink:0;display:flex;align-items:center;justify-content:center;background:#faf8f5;border-radius:50%}
 .t-picto svg{width:18px;height:18px;stroke:#787873;fill:none;stroke-width:1.5}
 .t-body .t-title{font-size:12px;font-weight:500;color:#222220;margin-bottom:4px;letter-spacing:0.3px}
-.t-body .t-desc{font-size:12px;color:#82827d;line-height:1.8}
+.t-body .t-desc{width:102%;font-size:12px;color:#82827d;line-height:1.8}
 
-/* ── 🤍 마음 전하기 (계좌) ── */
+/* ──  마음 전하기 (계좌) ── */
 .account-toggle-wrap{text-align:center}
 .account-toggle-btn{background:0;border:0;cursor:pointer;padding:.6rem;display:inline-flex;flex-direction:column;align-items:center;gap:6px}
 .toggle-label{font-size:11px;color:#8c8273;letter-spacing:1.5px;font-family:'Noto Serif KR',serif}
@@ -232,7 +292,7 @@ body{
 }
 .copy-btn:hover{background:#faf8f5;border-color:#cbd3c1}
 
-/* ── ✉️ 사진 공유하기 ── */
+/* ──  사진 공유하기 ── */
 .photo-share-txt{font-family:'Noto Serif KR',serif;font-size:14px;font-weight:300;color:#61615c;line-height:2.2;text-align:center;max-width:320px;margin:0 auto 2rem}
 .photo-link-wrap{text-align:center}
 .photo-upload-btn{
@@ -256,7 +316,7 @@ body{
   box-shadow:0 6px 20px rgba(74,74,70,0.25);
 }
 
-/* ── 🤍 Footer ── */
+/* ──  Footer ── */
 footer{background:#ffffff;text-align:center;padding:4rem 1.5rem;width:100%;max-width:480px;position:relative}
 footer::before{
   content:'';position:absolute;top:0;left:45%;width:10%;height:1px;background:#e3ded6;
@@ -266,7 +326,7 @@ footer::before{
 .ft-bar{width:16px;height:1px;background:#e3ded6;margin:1.5rem auto}
 .ft-names{font-size:9px;color:#c2b9aa;letter-spacing:3px;text-transform:uppercase}
 
-/* ── 🖼️ Lightbox & Modal (오버레이 스킨) ── */
+/* ──  Lightbox & Modal (오버레이 스킨) ── */
 .modal-overlay, .lb{display:none;position:fixed;inset:0;background:rgba(255,255,255,0.97);z-index:500;align-items:flex-end;justify-content:center;backdrop-filter:blur(5px)}
 .modal-overlay.open, .lb.open{display:flex}
 .modal{
@@ -293,7 +353,7 @@ footer::before{
 }
 .m-btn:hover{background:#faf8f5;border-color:#c4b9a5}
 
-/* ── 🖼️ 라이트박스 (화살표 위치 오류 수정) ── */
+/* ── 라이트박스 ── */
 .lb{
   display:none;
   position:fixed;
@@ -325,16 +385,22 @@ footer::before{
 
 <section class="hero">
   <div class="hero-bg"></div>
+  
+  <!--  사진 영역 -->
+  <div class="hero-card">
+    <div class="hero-img-box">
+      <img src="images/갤러리3.webp" alt="Wedding Photo" class="hero-img">
+    </div>
+  </div>
+
   <div class="hero-content">
-    <p class="hero-date">2026 · 09 · 05</p>
-    <div class="hero-bar"></div>
+    <p class="hero-date">2026. 09. 05. SAT. PM 01:00</p>
+    <p class="hero-venue">고려대학교 교우회관</p>
     <div class="hero-names">
       김낙현
-      <span class="hero-amp">&amp;</span>
+      <span class="hero-amp">&ensp;&amp;&ensp;</span>
       김지수
     </div>
-    <div class="hero-bar"></div>
-    <p class="hero-sub">WEDDING INVITATION</p>
   </div>
 </section>
 
@@ -549,7 +615,7 @@ footer::before{
   <div class="hairline"></div>
   <div class="account-toggle-wrap">
     <button class="account-toggle-btn" id="acc-toggle" onclick="toggleAccount()">
-      <span class="toggle-label" id="acc-label">펼쳐보기</span>
+      <span class="toggle-label" id="acc-label">계좌 펼쳐보기</span>
       <span class="bracket down" id="acc-bracket"></span>
     </button>
   </div>
