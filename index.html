@@ -236,7 +236,7 @@ body{
 }
 .venue-info strong{font-family:'Noto Serif KR',serif;font-size:15px;color:#1a1a1a;display:block;margin-bottom:.3rem;letter-spacing:0.5px}
 .map-links{display:flex;gap:8px;margin-bottom:1.6rem}
-.map-link-btn{flex:1;text-align:center;padding:.65rem 0;border-radius:10px;margin:0;text-decoration:none;display:flex;align-items:center;justify-content:center;gap:6px;color:#111111}
+.map-link-btn{flex:1;font-size: 11px;text-align:center;padding:.65rem 0;border-radius:10px;margin:0;text-decoration:none;display:flex;align-items:center;justify-content:center;gap:4px;color:#1a1a1a;font-family: 'Noto Serif KR', serif;white-space: nowrap;}
 
 /* ──  교통 정보 ── */
 .transport{margin-bottom:0.5rem}
@@ -532,21 +532,21 @@ footer::before{
   </div>
  
   <div class="map-links">
-    <a class="map-link-btn" href="https://map.kakao.com/?map_type=TYPE_MAP&target=car&rt=,,507877.0000000027,1136799.9999999965&rt1=&rt2=%EA%B3%A0%EB%A0%A4%EB%8C%80%ED%95%99%EA%B5%90%20%EA%B5%90%EC%9A%B0%ED%9A%8C%EA%B4%80&rtIds=,17565864" target="_blank">
+    <a class="map-link-btn" href="https://kko.to/LLsRjdHt3C">
       <svg width="20" height="20" viewBox="0 0 20 20" style="flex-shrink:0">
         <rect width="20" height="20" rx="5" fill="#FEE500"/>
         <path d="M10 4.5c-3.59 0-6.5 2.24-6.5 5 0 1.77 1.12 3.33 2.82 4.24l-.72 2.63a.25.25 0 0 0 .38.27L8.97 14.8c.34.04.69.07 1.03.07 3.59 0 6.5-2.24 6.5-5s-2.91-5-6.5-5z" fill="#3C1E1E"/>
       </svg>
       카카오맵
     </a>
-    <a class="map-link-btn" href="https://map.naver.com/p/directions/-/3zk57R,2AN7gX,%EA%B3%A0%EB%A0%A4%EB%8C%80%ED%95%99%EA%B5%90%20%EC%84%9C%EC%9A%B8%EC%BA%A0%ED%8D%BC%EC%8A%A4%EA%B5%90%EC%9A%B0%ED%9A%8C%EA%B4%80,18912226,PLACE_POI/-/transit?c=15.00,0,0,0,dh" target="_blank">
+    <a class="map-link-btn" href="https://naver.me/GV2th40D">
       <svg width="20" height="20" viewBox="0 0 20 20" style="flex-shrink:0">
         <rect width="20" height="20" rx="5" fill="#03C75A"/>
         <path d="M11.3 10.22L8.6 6H6v8h2.7V9.78L11.4 14H14V6h-2.7z" fill="#fff"/>
       </svg>
       네이버지도
     </a>
-    <a class="map-link-btn" href="https://www.google.com/maps/dir//%EA%B3%A0%EB%A0%A4%EB%8C%80%ED%95%99%EA%B5%90+%EA%B5%90%EC%9A%B0%ED%9A%8C%EA%B4%80+%EC%84%9C%EC%9A%B8%ED%8A%B9%EB%B3%84%EC%8B%9C+%EC%84%B1%EB%B6%81%EA%B5%AC+%EC%A2%85%EC%95%94%EB%8F%99+29-26/data=!3m1!4b1!4m17!1m7!3m6!1s0x357cbcbc8d707a77:0x195d6ec549202318!2z6rOg66Ck64yA7ZWZ6rWQIOq1kOyasO2ajOq0gA!8m2!3d37.5919972!4d127.035654!16s%2Fg%2F12cnz8f9l!4m8!1m0!1m5!1m1!1s0x357cbcbc8d707a77:0x195d6ec549202318!2m2!1d127.035654!2d37.5919972!3e3?entry=ttu" target="_blank">
+    <a class="map-link-btn" href="https://maps.app.goo.gl/v5DTf86wp8rhE7jp9">
       <svg width="20" height="20" viewBox="0 0 20 20" style="flex-shrink:0">
         <rect width="20" height="20" rx="5" fill="#fff" stroke="#e0ddd8" stroke-width="0.5"/>
         <path d="M10 3.5A3.75 3.75 0 0 0 6.25 7.25c0 2.6 3.75 9.25 3.75 9.25s3.75-6.65 3.75-9.25A3.75 3.75 0 0 0 10 3.5z" fill="#EA4335"/>
@@ -570,7 +570,7 @@ footer::before{
       </div>
       <div class="t-body">
         <div class="t-title">지하철</div>
-        <div class="t-desc">6호선 고려대역 2번 출구 도보 10분<br></div>
+        <div class="t-desc">6호선 고려대역 2번 출구 도보 5분<br></div>
       </div>
     </div>
     <div class="transport-item">
@@ -587,7 +587,7 @@ footer::before{
       </div>
       <div class="t-body">
         <div class="t-title">버스</div>
-        <div class="t-desc">간선 101, 110B, 121, 130, 141, 148 — 고대역 정류장 하차<br>지선 1017, 1111, 1213, 7211 — 고대역 정류장 하차</div>
+        <div class="t-desc">고대앞 정류장 하차<br> · 간선 101, 110B, 121, 130, 141, 148<br> · 지선 1017, 1111, 1213, 7211</div>
       </div>
     </div>
     <div class="transport-item">
@@ -603,7 +603,7 @@ footer::before{
       </div>
       <div class="t-body">
         <div class="t-title">주차</div>
-        <div class="t-desc">교우회관 주차장 이용 가능 / 식 당일 2시간 무료 주차 지원</div>
+        <div class="t-desc">교우회관 주차장 이용 가능 / 당일 2시간 무료 주차 지원</div>
       </div>
     </div>
   </div>
