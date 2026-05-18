@@ -18,6 +18,8 @@
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 
 <script type="text/javascript" src="https://dapi.kakao.com/v2/maps/sdk.js?appkey=b9101a3f62bf69d410ed17160d17a39e&autoload=false"></script>
+<script src="https://t1.kakaocdn.net/kakao_js_sdk/2.7.1/kakao.min.js" integrity="sha384-4w0gJa4v79pSO7bX06w6ThfPwt6ky9Vn6vxh59vE9vHyA9fI6EPyTCHk7z67ZdB7" crossorigin="anonymous"></script>
+<script>Kakao.init('a2a82dc121b8e8828957d54f58320e48'); </script>
 <style>
 /* ── Base & Typography── */
 *{margin:0;padding:0;box-sizing:border-box}
@@ -612,7 +614,7 @@ footer::before{
   <p class="ft-date">2026년 9월 5일 토요일 오후 1시</p>
   <p class="ft-place">고려대학교 교우회관</p>
   <div class="share-links">
-  <a class="share-btn kakao" href="https://sharer.kakao.com/talk/friends/picker/link?url=https://nakhyun-jisoo.vercel.app" target="_blank">
+  <a class="share-btn kakao" href="javascript:shareKakao()">
     <svg width="18" height="18" viewBox="0 0 24 24" fill="#3C1E1E">
       <path d="M12 3c-5.52 0-10 3.48-10 7.78 0 2.76 1.82 5.18 4.55 6.64l-1.15 4.24c-.12.44.4.82.78.57l5.05-3.34c.25.02.51.03.77.03 5.52 0 10-3.48 10-7.78s-4.48-7.78-10-7.78z"/>
     </svg>
@@ -854,6 +856,30 @@ function copyLink() {
     t.value = url; document.body.appendChild(t); t.select();
     document.execCommand('copy'); document.body.removeChild(t);
     alert('청첩장 링크가 복사되었습니다.');
+  });
+}
+
+function shareKakao() {
+  Kakao.Share.sendDefault({
+    objectType: 'feed',
+    content: {
+      title: '김낙현 ♡ 김지수 결혼합니다',
+      description: '2026. 09. 05. SAT. PM 01:00 고려대학교 교우회관',
+      imageUrl: 'https://nakhyun-jisoo.vercel.app/갤러리3.webp', 
+      link: {
+        mobileWebUrl: 'https://nakhyun-jisoo.vercel.app',
+        webUrl: 'https://nakhyun-jisoo.vercel.app',
+      },
+    },
+    buttons: [
+      {
+        title: '모바일 청첩장 보기',
+        link: {
+          mobileWebUrl: 'https://nakhyun-jisoo.vercel.app',
+          webUrl: 'https://nakhyun-jisoo.vercel.app',
+        },
+      },
+    ],
   });
 }
 </script>
