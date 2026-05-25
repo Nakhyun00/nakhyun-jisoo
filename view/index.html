@@ -17,6 +17,7 @@
     .form-group label { display: block; font-size: 11px; color: #bbb8b0; letter-spacing: 1px; margin-bottom: 0.4rem; padding-left: 4px; }
     input[type="text"], input[type="password"] { width: 100%; padding: .75rem 1rem; border: 0.5px solid #d8d5cf; border-radius: 10px; font-family: 'Noto Sans KR', sans-serif; font-size: 13px; color: #2c2c2a; background: #fbfbfa; outline: none; transition: border .2s; }
     input[type="text"]:focus, input[type="password"]:focus { border-color: #a8a5a0; background: #fff; }
+    input[type="text"]::placeholder, input[type="password"]::placeholder {color: #9c9a93; opacity: 1;}
     .submit-btn { width: 100%; padding: .85rem; background: #2c2c2a; color: #fff; border: none; border-radius: 24px; font-family: 'Noto Serif KR', serif; font-size: 14px; cursor: pointer; letter-spacing: 1px; transition: background .2s; margin-top: 0.5rem; }
     .submit-btn:hover { background: #4a4845; }
     #result-view, #admin-result-view { display: none; margin-top: 1rem; animation: fadeIn 0.4s ease; text-align: left; }
@@ -88,7 +89,7 @@
 
   <div id="auth-form">
     <div class="form-group">
-      <label for="viewer-name">올리는 사람 (이름)</label>
+      <label for="viewer-name">올린 사람</label>
       <input type="text" id="viewer-name" placeholder="업로드 시 작성한 이름">
     </div>
     <div class="form-group">
@@ -108,7 +109,7 @@
   </div>
 
   <div id="admin-result-view">
-    <div class="user-header" style="background: #5a4f43; color: #fff;">👑 전체 하객 업로드 통합 관리 모드</div>
+    <div class="user-header" style="background: #5a4f43; color: #fff;">관리자 모드</div>
     <div id="admin-group-container"></div>
   </div>
   
@@ -300,26 +301,57 @@
     }
   });
 
-  async function downloadPersonZip(name, photos) {
+ async function downloadPersonZip(name, photos) {
     const log = document.getElementById('log');
-    log.textContent = `압축 중...`;
+    log.textContent = `압축 준비 중...`;
+    log.className = "progress";
+    
     const zip = new JSZip();
     try {
       for (let i = 0; i < photos.length; i++) {
-        const response = await fetch(photos[i].image_url);
-        const blob = await response.blob();
+        log.textContent = `압축 중... (${i + 1}/${photos.length})`;
+        
+        // 💡 CORS 우회를 위해 Image 객체와 Canvas를 사용하는 기법으로 변경
+        const blob = await new Promise((resolve, reject) => {
+          const img = new Image();
+          img.crossOrigin = "anonymous"; // CORS 권한 요청
+          img.src = photos[i].image_url;
+          
+          img.onload = () => {
+            const canvas = document.createElement("canvas");
+            canvas.width = img.naturalWidth;
+            canvas.height = img.naturalHeight;
+            const ctx = canvas.getContext("2d");
+            ctx.drawImage(img, 0, 0);
+            
+            // 품질 100%의 원본 포맷 blob 추출
+            canvas.toBlob((b) => {
+              if (b) resolve(b);
+              else reject(new Error("Blob 생성 실패"));
+            }, "image/jpeg", 1.0);
+          };
+          img.onerror = () => reject(new Error("이미지 로드 실패"));
+        });
+
         const ext = photos[i].s3_key.split('.').pop() || 'jpg';
         zip.file(`${name}_${i + 1}.${ext}`, blob);
       }
+      
+      log.textContent = `ZIP 파일 생성 중...`;
       const content = await zip.generateAsync({ type: "blob" });
       const downloadUrl = window.URL.createObjectURL(content);
       const anchor = document.createElement('a');
       anchor.href = downloadUrl;
       anchor.download = `${name}_사진.zip`;
       anchor.click();
+      
       log.textContent = `✅ 다운로드 완료`;
+      log.className = "success";
+      setTimeout(() => { log.textContent = ""; }, 3000);
     } catch (err) {
-      log.textContent = `❌ 다운로드 오류`;
+      console.error("ZIP Error:", err);
+      log.textContent = `❌ 다운로드 오류 (CORS 또는 네트워크 제한)`;
+      log.className = "";
     }
   }
 
