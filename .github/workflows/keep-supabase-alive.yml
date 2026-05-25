@@ -1,0 +1,15 @@
+name: Keep Supabase Alive
+
+on:
+  schedule:
+    - cron: "0 1 * * *"
+  workflow_dispatch:
+
+jobs:
+  ping:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Hit keep-alive endpoint
+        run: |
+          curl -fsS -H "Authorization: Bearer ${{ secrets.SUPABASE_ANON_KEY }}" \
+               "${{ secrets.PING_ENDPOINT_URL }}"
