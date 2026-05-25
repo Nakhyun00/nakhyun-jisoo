@@ -12,7 +12,7 @@
     .page { width: 100%; max-width: 450px; background: #fff; border: 0.5px solid #e4e1db; border-radius: 16px; padding: 2.5rem 1.5rem; box-shadow: 0 4px 12px rgba(0,0,0,0.02); text-align: center; }
     
     .title-label { font-size: 10px; letter-spacing: 4px; color: #bbb8b0; margin-bottom: .5rem; text-transform: uppercase; }
-    .title { font-family: 'Noto Serif KR', serif; font-size: 20px; font-weight: 400; color: #2c2c2a; margin-bottom: .6rem; }
+    .title { font-family: 'Noto Serif KR', serif; font-size: 20px; font-weight: 400; color: #2c2a2a; margin-bottom: .6rem; }
     .hairline { width: 28px; height: 1px; background: #d8d5cf; margin: .6rem auto 2rem; }
     
     .desc { font-family: 'Noto Serif KR', serif; font-size: 13px; font-weight: 300; color: #7a7570; line-height: 2; margin-bottom: 2.5rem; }
@@ -22,7 +22,8 @@
     
     input[type="text"], input[type="password"] { width: 100%; padding: .75rem 1rem; border: 0.5px solid #d8d5cf; border-radius: 10px; font-family: 'Noto Sans KR', sans-serif; font-size: 13px; color: #2c2c2a; background: #fbfbfa; outline: none; transition: border .2s; }
     input[type="text"]:focus, input[type="password"]:focus { border-color: #a8a5a0; background: #fff; }
-    
+    input[type="text"]::placeholder, input[type="password"]::placeholder {color: #9c9a93; opacity: 1;}
+
     .file-wrapper { position: relative; width: 100%; margin-top: 1.5rem; margin-bottom: 2rem; }
     .file-label { display: flex; align-items: center; justify-content: center; width: 100%; padding: 1rem; border: 1px dashed #d8d5cf; border-radius: 10px; background: #fbfbfa; cursor: pointer; transition: all .2s; font-size: 13px; color: #7a7570; }
     .file-label:hover { background: #f4f2ee; border-color: #a8a5a0; }
@@ -31,17 +32,17 @@
     
     .file-name { display: none; font-size: 12px; color: #4a4845; margin-top: 0.5rem; word-break: break-all; font-weight: 500; line-height: 1.5; text-align: left; background: #f7f6f4; padding: 10px; border-radius: 8px; max-height: 120px; overflow-y: auto; }
     
-    /* [메인] 사진 선물하기 버튼 */
+    /* 사진 선물하기 버튼 */
     .submit-btn { width: 100%; padding: .85rem; background: #2c2c2a; color: #fff; border: none; border-radius: 24px; font-family: 'Noto Serif KR', serif; font-size: 14px; cursor: pointer; letter-spacing: 1px; transition: background .2s; margin-top: 0.5rem; }
     .submit-btn:hover { background: #4a4845; }
     .submit-btn:disabled { background: #ccc8c0; cursor: not-allowed; }
     
-    /* ── 🔥 [추가/수정] view 페이지 연동용 서브 버튼 스타일 ── */
+    /* ──  view 페이지 연동용 서브 버튼 스타일 ── */
     .view-link-btn { 
       display: block; 
       width: 100%; 
       padding: .85rem; 
-      background: #ede9e3; /* 메인 톤에 맞춘 고급스럽고 연한 그레이 베이지 */
+      background: #ede9e3;
       color: #5a5652; 
       border: none; 
       border-radius: 24px; 
@@ -97,7 +98,7 @@
   </div>
 
   <div id="log"></div>
-  
+
   <button id="upload-btn" class="submit-btn">사진 선물하기</button>
 
 
@@ -192,7 +193,7 @@
         const signedUrl = data.signedUrl;
         const key = data.key;
 
-        log.textContent = `[${currentIdx}/${totalFiles}] 보관소(AWS S3)에 사진 저장 중...`;
+        log.textContent = `[${currentIdx}/${totalFiles}] 올려주신 사진을 차곡차곡 정리하는 중...`;
 
         const uploadRes = await fetch(signedUrl, {
           method: 'PUT',
@@ -200,7 +201,7 @@
           headers: { 'Content-Type': file.type }
         });
 
-        if (!uploadRes.ok) throw new Error(`"${file.name}" S3 전송 실패`);
+        if (!uploadRes.ok) throw new Error(`"${file.name}" 전송 실패`);
 
         const imageUrl = `https://${AWS_BUCKET_NAME}.s3.ap-southeast-2.amazonaws.com/${key}`;
         dbRows.push({
