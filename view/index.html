@@ -307,35 +307,47 @@
     log.className = "progress";
     
     const zip = new JSZip();
-  try {
-    for (let i = 0; i < photos.length; i++) {
-      log.textContent = `압축 중... (${i + 1}/${photos.length})`;
+    try {
+      for (let i = 0; i < photos.length; i++) {
+        log.textContent = `사진 다운로드 중... (${i + 1}/${photos.length})`;
+        
+        // 💡 핵심: 주소 뒤에 실시간 타임스탬프(?_=[시간])를 붙여 브라우저의 악성 캐시를 강제로 우회합니다.
+        const originUrl = photos[i].image_url;
+        const cacheBustUrl = originUrl + (originUrl.includes('?') ? '&' : '?') + '_=' + new Date().getTime();
 
-      // Canvas 방식 제거 → fetch로 직접 blob 수신
-      const res = await fetch(photos[i].image_url, { mode: 'cors' });
-      if (!res.ok) throw new Error(`이미지 fetch 실패: ${res.status}`);
-      const blob = await res.blob();
-
-      const ext = photos[i].s3_key.split('.').pop() || 'jpg';
-      zip.file(`${name}_${i + 1}.${ext}`, blob);
+        // 💡 fetch 요청 시 캐시를 사용하지 않도록 명시합니다.
+        const response = await fetch(cacheBustUrl, { 
+          method: 'GET',
+          cache: 'no-store'
+        });
+        
+        if (!response.ok) throw new Error(`HTTP 에러! 상태코드: ${response.status}`);
+        const blob = await response.blob();
+        
+        // s3_key가 없거나 에러가 날 경우를 대비한 안전한 확장자 추출
+        const s3Key = photos[i].s3_key || '';
+        const ext = s3Key.split('.').pop() || 'jpg';
+        
+        zip.file(`${name}_${i + 1}.${ext}`, blob);
+      }
+      
+      log.textContent = `ZIP 파일 생성 및 압축 중...`;
+      const content = await zip.generateAsync({ type: "blob" });
+      const downloadUrl = window.URL.createObjectURL(content);
+      const anchor = document.createElement('a');
+      anchor.href = downloadUrl;
+      anchor.download = `${name}_사진.zip`;
+      anchor.click();
+      
+      log.textContent = `✅ 다운로드 완료`;
+      log.className = "success";
+      setTimeout(() => { log.textContent = ""; }, 3000);
+    } catch (err) {
+      console.error("ZIP Error Details:", err);
+      log.textContent = `❌ 압축 실패: S3 권한 및 캐시 문제를 확인하세요.`;
+      log.className = "";
+      alert("사진을 긁어오는 데 실패했습니다. 시크릿 창에서 다시 시도해 보세요.");
     }
-
-    log.textContent = `ZIP 파일 생성 중...`;
-    const content = await zip.generateAsync({ type: "blob" });
-    const anchor = document.createElement('a');
-    anchor.href = URL.createObjectURL(content);
-    anchor.download = `${name}_사진.zip`;
-    anchor.click();
-
-    log.textContent = `✅ 다운로드 완료`;
-    log.className = "success";
-    setTimeout(() => { log.textContent = ""; }, 3000);
-
-   } catch (err) {
-    console.error("ZIP Error:", err);
-    log.textContent = `❌ 오류: ${err.message}`;
-    log.className = "";
-   } 
   }
 
   // ── 💡 [삭제 기능 핵심 수정] ──
