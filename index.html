@@ -280,6 +280,46 @@ footer::before{
   box-shadow:0 -10px 40px rgba(165,155,135,0.08);
   animation:slideUp .32s cubic-bezier(0.16, 1, 0.3, 1);
 }
+
+/* ── 하단 고정 팝업 최외곽 레이어 ── */
+.bottom-fixed-popup {
+  position: fixed; bottom: 0; left: 0; right: 0; margin: 0 auto;
+  width: 100%; max-width: 450px; z-index: 15000; pointer-events: none; box-sizing: border-box;
+  display: none;
+}
+/* ── 팝업 내부 이미지 스타일 ── */
+.time-popup-img-wrapper {
+  width: 100px; height: 100px; margin: 0 auto 12px; display: flex; justify-content: center; align-items: center;
+}
+.time-popup-img-wrapper img { width: 100%; height: 100%; object-fit: contain; }
+/* ── 팝업 박스 ── */
+.time-popup-content {
+  pointer-events: auto; /* 박스 내부 클릭/터치 허용 */
+  width: 100%; background: #ffffff; border-top: 1px solid #e8e0d8; border-radius: 24px 24px 0 0; 
+  box-shadow: 0 -6px 30px rgba(120, 90, 60, 0.12); font-family: 'Noto Serif KR', serif; position: relative; text-align: center; box-sizing: border-box;
+  /* 내부 여백 세팅 */
+  padding: 28px 24px env(safe-area-inset-bottom, 24px); padding-bottom: max(32px, env(safe-area-inset-bottom));
+}
+.time-popup-close {
+  position: absolute; top: 16px; right: 20px; font-size: 22px; color: #b0a090; cursor: pointer; line-height: 1; background: none; border: none; padding: 4px;
+}
+.time-popup-layout { display: flex; flex-direction: column; align-items: center; gap: 16px; margin-bottom: 20px; }
+.time-popup-body { text-align: center; padding-top: 8px; }
+.time-popup-body h3 { font-family: 'Noto Serif KR', serif; font-size: 18px; font-weight: 500; color: #3a3028; margin: 0 0 6px; }
+.time-popup-body p { font-size: 14px; color: #9a8a7c; margin: 0; line-height: 1.6; }
+/* ── 업로드 버튼 ── */
+.time-popup-btn {
+  width: 85%; max-width: 280px; background: #2c2c2a; color: #ffffff; text-decoration: none; font-size: 14px; font-weight: 500; padding: 12px 0; border-radius: 24px; letter-spacing: 0.05em; display: block; transition: background .2s;
+}
+.time-popup-btn:hover { background: #4a4845; }
+/* ── 오늘 그만보기 (우측 하단 정렬) ── */
+.time-popup-options { border-top: 1px solid #f5f0ea; padding-top: 12px; display: flex; justify-content: flex-end; }
+.time-popup-options label { display: flex; align-items: center; gap: 5px; font-size: 11px; color: #bbb8b0; cursor: pointer; user-select: none; }
+.time-popup-options input[type="checkbox"] { width: 13px; height: 13px; accent-color: #2c2c2a; cursor: pointer; }
+
+
+@keyframes popupFadeIn { from { opacity: 0; } to { opacity: 1; } }
+
 @keyframes slideUp{from{transform:translateY(100%)}to{transform:translateY(0)}}
 .modal-close{position:absolute;top:1.2rem;right:1.5rem;font-size:22px;background:none;border:none;color:#aaa;cursor:pointer}
 .modal-group{margin-bottom:1.6rem}
@@ -882,6 +922,69 @@ function shareKakao() {
     ],
   });
 }
+
+// 💡 결혼식 시작 시간 설정 (9월은 자바스크립트 데이터 특성상 '8'로 입력)
+const weddingStartTime = new Date(2026, 5, 8, 0, 0, 0); 
+
+function checkWeddingTime() {
+  const now = new Date();
+  
+  // 로컬 스토리지에서 "오늘 그만 보기" 만료일시를 가져옴
+  const dontShowUntil = localStorage.getItem('weddingPopupDontShowUntil');
+
+  // 만료 제한 시간이 존재하고, 아직 그 시간에 도달하지 않았다면 팝업을 띄우지 않음
+  if (dontShowUntil && now.getTime() < parseInt(dontShowUntil)) {
+    return;
+  }
+
+  // 제한 시간이 지났거나 없다면 현재 시간이 결혼식 시간 이후일 때 팝업 표시
+  if (now >= weddingStartTime) {
+    document.getElementById('wedding-time-popup').style.display = 'flex';
+  }
+}
+
+function closeTimePopup() {
+  const popup = document.getElementById('wedding-time-popup');
+  const checkbox = document.getElementById('never-see-today');
+  
+  if (checkbox && checkbox.checked) {
+    // "오늘은 그만 보기"가 체크되어 있다면 현재 시간으로부터 정확히 24시간 뒤의 타임스탬프 계산
+    const next24Hours = new Date().getTime() + (24 * 60 * 60 * 1000);
+    localStorage.setItem('weddingPopupDontShowUntil', next24Hours);
+  }
+  // 팝업 닫기 (체크 안 하고 그냥 닫으면 만료일을 저장하지 않으므로 새로고침 시 다시 뜸)
+  popup.style.display = 'none';
+}
+
+// 페이지 로드 시 타이머 가동
+document.addEventListener('DOMContentLoaded', () => {
+  checkWeddingTime();
+  setInterval(checkWeddingTime, 60000); // 1분마다 주기적 체크
+});
+
 </script>
+<div id="wedding-time-popup" class="bottom-fixed-popup">
+  <div class="time-popup-content">
+    <span class="time-popup-close" onclick="closeTimePopup()">&times;</span>
+    
+    <div class="time-popup-layout">
+      <div class="time-popup-body">
+        <div class="time-popup-img-wrapper">
+      <img src="images/popup.webp" alt="부케 아이콘">
+    </div>
+        <h3>결혼식이 끝났습니다</h3>
+        <p>소중한 시간을 함께 해주셔서 감사합니다.<br>
+          직접 찍은 아름다운 순간을 공유해 주세요.</p>
+      </div>
+      <a href="/photo" class="time-popup-btn">사진 업로드하기</a>
+    </div>
+
+    <div class="time-popup-options">
+      <label for="never-see-today">
+        <input type="checkbox" id="never-see-today"> 오늘은 그만 보기
+      </label>
+    </div>
+  </div>
+</div>
 </body>
 </html>
